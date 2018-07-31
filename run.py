@@ -4,6 +4,7 @@ import models
 import dataset
 params = Params()
 params.parse_config('config/config.ini')
+params.network_type = "real"
 params.network_type = "complex"
 params.network_type = "qdnn"
 reader=dataset.setup(params)
