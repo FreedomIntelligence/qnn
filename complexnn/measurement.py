@@ -11,8 +11,9 @@ import math
 
 class ComplexMeasurement(Layer):
 
-    def __init__(self, units = 5, **kwargs):
+    def __init__(self, units = 5, batch_size = 32,**kwargs):
         self.units = units
+        self.batch_size=batch_size
         super(ComplexMeasurement, self).__init__(**kwargs)
 
     def get_config(self):
@@ -53,11 +54,31 @@ class ComplexMeasurement(Layer):
 
         input_real = inputs[0]
         input_imag = inputs[1]
+        print(input_real)
+        
+        kernel_real_bra =  tf.expand_dims(kernel_real,1)    # 3 * 1 * 5
+        kernel_real_ket =  tf.expand_dims(kernel_real,2)    # 3 * 5 * 1
+        kernel_image_bra =  tf.expand_dims(kernel_imag,1)    # 3 * 1 * 5
+        kernel_image_ket =  tf.expand_dims(kernel_imag,2)    # 3 * 5 * 1
+        
+        measurement_real = tf.matmul(kernel_real_ket, kernel_real_bra) - tf.matmul(kernel_image_ket, kernel_image_bra)
+        measurement_imag = tf.matmul(kernel_image_ket, kernel_real_bra) + tf.matmul(kernel_real_ket, kernel_image_bra)
 
-        output_real = K.dot(input_real, K.transpose(kernel_real)) - K.dot(input_imag, K.transpose(kernel_imag))
+        measurement_real_extend =tf.tile( tf.expand_dims(measurement_real,0),[self.batch_size,1,1,1])
+        measurement_imag_extend =tf.tile( tf.expand_dims(measurement_imag,0),[self.batch_size,1,1,1])
+        
+        input_real_extend = tf.tile( tf.expand_dims(input_real,1),[1,self.units,1,1])
+        input_imag_extend = tf.tile( tf.expand_dims(input_imag,1),[1,self.units,1,1])
+        
+        measured_result_real = tf.matmul(input_real_extend, measurement_real_extend) - tf.matmul(input_imag_extend, measurement_imag_extend)
+#        measured_result_imag = tf.matmul(input_imag_extend, measurement_real_extend) + tf.matmul(input_real_extend, measurement_imag_extend)
+        
+        
 
-        output_imag = K.dot(input_imag, K.transpose(kernel_real)) + K.dot(input_real, K.transpose(kernel_imag))
-        output = K.sum(K.square(output_real),axis = 1)+K.sum(K.square(output_imag), axis = 1)
+        
+        output = tf.trace(measured_result_real)
+        
+#        output = K.sum(K.square(output_real),axis = 1)+K.sum(K.square(output_imag), axis = 1)
 
         # print(output_real.shape)
         # print(output_imag.shape)
@@ -74,7 +95,7 @@ def main():
 
     input_1 = Input(shape=(5,5), dtype='float')
     input_2 = Input(shape=(5,5), dtype='float')
-    output = ComplexMeasurement(3)([input_1,input_2])
+    output = ComplexMeasurement(3,batch_size=10)([input_1,input_2])
 
 
     model = Model([input_1,input_2], output)
@@ -93,7 +114,8 @@ def main():
             
             m= weights[0][j,:,0] + 1j *weights[0][j,:,1]
             np.matmul(xy ,np.outer(m,m))
-            result = np.absolute(np.trace(np.matmul(xy ,np.outer(m,m))))
+#            result = np.absolute(np.trace(np.matmul(xy ,np.outer(m,m))))
+            result = np.trace(np.matmul(xy ,np.outer(m,m)))
             print(result, output[i][j])
     # complex_array = np.random.random((3,5,2))
 
