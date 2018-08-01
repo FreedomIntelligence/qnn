@@ -11,13 +11,12 @@ import math
 
 class ComplexMeasurement(Layer):
 
-    def __init__(self, units = 5, batch_size = 32,**kwargs):
+    def __init__(self, units = 5, **kwargs):
         self.units = units
-        self.batch_size=batch_size
         super(ComplexMeasurement, self).__init__(**kwargs)
 
     def get_config(self):
-        config = {'units': self.units, 'kernel': self.kernel}
+        config = {'units': self.units, 'kernel': self.kernel, 'dim': self.dim}
         base_config = super(ComplexMeasurement, self).get_config()
         return dict(list(base_config.items())+list(config.items()))
 
@@ -30,12 +29,13 @@ class ComplexMeasurement(Layer):
              raise ValueError('This layer should be called '
                              'on a list of 2 inputs.'
                               'Got ' + str(len(input_shape)) + ' inputs.')
-
+        self.dim = input_shape[0][1]
         self.kernel = self.add_weight(name='kernel',
-                                      shape=(self.units, input_shape[0][1],2),
+                                      shape=(self.units, self.dim,2),
                                       constraint = unit_norm(axis = (1,2)),
                                       initializer='uniform',
                                       trainable=True)
+
         super(ComplexMeasurement, self).build(input_shape)  # Be sure to call this somewhere!
 
     def call(self, inputs):
@@ -54,34 +54,29 @@ class ComplexMeasurement(Layer):
 
         input_real = inputs[0]
         input_imag = inputs[1]
-        print(input_real)
-        
-        kernel_real_bra =  tf.expand_dims(kernel_real,1)    # 3 * 1 * 5
-        kernel_real_ket =  tf.expand_dims(kernel_real,2)    # 3 * 5 * 1
-        kernel_image_bra =  tf.expand_dims(kernel_imag,1)    # 3 * 1 * 5
-        kernel_image_ket =  tf.expand_dims(kernel_imag,2)    # 3 * 5 * 1
-        
-        measurement_real = tf.matmul(kernel_real_ket, kernel_real_bra) - tf.matmul(kernel_image_ket, kernel_image_bra)
-        measurement_imag = tf.matmul(kernel_image_ket, kernel_real_bra) + tf.matmul(kernel_real_ket, kernel_image_bra)
 
-        measurement_real_extend =tf.tile( tf.expand_dims(measurement_real,0),[self.batch_size,1,1,1])
-        measurement_imag_extend =tf.tile( tf.expand_dims(measurement_imag,0),[self.batch_size,1,1,1])
-        
-        input_real_extend = tf.tile( tf.expand_dims(input_real,1),[1,self.units,1,1])
-        input_imag_extend = tf.tile( tf.expand_dims(input_imag,1),[1,self.units,1,1])
-        
-        measured_result_real = tf.matmul(input_real_extend, measurement_real_extend) - tf.matmul(input_imag_extend, measurement_imag_extend)
-#        measured_result_imag = tf.matmul(input_imag_extend, measurement_real_extend) + tf.matmul(input_real_extend, measurement_imag_extend)
-        
-        
+        # print(input_real.shape)
+        # print(input_imag.shape)
 
-        
-        output = tf.trace(measured_result_real)
-        
-#        output = K.sum(K.square(output_real),axis = 1)+K.sum(K.square(output_imag), axis = 1)
 
-        # print(output_real.shape)
-        # print(output_imag.shape)
+        kernel_r = K.batch_dot(K.expand_dims(kernel_real,1), K.expand_dims(kernel_real,2), axes = (1,2)) - K.batch_dot(K.expand_dims(kernel_imag,1), K.expand_dims(kernel_imag,2), axes = (1,2))
+
+        kernel_i = K.batch_dot(K.expand_dims(kernel_imag,1), K.expand_dims(kernel_real,2), axes = (1,2)) + K.batch_dot(K.expand_dims(kernel_real,1), K.expand_dims(kernel_imag,2), axes = (1,2))
+
+
+        # print(kernel_r.shape)
+        # print(kernel_i.shape)
+
+        kernel_r = K.reshape(kernel_r, shape = (self.units, self.dim * self.dim))
+        kernel_i = K.reshape(kernel_i, shape = (self.units, self.dim * self.dim))
+
+        input_real = K.reshape(input_real, shape = (-1, self.dim * self.dim))
+
+        input_imag = K.reshape(input_imag, shape = (-1, self.dim * self.dim))
+
+        output = K.dot(input_real,K.transpose(kernel_r)) - K.dot(input_imag,K.transpose(kernel_i))
+
+
         # print(output.shape)
         return(output)
 
@@ -95,7 +90,7 @@ def main():
 
     input_1 = Input(shape=(5,5), dtype='float')
     input_2 = Input(shape=(5,5), dtype='float')
-    output = ComplexMeasurement(3,batch_size=10)([input_1,input_2])
+    output = ComplexMeasurement(3)([input_1,input_2])
 
 
     model = Model([input_1,input_2], output)
@@ -103,7 +98,7 @@ def main():
               optimizer='sgd',
               metrics=['accuracy'])
     model.summary()
-    
+
     weights = model.get_weights()
     x_1 = np.random.random((10,5,5))
     x_2 = np.random.random((10,5,5))
@@ -111,7 +106,7 @@ def main():
     for i in range(10):
         xy = x_1[i] + 1j * x_2[i]
         for j in range(3):
-            
+
             m= weights[0][j,:,0] + 1j *weights[0][j,:,1]
             np.matmul(xy ,np.outer(m,m))
 #            result = np.absolute(np.trace(np.matmul(xy ,np.outer(m,m))))
