@@ -1,0 +1,6 @@
+*.bak
+__pycache__/*
+*.pyc
+glove/*
+data/*
+eval/*
