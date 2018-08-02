@@ -92,20 +92,16 @@ def get_wordvec(path_to_vec, word2id=None, orthonormalized=True):
         matrix, word_list = form_matrix(path_to_vec)
         coefficients_matrix = np.transpose(matrix)
     word_vec = {}
+     # if word2vec or fasttext file : skip first line "next(f)"
+    if word2id == None:
+        print('program goes here!')
+        for word in word_list:
+            word_vec[word] = coefficients_matrix[:, word_list.index(word)]
+    else:
+        for word in word_list:
+            if word in word2id:
+                   word_vec[word] = coefficients_matrix[:, word_list.index(word)]
 
-    with io.open(path_to_vec, 'r', encoding='utf-8') as f:
-        # if word2vec or fasttext file : skip first line "next(f)"
-        if word2id == None:
-            print('program goes here!')
-            for word in word_list:
-                word_vec[word] = coefficients_matrix[:, word_list.index(word)]
-        else:
-            for line in f:
-                word, vec = line.split(' ', 1)
-                if word in word2id:
-                    word_vec[word] = coefficients_matrix[:, word_list.index(word)]
-                   
-                    
     logging.info('Found {0} words with word vectors, out of \
         {1} words'.format(len(word_vec), len(word2id)))
     return word_vec
