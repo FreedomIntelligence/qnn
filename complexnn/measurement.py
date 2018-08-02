@@ -3,6 +3,7 @@ from keras import backend as K
 from keras.layers import Layer
 from keras.models import Model, Input
 from keras.constraints import unit_norm
+from keras.initializers import Orthogonal
 import tensorflow as tf
 import sys
 import os
@@ -33,7 +34,7 @@ class ComplexMeasurement(Layer):
         self.kernel = self.add_weight(name='kernel',
                                       shape=(self.units, self.dim,2),
                                       constraint = unit_norm(axis = (1,2)),
-                                      initializer='uniform',
+                                      initializer=Orthogonal(gain=1.0, seed=None),
                                       trainable=True)
 
         super(ComplexMeasurement, self).build(input_shape)  # Be sure to call this somewhere!

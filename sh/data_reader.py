@@ -3,18 +3,16 @@ import os
 import io
 import logging
 import numpy as np
+import data as data
 from sklearn.model_selection import train_test_split
-from  .data import data_gen,set_wordphase,create_dictionary,get_wordvec,get_index_batch,clear
-from keras.utils import to_categorical
+
 class DataReader(object):
     def __init__(self, train, dev, test, nb_classes):
-#        self.data = {'train': train, 'dev': dev, 'test': test}
-        self.data = {'train': clear(train), 'dev': clear(dev), 'test': clear(test)}
+        self.data = {'train': train, 'dev': dev, 'test': test}
         self.nb_classes = nb_classes
         self.max_sentence_length = self.get_max_sentence_length()
 
     def get_max_sentence_length(self):
-
         samples = self.data['train']['X'] + self.data['dev']['X'] + \
                 self.data['test']['X']
         max_sentence_length = 0
@@ -29,15 +27,15 @@ class DataReader(object):
         samples = self.data['train']['X'] + self.data['dev']['X'] + \
                 self.data['test']['X']
 
-        id2word, word2id = create_dictionary(samples, threshold=0)
-        word_vec = get_wordvec(path_to_vec, word2id,orthonormalized=orthonormalized)
+        id2word, word2id = data.create_dictionary(samples, threshold=0)
+        word_vec = data.get_wordvec(path_to_vec, word2id,orthonormalized=orthonormalized)
         wvec_dim = len(word_vec[next(iter(word_vec))])
 
         #stores the value of theta for each word
-        word_complex_phase = set_wordphase(word2id)
+        word_complex_phase = data.set_wordphase(word2id)
 
         params = {'word2id':word2id, 'word_vec':word_vec, 'wvec_dim':wvec_dim,'word_complex_phase':word_complex_phase,'id2word':id2word}
-        self.embedding_params = params
+
         return params
 
     def create_batch(self, embedding_params, batch_size = -1):
@@ -54,7 +52,7 @@ class DataReader(object):
                 bsize = len(self.data[key]['y'])
             for ii in range(0, len(self.data[key]['y']), bsize):
                 batch = self.data[key]['X'][ii:ii + bsize]
-                embeddings = get_index_batch(embedding_params, batch)
+                embeddings = data.get_index_batch(embedding_params, batch)
                 # print(embeddings)
                 embed[key]['X'].append(embeddings)
                 # print(self.sst_data[key]['y'][ii:ii + batch_size])
@@ -65,32 +63,6 @@ class DataReader(object):
             # print(sst_embed[key]['y'])
             logging.info('Computed {0} embeddings'.format(key))
         return embed
-    
-     
-    
-    def get_processed_data(self):
-
-        train_test_val = self.create_batch(self.embedding_params)
-        training_data = train_test_val['train']
-        test_data = train_test_val['test']
-        validation_data = train_test_val['dev']
-        
-        
-        # for x, y in batch_gen(training_data, max_sequence_length):
-        #     model.train_on_batch(x,y)
-        
-        train_x, train_y = data_gen(training_data, self.max_sentence_length)
-        test_x, test_y = data_gen(test_data, self.max_sentence_length)
-        val_x, val_y = data_gen(validation_data, self.max_sentence_length)
-        # assert len(train_x) == 67349
-        # assert len(test_x) == 1821
-        # assert len(val_x) == 872
-        
-        train_y = to_categorical(train_y)
-        test_y = to_categorical(test_y)
-        val_y = to_categorical(val_y)
-        return (train_x, train_y),(test_x, test_y),(val_x, val_y)
-        
 
 
 class TRECDataReader(DataReader):
@@ -101,7 +73,6 @@ class TRECDataReader(DataReader):
         test = self.loadFile(os.path.join(task_dir_path, 'TREC_10.label'))
         nb_classes = 6
         super(TRECDataReader,self).__init__(train, dev, test, nb_classes)
-        self.nb_classes = nb_classes
 
     def train_dev_split(self, samples, train_dev_ratio = 1/9):
         X_train, X_dev, y_train, y_dev = train_test_split(samples['X'], samples['y'], test_size=train_dev_ratio, random_state=self.seed)
@@ -138,7 +109,6 @@ class SSTDataReader(DataReader):
         test = self.loadFile(os.path.join(task_dir_path, self.task_name, 'sentiment-test'))
 #        super().__init__(train, dev, test, nclasses)
         super(SSTDataReader,self).__init__(train, dev, test, nclasses)
-        self.nb_classes = nclasses
 
     def loadFile(self, fpath):
         sst_data = {'X': [], 'y': []}
@@ -162,7 +132,6 @@ class BinaryClassificationDataReader(DataReader):
         train, test, dev = self.train_test_dev_split(0.1,1.0/9)
         nb_classes = 2
         super(BinaryClassificationDataReader,self).__init__(train, test, dev, nb_classes)
-        self.nb_classes = nb_classes
 
     def loadFile(self, fpath):
         with io.open(fpath, 'r', encoding='latin-1') as f:

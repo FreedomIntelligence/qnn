@@ -104,8 +104,7 @@ def get_wordvec(path_to_vec, word2id=None, orthonormalized=True):
                 word, vec = line.split(' ', 1)
                 if word in word2id:
                     word_vec[word] = coefficients_matrix[:, word_list.index(word)]
-                   
-                    
+
     logging.info('Found {0} words with word vectors, out of \
         {1} words'.format(len(word_vec), len(word2id)))
     return word_vec
@@ -175,7 +174,7 @@ def get_lookup_table(embedding_params):
     lookup_table.append([0]* embedding_params['wvec_dim'])
     for i in range(0, len(id2word)):
         word = id2word[i]
-        wvec = np.random.random(embedding_params['wvec_dim']).tolist()#[0]* embedding_params['wvec_dim']
+        wvec = [0]* embedding_params['wvec_dim']
         if word in word_vec:
             wvec = word_vec[word]
         # print(wvec)
@@ -208,18 +207,17 @@ def data_gen(data, max_sequence_length):
 
     return np.asarray(padded_sentences), np.transpose(np.asarray(labels))
 
+data = ["i love you"," he loves shit", "of and" ]
 from nltk.corpus import stopwords
 from nltk.stem.porter import *
 stemmer = PorterStemmer()
-def clear(data,stopwrods=[]): #
-    result= dict()
+def clear(data,stopwrods=set(stopwords.words('english'))):
     clear_data=[]
-    for item in data["X"]:
-        new_item = [word.lower() for word in item if word not in stopwrods]
+    for item in data:
+        new_item =  " ".join([ stemmer.stem(word) for word in item.lower().split() if word not in stopwrods])
         clear_data.append(new_item)
-    result["X"]=clear_data
-    result["y"]=data["y"]
-    return result
+    return clear_data
+
 def main():
     complex_embedding_dir = 'eval/eval_CR/embedding'
     load_complex_embedding(complex_embedding_dir)
