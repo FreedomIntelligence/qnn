@@ -3,6 +3,7 @@ from params import Params
 import models
 import dataset
 from keras import optimizers
+from save import save_experiment
 
 params = Params()
 params.parse_config('config/qdnn.ini')
@@ -29,3 +30,4 @@ weights = model.get_weights()
 history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
 
 evaluation = model.evaluate(x = val_x, y = val_y)
+#save_experiment(model, params, evaluation, history, reader, config_file)
