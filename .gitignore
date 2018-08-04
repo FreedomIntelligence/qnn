@@ -6,3 +6,9 @@ data/*
 eval/*
 models/__pycache__/*
 dataset/__pycache__/*
+complexnn/__pycache__/*
+*.text
+test.py
+log/*
+*.txt
+
