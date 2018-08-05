@@ -204,10 +204,10 @@ def data_gen(data, max_sequence_length):
 
     return np.asarray(padded_sentences), np.transpose(np.asarray(labels))
 
-from nltk.corpus import stopwords
-from nltk.stem.porter import *
-stemmer = PorterStemmer()
-def clear(data,stopwrods=stopwords.words('english')): #stopwords.words('english')
+#from nltk.corpus import stopwords
+#from nltk.stem.porter import *
+#stemmer = PorterStemmer()
+def clear(data,stopwrods=[]): #stopwords.words('english')
     result= dict()
     clear_data=[]
     for item in data["X"]:
