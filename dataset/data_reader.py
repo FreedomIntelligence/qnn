@@ -12,6 +12,7 @@ class DataReader(object):
         self.data = {'train': clear(train), 'dev': clear(dev), 'test': clear(test)}
         self.nb_classes = nb_classes
         self.max_sentence_length = self.get_max_sentence_length()
+        
 
     def get_max_sentence_length(self):
 

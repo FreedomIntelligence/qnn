@@ -3,7 +3,6 @@ from params import Params
 import models
 import dataset
 import units
-from keras import optimizers
 from save import save_experiment
 import itertools
 import argparse
@@ -17,28 +16,13 @@ def run(params,reader):
     model = qdnn.getModel()
     
     model.compile(loss = params.loss,
-    #          optimizer = sgd,
               optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
               metrics=['accuracy'])
     
-    model.summary()
-    # word2id = reader.embedding_params['word2id']
-    # file_name = 'sentiment_dic/sentiment_dic.txt'
-    # pretrain_x = []
-    # pretrain_y = []
-    # with codecs.open(file_name, 'r') as f:
-    #     for line in f:
-    #         word, polarity = line.split()
-    #         if word in word2id:
-    #             word_id = word2id[word]
-    #             pretrain_x.append([word_id]* reader.max_sentence_length)
-    #             pretrain_y.append(int(float(polarity)))
-    
-    # pretrain_x = np.asarray(pretrain_x)
-    # pretrain_y = to_categorical(pretrain_y)
-    
+    model.summary()    
     (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
     
+    #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
     #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
     
     history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
@@ -47,20 +31,20 @@ def run(params,reader):
     #save_experiment(model, params, evaluation, history, reader, config_file)
 
 grid_parameters ={
-#        "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","MRPC","SUBJ","STS","SNLI","CR"],
-        "wordvec_path":["glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt","glove/glove.6B.200d.txt","glove/glove.6B.300d.txt"],
-        "loss": ["categorical_crossentropy","categorical_hinge","kullback_leibler_divergence"],
-#        "optimizer":["sgd ","rmsprop", "adagrad","adadelta,""adam","adamax","nadam"],
-#        "batch_size":[16,32,64,128],
-#        "activation":["tanh","relu","sigmoid"],
-#        "amplitude_l2":[0.0000005,0.0000001,0.00000005,0.000001,0],
-#        "phase_l2":[0.0000005,0.0000001,0.00000005,0.000001,0],
-#        "dense_l2":[0.0001,0.00001,0.000001,0],
-#        "measurement_size" :[5,10,20,50,100],
-#        "lr" : [10,2.5,1,0.25,0.001],
-#        "dropout_rate_embedding" : [0.5,0.75,0.8,0.9,1],
-#        "dropout_rate_probs" : [0.5,0.75,0.8,0.9,1]     
-        }
+        "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
+        "wordvec_path":["glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt","glove/glove.6B.200d.txt"],#"glove/glove.6B.300d.txt"],
+        "loss": ["categorical_crossentropy","categorical_hinge"],#"mean_squared_error"],
+        "optimizer":["sgd","rmsprop","adadelta,""adam"], #"adagrad","adamax","nadam"],
+        "batch_size":[16,32,64],
+        "activation":["sigmoid"],
+        "amplitude_l2":[0.0000005,0.0000001,0.00000005,0.000001,0],
+        "phase_l2":[0.00000005],
+        "dense_l2":[0.000001],#0.0001,0.00001,0],
+        "measurement_size" :[5,10,20],#,50100],
+        "lr" : [2,1,0.5,0.1,0.05,0.01],
+        "dropout_rate_embedding" : [0.8,0.9],#0.5,0.75,0.8,0.9,1],
+        "dropout_rate_probs" : [0.9]#,0.5,0.75,0.8,1]     
+    }
 if __name__=="__main__":
 
  # import argparse

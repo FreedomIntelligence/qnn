@@ -2,6 +2,9 @@
 from .data_reader import CRDataReader,MRDataReader,SUBJDataReader,MPQADataReader,SSTDataReader,TRECDataReader
 from .data import get_lookup_table
 import os
+import codecs
+import numpy as np
+from keras.utils import to_categorical
 def setup(opt):
     dir_path = os.path.join(opt.datasets_dir, opt.dataset_name)
     if(opt.dataset_name == 'CR'):
@@ -24,6 +27,22 @@ def setup(opt):
    
     return reader
 
+def get_sentiment_dic_training_data(reader, opt):
+    word2id = reader.embedding_params['word2id']
+    file_name = opt.sentiment_dic_file
+    pretrain_x = []
+    pretrain_y = []
+    with codecs.open(file_name, 'r') as f:
+        for line in f:
+            word, polarity = line.split()
+            if word in word2id:
+                word_id = word2id[word]
+                pretrain_x.append([word_id]* reader.max_sentence_length)
+                pretrain_y.append(int(float(polarity)))
+    
+    pretrain_x = np.asarray(pretrain_x)
+    pretrain_y = to_categorical(pretrain_y)
+    return pretrain_x, pretrain_y
 
 def process_embedding(reader,opt):
     opt.max_sequence_length = reader.get_max_sentence_length()
