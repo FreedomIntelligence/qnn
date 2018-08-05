@@ -18,30 +18,31 @@ from multiply import ComplexMultiply
 from positive_unit_norm import PositiveUnitNorm
 from keras import regularizers
 
-def phase_embedding_layer(max_sequence_length, input_dim, embedding_dim = 1,trainable = True):
+def phase_embedding_layer(max_sequence_length, input_dim, embedding_dim = 1,trainable = True,l2_reg=0.0000005):
     embedding_layer = Embedding(input_dim,
                             embedding_dim,
                             embeddings_initializer=RandomUniform(minval=0, maxval=2*math.pi),
-                            input_length=max_sequence_length, trainable = trainable)
+                            input_length=max_sequence_length, trainable = trainable,
+                            embeddings_regularizer= regularizers.l2(l2_reg))
     return embedding_layer
 
 
 
-def amplitude_embedding_layer(embedding_matrix, max_sequence_length, trainable = False, random_init = True):
+def amplitude_embedding_layer(embedding_matrix, max_sequence_length, trainable = False, random_init = True,l2_reg=0.0000005):
     embedding_dim = embedding_matrix.shape[0]
     vocabulary_size = embedding_matrix.shape[1]
     if(random_init):
         return(Embedding(vocabulary_size,
                                 embedding_dim,
                                 embeddings_constraint = unit_norm(axis = 1),
-                                input_length=max_sequence_length,embeddings_regularizer= regularizers.l2(0.0000005),
+                                input_length=max_sequence_length,embeddings_regularizer= regularizers.l2(l2_reg),
                                 trainable=trainable))
     else:
         return(Embedding(vocabulary_size,
                                 embedding_dim,
                                 weights=[np.transpose(embedding_matrix)],
                                 embeddings_constraint = unit_norm(axis = 1),
-                                input_length=max_sequence_length,embeddings_regularizer= regularizers.l2(0.0000005),
+                                input_length=max_sequence_length,embeddings_regularizer= regularizers.l2(l2_reg),
                                 trainable=trainable))
 
 

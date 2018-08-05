@@ -21,20 +21,21 @@ import numpy as np
 
 from keras import regularizers
 
-l1l2 = regularizers.l1_l2(l1=0.01, l2=0.01)
+
 
 class QDNN(BasicModel):
     
     def initialize(self):
         self.doc = Input(shape=(self.opt.max_sequence_length,), dtype='int32')
+
+        self.phase_embedding=phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
         
-        self.phase_embedding=phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable)
-        self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init)
+        self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
         self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True)
-        self.dense = Dense(self.opt.nb_classes, activation="sigmoid", kernel_regularizer= regularizers.l2(0.0001))  # activation="sigmoid",       
-        self.dropout = Dropout(self.opt.dropout_rate)
-        self.dense2 = Dense(10, activation="sigmoid", kernel_regularizer= regularizers.l2(0.0001))
-        self.dense3 = Dense(self.opt.nb_classes, activation="sigmoid", kernel_regularizer= regularizers.l2(0.0001))
+        self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",       
+        self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
+        self.dropout_probs = Dropout(self.opt.dropout_rate_probs)
+  
     def __init__(self,opt):
         super(QDNN, self).__init__(opt) 
         
@@ -44,9 +45,9 @@ class QDNN(BasicModel):
         self.phase_encoded = self.phase_embedding(self.doc)
         self.amplitude_encoded = self.amplitude_embedding(self.doc)
         
-        if math.fabs(self.opt.dropout_rate -1) < 1e-6:
-            self.phase_encoded = self.dropout(self.phase_encoded)
-            self.amplitude_encoded = self.dropout(self.amplitude_encoded)
+        if math.fabs(self.opt.dropout_rate_embedding -1) < 1e-6:
+            self.phase_encoded = self.dropout_embedding(self.phase_encoded)
+            self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)
             
         [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([ self.phase_encoded, self.amplitude_encoded])
         if self.opt.network_type.lower() == 'complex_mixture':
@@ -60,9 +61,10 @@ class QDNN(BasicModel):
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
     
     
-        probs = ComplexMeasurement(units = 10)([sentence_embedding_real, sentence_embedding_imag])
-#        probs = self.dropout(probs)
-        output =  self.dense3(self.dense2(probs))
+        probs = ComplexMeasurement(units = self.opt.measurement_size)([sentence_embedding_real, sentence_embedding_imag])
+        if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:        
+            probs = self.dropout_probs(probs)
+        output =  self.dense(probs)
     
         model = Model(self.doc, output)
     

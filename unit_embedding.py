@@ -6,7 +6,7 @@ from keras.models import Model
 import codecs
 import numpy as np
 from complexnn.l2_normalization import L2normalization
-encoding_dim = 50
+encoding_dim = 100
 mnist_config = False#False
 if mnist_config:
     input_dim = 784
@@ -90,7 +90,7 @@ else:
     
     batchse = getdata("glove/glove.6B.300d.txt")
     autoencoder.fit(batchse, batchse,
-                    epochs=5,
+                    epochs=50,
                     batch_size=256,
                     shuffle=True,
                     validation_data=(x_test, x_test))
@@ -123,20 +123,20 @@ decoded_imgs = autoencoder.predict(x_test)
 
 
 def generate_word_vector(file_name,batch_size=256):
-    while 1:
-        with codecs.open(file_name, 'r',encoding='utf-8') as f:
-            batch_image=[]
-            words=[]
-            for line in f:
-                word, vec = line.split(' ', 1)
-                vector = np.fromstring(vec, sep=' ')
-                batch_image.append(vector)
-                words.append(word)
-                if len(batch_image) ==batch_size:
-                    yield words,np.array(batch_image)
-                    batch_image=[]
-                    words=[]
-output_file="normalized_vectors.txt"
+
+    with codecs.open(file_name, 'r',encoding='utf-8') as f:
+        batch_image=[]
+        words=[]
+        for line in f:
+            word, vec = line.split(' ', 1)
+            vector = np.fromstring(vec, sep=' ')
+            batch_image.append(vector)
+            words.append(word)
+            if len(batch_image) ==batch_size:
+                yield words,np.array(batch_image)
+                batch_image=[]
+                words=[]
+output_file="glove/normalized_vectors.txt"
 with codecs.open(output_file, 'w',encoding='utf-8') as outf:
     for words,vectors in generate_word_vector("glove/glove.6B.300d.txt"):
         new_vectors = encoder.predict(vectors)

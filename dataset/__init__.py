@@ -20,23 +20,28 @@ def setup(opt):
         reader = SSTDataReader(dir_path, nclasses = 5)
     if(opt.dataset_name == 'TREC'):
         reader = TRECDataReader(dir_path)
-        
-    opt.max_sequence_length = reader.get_max_sentence_length()
-    if(opt.wordvec_initialization == 'orthogonalize'):
-        embedding_params = reader.get_word_embedding(opt.wordvec_path,orthonormalized=True)
+       
+   
+    return reader
 
-    elif( (opt.wordvec_initialization == 'random') | (opt.wordvec_initialization == 'word2vec')):
-        embedding_params = reader.get_word_embedding(opt.wordvec_path,orthonormalized=False)
-    else:
-        raise ValueError('The input word initialization approach is invalid!')
-        
-    # print(embedding_params['word2id'])
-    opt.lookup_table = get_lookup_table(embedding_params)
-    opt.random_init = True
-    if not(opt.wordvec_initialization == 'random'):
-        opt.random_init = False
-    opt.nb_classes = reader.nb_classes
+
+def process_embedding(reader,opt):
+    opt.max_sequence_length = reader.get_max_sentence_length()
 
     
-    return reader
+    if  opt.wordvec_path == 'random':
+        opt.random_init = True
+    else:
+        opt.random_init = False
+        orthonormalized = (opt.wordvec_initialization == "orthonormalized")
+        embedding_params = reader.get_word_embedding(opt.wordvec_path,orthonormalized=orthonormalized)
+        opt.lookup_table = get_lookup_table(embedding_params)
+
+        
+    # print(embedding_params['word2id'])
+        
+    opt.nb_classes = reader.nb_classes
+    return opt
+
+    
     
