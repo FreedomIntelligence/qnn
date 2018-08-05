@@ -7,7 +7,8 @@ from keras import optimizers
 from save import save_experiment
 
 params = Params()
-params.parse_config('config/qdnn.ini')
+config_file = 'config/qdnn.ini'
+params.parse_config(config_file)
 params.network_type = "real"
 params.network_type = "complex"
 params.network_type = "qdnn"
