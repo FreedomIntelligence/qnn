@@ -8,9 +8,9 @@ import itertools
 import argparse
 
 gpu_count = len(units.get_available_gpus())
-dir_path,global_logger = units.getLogger("global")
+dir_path,global_logger = units.getLogger()
 
-def run(params,reader,logger):
+def run(params,reader):
     params=dataset.process_embedding(reader,params)
     qdnn = models.setup(params)
     model = qdnn.getModel()
@@ -67,9 +67,9 @@ if __name__=="__main__":
     for parameter in parameters[:1]:
         params.setup(zip(grid_parameters.keys(),parameter))
 #        params.print()
-        dir_path,logger = units.getLogger()
-        params.save(dir_path)
-        history,evaluation=run(params,reader,logger)
+#        dir_path,logger = units.getLogger()
+#        params.save(dir_path)
+        history,evaluation=run(params,reader)
         global_logger.info("%s : %.4f "%( params.to_string() ,max(history.history["val_acc"])))
 
 
