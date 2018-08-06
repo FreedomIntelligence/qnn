@@ -11,4 +11,4 @@ complexnn/__pycache__/*
 test.py
 log/*
 *.txt
-
+.spyproject/workspace.ini

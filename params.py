@@ -1,6 +1,5 @@
 import os
-import io,re
-import logging
+import io,re,codecs
 import numpy as np
 import configparser
 import argparse
@@ -46,5 +45,9 @@ class Params(object):
     def print(self):
         for k, v in self.__dict__.items():
             print("%s -> %s"%(k,str(v)))
+    def save(self,path):
+        with codecs.open(path+"/config.ini","w",encoding="utf-8") as f:
+            for k, v in self.__dict__.items():
+                f.write("%s -> %s"%(k,str(v)))
 
 

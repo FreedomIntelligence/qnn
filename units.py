@@ -34,3 +34,24 @@ def get_available_gpus():
     from tensorflow.python.client import device_lib
     local_device_protos = device_lib.list_local_devices()
     return [x.name for x in local_device_protos if x.device_type == 'GPU']
+
+def getLogger():
+    import random,logging,time,sys,os
+    random_str = str(random.randint(1,10000))
+    
+    now = int(time.time()) 
+    timeArray = time.localtime(now)
+    timeStamp = time.strftime("%Y%m%d%H%M%S", timeArray)
+    log_path = "log/" +time.strftime("%Y%m%d", timeArray)
+    log_filename = log_path+"/log.txt"
+    program = os.path.basename(sys.argv[0])
+    logger = logging.getLogger(program) 
+    if not os.path.exists(log_path):
+        os.mkdir(log_path)
+    if not os.path.exists(log_filename):
+        os.mkdir(log_filename)
+    logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s',datefmt='%a, %d %b %Y %H:%M:%S',filename=log_filename+'/qa'+timeStamp+"_"+ random_str+'.log',filemode='w')
+    logging.root.setLevel(level=logging.INFO)
+    logger.info("running %s" % ' '.join(sys.argv))
+    
+    return log_path,logger
