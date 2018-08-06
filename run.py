@@ -36,7 +36,7 @@ def run(params,reader):
 
 grid_parameters ={
         "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
-        "wordvec_path":["glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt","glove/glove.6B.200d.txt"],#"glove/glove.6B.300d.txt"],
+        "wordvec_path":["glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt"],#"glove/glove.6B.300d.txt"],
         "loss": ["categorical_crossentropy","categorical_hinge"],#"mean_squared_error"],
         "optimizer":["rmsprop","adadelta","adam"], #"adagrad","adamax","nadam"],
         "batch_size":[16,32],
