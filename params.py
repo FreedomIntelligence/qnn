@@ -25,8 +25,9 @@ class Params(object):
         config = configparser.ConfigParser()
         config['COMMON'] = {}
         config_common = config['COMMON']
-        for k,v in self.__dict__.items():            
-            config_common[k] = str(v)
+        for k,v in self.__dict__.items():        
+            if not k == 'lookup_table':    
+                config_common[k] = str(v)
 
         with open(config_file_path, 'w') as configfile:
             config.write(configfile)
@@ -45,9 +46,11 @@ class Params(object):
     def print(self):
         for k, v in self.__dict__.items():
             print("%s -> %s"%(k,str(v)))
+
     def save(self,path):
         with codecs.open(path+"/config.ini","w",encoding="utf-8") as f:
             for k, v in self.__dict__.items():
                 f.write("%s -> %s"%(k,str(v)))
+
 
 

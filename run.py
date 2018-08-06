@@ -28,8 +28,10 @@ def run(params,reader,logger):
     history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
     
     evaluation = model.evaluate(x = val_x, y = val_y)
+    save_experiment(model, params, evaluation, history, reader)
     #save_experiment(model, params, evaluation, history, reader, config_file)
     return history,evaluation
+
 
 grid_parameters ={
         "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
@@ -67,5 +69,5 @@ if __name__=="__main__":
         dir_path,logger = units.getLogger()
         params.save(dir_path)
         history,evaluation=run(params,reader,logger)
-        
-    
+
+
