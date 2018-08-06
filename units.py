@@ -42,13 +42,13 @@ def getLogger():
     now = int(time.time()) 
     timeArray = time.localtime(now)
     timeStamp = time.strftime("%Y%m%d%H%M%S", timeArray)
-    log_path = "log/" +time.strftime("%Y%m%d", timeArray)
+    log_path = "log/acc" +time.strftime("%Y%m%d", timeArray)
 
     program = os.path.basename(sys.argv[0])
     logger = logging.getLogger(program) 
     if not os.path.exists(log_path):
         os.mkdir(log_path)
-    logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s',datefmt='%a, %d %b %Y %H:%M:%S',filename=log_path+'/qa'+timeStamp+"_"+ random_str+'.log',filemode='w')
+    logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s',datefmt='%a, %d %b %Y %H:%M:%S',filename=log_path+'/'+timeStamp+"_"+ random_str+'.log',filemode='w')
     logging.root.setLevel(level=logging.INFO)
     logger.info("running %s" % ' '.join(sys.argv))
     
