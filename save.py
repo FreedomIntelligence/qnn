@@ -14,11 +14,13 @@ def save_experiment(model, params, evaluation, history, reader):
     
     eval_dir = params.eval_dir
     if not os.path.exists(eval_dir):
-        os.mkdir(eval_dir)
-        
+        os.mkdir(eval_dir)  
+
+    now = int(time.time()) 
+    timeArray = time.localtime(now)
+    timeStamp = time.strftime("%Y%m%d%H%M%S", timeArray)
     
-    time_in_milli_seconds = int(round(time.time() * 1000))
-    params_dir = os.path.join(eval_dir,str(time_in_milli_seconds))
+    params_dir = os.path.join(eval_dir,timeStamp)
     if not os.path.exists(params_dir):
         os.mkdir(params_dir)
         
