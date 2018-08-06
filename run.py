@@ -28,7 +28,7 @@ def run(params,reader):
     history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
     
     evaluation = model.evaluate(x = val_x, y = val_y)
-    #save_experiment(model, params, evaluation, history, reader, config_file)
+    save_experiment(model, params, evaluation, history, reader)
 
 grid_parameters ={
         "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
@@ -64,4 +64,3 @@ if __name__=="__main__":
         params.setup(zip(grid_parameters.keys(),parameter))
 #        params.print()
         run(params,reader)
-    

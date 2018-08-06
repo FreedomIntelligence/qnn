@@ -7,18 +7,23 @@ Created on Thu Aug  2 15:48:07 2018
 import codecs
 import numpy as np
 import os
-import shutil
-
-def save_experiment(model, params, evaluation, history, reader, config_file):
+#import shutil
+import time
+def save_experiment(model, params, evaluation, history, reader):
     
     eval_dir = params.eval_dir
     if not os.path.exists(eval_dir):
         os.mkdir(eval_dir)
+        
     
-    params_dir = os.path.join(eval_dir,str(hash(params)))
+    time_in_milli_seconds = int(round(time.time() * 1000))
+    params_dir = os.path.join(eval_dir,str(time_in_milli_seconds))
     if not os.path.exists(params_dir):
         os.mkdir(params_dir)
-    shutil.copy2(config_file, os.path.abspath(params_dir))
+        
+    config_file = os.path.join(params_dir, 'config.ini')
+    params.export_to_config(config_file)
+#    shutil.copy2(config_file, os.path.abspath(params_dir))
     save_result(evaluation, history, params_dir)
     save_network(model, reader, params_dir)
     
