@@ -8,7 +8,7 @@ import itertools
 import argparse
 
 gpu_count = len(units.get_available_gpus())
-dir_path,global_logger = units.getLogger()
+dir_path,global_logger = units.getLogger("global")
 
 def run(params,reader,logger):
     params=dataset.process_embedding(reader,params)
@@ -30,6 +30,7 @@ def run(params,reader,logger):
     evaluation = model.evaluate(x = val_x, y = val_y)
     save_experiment(model, params, evaluation, history, reader)
     #save_experiment(model, params, evaluation, history, reader, config_file)
+
     return history,evaluation
 
 
@@ -69,5 +70,6 @@ if __name__=="__main__":
         dir_path,logger = units.getLogger()
         params.save(dir_path)
         history,evaluation=run(params,reader,logger)
+        global_logger.info("%s : %.4f "%( params.to_string() ,max(history.history["val_acc"])))
 
 

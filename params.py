@@ -42,15 +42,16 @@ class Params(object):
     def setup(self,parameters):
         for k, v in parameters:
             self.__dict__.__setitem__(k,v)
-    
-    def print(self):
+    def get_parameter_list(self):
+        info=[]
         for k, v in self.__dict__.items():
-            print("%s -> %s"%(k,str(v)))
-
+            info.append("%s -> %s"%(k,str(v)))
+        return info
+    def to_string(self):
+        return " ".join(self.get_parameter_list())
     def save(self,path):
         with codecs.open(path+"/config.ini","w",encoding="utf-8") as f:
-            for k, v in self.__dict__.items():
-                f.write("%s -> %s"%(k,str(v)))
-
+            f.write("\n".join(self.get_parameter_list()))
+        
 
 
