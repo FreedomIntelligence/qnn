@@ -59,7 +59,7 @@ if __name__=="__main__":
     
     parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
      
-            
+    parameters= parameters[::-1][:2]        
     params = Params()
     config_file = 'config/qdnn.ini'    # define dataset in the config
     params.parse_config(config_file)

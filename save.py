@@ -38,7 +38,7 @@ def save_result(evaluation, history, output_dir):
     with codecs.open(eval_result_file, 'w') as f:
         f.write('loss = '+ str(evaluation[0])+ ' accuracy = '+ str(evaluation[1]))
     np.save(history_file, history.history)
-    pd.DataFrame(history).to_csv("history.csv")
+    pd.DataFrame(history.history).to_csv("history.csv")
 
 def save_network(model, reader, output_dir):
     id2word = reader.embedding_params['id2word']
