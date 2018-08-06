@@ -46,6 +46,9 @@ def getLogger():
 
     program = os.path.basename(sys.argv[0])
     logger = logging.getLogger(program) 
+    
+    if not os.path.exists("log"):
+        os.mkdir("log")
     if not os.path.exists(log_path):
         os.mkdir(log_path)
     logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s',datefmt='%a, %d %b %Y %H:%M:%S',filename=log_path+'/'+timeStamp+"_"+ random_str+'.log',filemode='w')
