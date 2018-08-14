@@ -46,6 +46,7 @@ class DataReader(object):
         for index, word in enumerate(id2word):
             if word in counter:
                 idfs[index+1] = counter[word]
+        idfs[0] = 100
         idfs = np.log(np.sum(idfs)/idfs)
         params = {'word2id':word2id, 'word_vec':word_vec, 'wvec_dim':wvec_dim,'word_complex_phase':word_complex_phase,'id2word':id2word,"id2idf":idfs}
         self.embedding_params = params
