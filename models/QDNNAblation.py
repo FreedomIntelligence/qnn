@@ -35,9 +35,12 @@ word_weight_without_training =4
 
 
 class QDNNAblation(QDNN):
-    def __init__(self,opt):
-        super(QDNN, self).__init__(opt)
+    def initialize(self):
+        super(QDNNAblation, self).initialize()
         self.ablation()
+    def __init__(self,opt):
+        super(QDNNAblation, self).__init__(opt)
+
         
     def ablation(self):
         if self.opt.ablation== projector_to_dense:
