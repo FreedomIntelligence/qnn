@@ -17,7 +17,7 @@ class RealNN(BasicModel):
             self.embedding = Embedding(trainable=self.opt.embedding_trainable, input_dim=self.opt.lookup_table.shape[0],output_dim=self.opt.lookup_table.shape[1],embeddings_constraint = unit_norm(axis = 1))
         
         self.dense = Dense(self.opt.nb_classes, activation="sigmoid")        
-        self.dropout = Dropout(self.opt.dropout_rate)
+        self.dropout = Dropout(self.opt.dropout_rate_probs)
         
     def __init__(self,opt):
         super(RealNN, self).__init__(opt)        
@@ -27,7 +27,7 @@ class RealNN(BasicModel):
     
     def build(self):        
         self.encoded = self.embedding(self.doc)
-        if math.fabs(self.opt.dropout_rate -1) < 1e-6:
+        if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             self.encoded = self.dropout(self.encoded)
         representation =GlobalAveragePooling1D()(self.encoded)
         output = self.dense(representation)

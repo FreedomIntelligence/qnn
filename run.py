@@ -65,7 +65,7 @@ grid_parameters ={
         "lr" : [0.1],#,1,0.01
         "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
         "dropout_rate_probs" : [0.9],#,0.5,0.75,0.8,1]    ,
-        "ablation" : [1,2,3,4],
+        "ablation" : [5],
         "network_type" : ["ablation"]
     }
 if __name__=="__main__":
@@ -88,6 +88,7 @@ if __name__=="__main__":
         if old_dataset != params.dataset_name:
             print("switch %s to %s"%(old_dataset,params.dataset_name))
             reader=dataset.setup(params)
+            params.reader = reader
 #        params.print()
 #        dir_path,logger = units.getLogger()
 #        params.save(dir_path)

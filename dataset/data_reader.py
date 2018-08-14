@@ -31,13 +31,23 @@ class DataReader(object):
                 self.data['test']['X']
 
         id2word, word2id = create_dictionary(samples, threshold=0)
+        
         word_vec = get_wordvec(path_to_vec, word2id,orthonormalized=orthonormalized)
         wvec_dim = len(word_vec[next(iter(word_vec))])
 
         #stores the value of theta for each word
         word_complex_phase = set_wordphase(word2id)
+        
+        
+        from collections import Counter
 
-        params = {'word2id':word2id, 'word_vec':word_vec, 'wvec_dim':wvec_dim,'word_complex_phase':word_complex_phase,'id2word':id2word}
+        idfs = np.array([0.5]*(len(word2id)+1))
+        counter = Counter([word for sen in self.data['train']['X'] for word in sen]) 
+        for index, word in enumerate(id2word):
+            if word in counter:
+                idfs[index+1] = counter[word]
+        idfs = np.log(np.sum(idfs)/idfs)
+        params = {'word2id':word2id, 'word_vec':word_vec, 'wvec_dim':wvec_dim,'word_complex_phase':word_complex_phase,'id2word':id2word,"id2idf":idfs}
         self.embedding_params = params
         return params
 

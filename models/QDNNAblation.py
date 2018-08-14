@@ -32,7 +32,7 @@ projector_to_dense = 1
 projector_without_training = 2
 amplitude_embedding_without_training =3
 word_weight_without_training =4
-
+word_weigth_with_idf = 5
 
 class QDNNAblation(QDNN):
     def initialize(self):
@@ -55,4 +55,11 @@ class QDNNAblation(QDNN):
         elif self.opt.ablation == word_weight_without_training:
             print("word_weight_without_training")
             self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = False)
+        elif self.opt.ablation == word_weigth_with_idf:
+            weights= np.array([[num] for num in self.opt.idfs])
+            print(weights.shape)
+#            print(self.opt.lookup_table.shape[0], 1)
+            self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True,weights=[weights])
+        else:
+            pass
             

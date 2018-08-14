@@ -55,6 +55,7 @@ def process_embedding(reader,opt):
         orthonormalized = (opt.wordvec_initialization == "orthonormalized")
         embedding_params = reader.get_word_embedding(opt.wordvec_path,orthonormalized=orthonormalized)
         opt.lookup_table = get_lookup_table(embedding_params)
+        opt.idfs = embedding_params["id2idf"]
 
         
     # print(embedding_params['word2id'])
