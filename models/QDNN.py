@@ -60,13 +60,20 @@ class QDNN(BasicModel):
         else:
             print('Wrong input network type -- The default mixture network is constructed.')
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
+        if self.opt.network_type== "ablation" and self.opt.ablation == 1:        
+            sentence_embedding_real = Flatten()(sentence_embedding_real)
+            sentence_embedding_imag = Flatten()(sentence_embedding_imag)
+        # output = Complex1DProjection(dimension = embedding_dimension)([sentence_embedding_real, sentence_embedding_imag])
+            predictions = ComplexDense(units = self.opt.nb_classes, activation= "sigmoid", init_criterion = self.opt.init_mode)([sentence_embedding_real, sentence_embedding_imag])
     
-    
-        probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
+            output = GetReal()(predictions)
+        else:
         
-        if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:        
-            probs = self.dropout_probs(probs)
-        output =  self.dense(probs)
+            probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
+            
+            if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:        
+                probs = self.dropout_probs(probs)
+            output =  self.dense(probs)
     
         model = Model(self.doc, output)
     

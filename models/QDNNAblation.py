@@ -60,7 +60,7 @@ class QDNNAblation(QDNN):
             weights= np.array([[num] for num in self.opt.idfs])
             print(weights.shape)
 #            print(self.opt.lookup_table.shape[0], 1)
-            self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True,weights=[weights])
+            self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = False,weights=[weights])
         else:
             pass
             
