@@ -29,7 +29,7 @@ class ComplexNN(BasicModel):
         self.phase_embedding=phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable)
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init)
         self.dense = Dense(self.opt.nb_classes, activation="sigmoid")        
-        self.dropout = Dropout(self.opt.dropout_rate)
+        self.dropout = Dropout(self.opt.dropout_rate_probs)
         
     def __init__(self,opt):
         super(ComplexNN, self).__init__(opt) 
@@ -40,7 +40,7 @@ class ComplexNN(BasicModel):
         self.phase_encoded = self.phase_embedding(self.doc)
         self.amplitude_encoded = self.amplitude_embedding(self.doc)
         
-        if math.fabs(self.opt.dropout_rate -1) < 1e-6:
+        if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             self.phase_encoded = self.dropout(self.phase_encoded)
             self.amplitude_encoded = self.dropout(self.amplitude_encoded)
             

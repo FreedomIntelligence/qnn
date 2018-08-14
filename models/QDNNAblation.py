@@ -24,10 +24,10 @@ import numpy as np
 from keras import regularizers
 from keras.initializers import Constant
 
+from keras.models import Sequential
 
 
-
-
+from complexnn.utils import GetReal
 projector_to_dense = 1
 projector_without_training = 2
 amplitude_embedding_without_training =3
@@ -48,6 +48,7 @@ class QDNNAblation(QDNN):
             self.projection = ComplexDense(units = self.opt.nb_classes, activation= "sigmoid", bias_initializer=Constant(value=-1), init_criterion = self.opt.init_mode)
         elif self.opt.ablation == projector_without_training:
             print("projector_without_training")
+            
             self.projection = ComplexMeasurement(units = self.opt.measurement_size,trainable = False)
         elif self.opt.ablation == amplitude_embedding_without_training:
             print("amplitude_embedding_without_training")
