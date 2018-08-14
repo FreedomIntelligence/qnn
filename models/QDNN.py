@@ -35,6 +35,7 @@ class QDNN(BasicModel):
         self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",       
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
         self.dropout_probs = Dropout(self.opt.dropout_rate_probs)
+        self.projection = ComplexMeasurement(units = self.opt.measurement_size)
   
     def __init__(self,opt):
         super(QDNN, self).__init__(opt) 
@@ -61,7 +62,8 @@ class QDNN(BasicModel):
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
     
     
-        probs = ComplexMeasurement(units = self.opt.measurement_size)([sentence_embedding_real, sentence_embedding_imag])
+        probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
+        
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:        
             probs = self.dropout_probs(probs)
         output =  self.dense(probs)

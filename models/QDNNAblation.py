@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
+# -*- coding: utf-8 -*-
+from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation
+from .BasicModel import BasicModel
+from keras.models import Model, Input, model_from_json, load_model
+from keras.constraints import unit_norm
+import sys
+from .QDNN import QDNN
+sys.path.append('complexnn')
+from embedding import phase_embedding_layer, amplitude_embedding_layer
+from multiply import ComplexMultiply
+from superposition import ComplexSuperposition
+from dense import ComplexDense
+from mixture import ComplexMixture
+from measurement import ComplexMeasurement
+
+from utils import GetReal
+from projection import Complex1DProjection
+import math
+import numpy as np
+
+from keras import regularizers
+from keras.initializers import Constant
+
+
+
+
+
+projector_to_dense = 1
+projector_without_training = 2
+amplitude_embedding_without_training =3
+word_weight_without_training =4
+
+
+class QDNNAblation(QDNN):
+    def __init__(self,opt):
+        super(QDNN, self).__init__(opt)
+        self.ablation()
+        
+    def ablation(self):
+        if self.opt.ablation== projector_to_dense:
+            print("projector_to_dense")
+            self.projection = ComplexDense(units = self.opt.nb_classes, activation= "sigmoid", bias_initializer=Constant(value=-1), init_criterion = self.opt.init_mode)
+        elif self.opt.ablation == projector_without_training:
+            print("projector_without_training")
+            self.projection = ComplexMeasurement(units = self.opt.measurement_size,trainable = False)
+        elif self.opt.ablation == amplitude_embedding_without_training:
+            print("amplitude_embedding_without_training")
+            self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = False, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
+        elif self.opt.ablation == word_weight_without_training:
+            print("word_weight_without_training")
+            self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = False)
+            
