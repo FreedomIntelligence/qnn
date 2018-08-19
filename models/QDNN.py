@@ -24,58 +24,60 @@ from keras import regularizers
 
 
 class QDNN(BasicModel):
-    
+
     def initialize(self):
         self.doc = Input(shape=(self.opt.max_sequence_length,), dtype='int32')
 
         self.phase_embedding=phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
-        
+
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
         self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True)
-        self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",       
+        self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
         self.dropout_probs = Dropout(self.opt.dropout_rate_probs)
         self.projection = ComplexMeasurement(units = self.opt.measurement_size)
-  
+
     def __init__(self,opt):
-        super(QDNN, self).__init__(opt) 
-        
-    
+        super(QDNN, self).__init__(opt)
+
+
     def build(self):
         self.weight = Activation('softmax')(self.weight_embedding(self.doc))
         self.phase_encoded = self.phase_embedding(self.doc)
         self.amplitude_encoded = self.amplitude_embedding(self.doc)
-        
+
         if math.fabs(self.opt.dropout_rate_embedding -1) < 1e-6:
             self.phase_encoded = self.dropout_embedding(self.phase_encoded)
             self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)
-            
+
         [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([ self.phase_encoded, self.amplitude_encoded])
         if self.opt.network_type.lower() == 'complex_mixture':
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
-    
+
         elif self.opt.network_type.lower() == 'complex_superposition':
             [sentence_embedding_real, sentence_embedding_imag]= ComplexSuperposition()([seq_embedding_real, seq_embedding_imag, self.weight])
-    
+
         else:
             print('Wrong input network type -- The default mixture network is constructed.')
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
-        if self.opt.network_type== "ablation" and self.opt.ablation == 1:        
+        if self.opt.network_type== "ablation" and self.opt.ablation == 1:
             sentence_embedding_real = Flatten()(sentence_embedding_real)
             sentence_embedding_imag = Flatten()(sentence_embedding_imag)
         # output = Complex1DProjection(dimension = embedding_dimension)([sentence_embedding_real, sentence_embedding_imag])
             predictions = ComplexDense(units = self.opt.nb_classes, activation= "sigmoid", init_criterion = self.opt.init_mode)([sentence_embedding_real, sentence_embedding_imag])
-    
+
             output = GetReal()(predictions)
         else:
-        
+
             probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
-            
-            if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:        
+
+            if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
                 probs = self.dropout_probs(probs)
             output =  self.dense(probs)
-    
+
         model = Model(self.doc, output)
-    
+
 
         return model
+
+

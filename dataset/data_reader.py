@@ -12,7 +12,7 @@ class DataReader(object):
         self.data = {'train': clear(train), 'dev': clear(dev), 'test': clear(test)}
         self.nb_classes = nb_classes
         self.max_sentence_length = self.get_max_sentence_length()
-        
+
 
     def get_max_sentence_length(self):
 
@@ -23,7 +23,6 @@ class DataReader(object):
             sample_length = len(sample)
             if max_sentence_length < sample_length:
                 max_sentence_length = sample_length
-
         return max_sentence_length
 
     def get_word_embedding(self, path_to_vec,orthonormalized=True):
@@ -31,18 +30,18 @@ class DataReader(object):
                 self.data['test']['X']
 
         id2word, word2id = create_dictionary(samples, threshold=0)
-        
+
         word_vec = get_wordvec(path_to_vec, word2id,orthonormalized=orthonormalized)
         wvec_dim = len(word_vec[next(iter(word_vec))])
 
         #stores the value of theta for each word
         word_complex_phase = set_wordphase(word2id)
-        
-        
+
+
         from collections import Counter
 
         idfs = np.array([0.5]*(len(word2id)+1))
-        counter = Counter([word for sen in self.data['train']['X'] for word in sen]) 
+        counter = Counter([word for sen in self.data['train']['X'] for word in sen])
         for index, word in enumerate(id2word):
             if word in counter:
                 idfs[index+1] = counter[word]
@@ -77,32 +76,32 @@ class DataReader(object):
             # print(sst_embed[key]['y'])
             logging.info('Computed {0} embeddings'.format(key))
         return embed
-    
-     
-    
+
+
+
     def get_processed_data(self):
 
         train_test_val = self.create_batch(self.embedding_params)
         training_data = train_test_val['train']
         test_data = train_test_val['test']
         validation_data = train_test_val['dev']
-        
-        
+
+
         # for x, y in batch_gen(training_data, max_sequence_length):
         #     model.train_on_batch(x,y)
-        
+
         train_x, train_y = data_gen(training_data, self.max_sentence_length)
         test_x, test_y = data_gen(test_data, self.max_sentence_length)
         val_x, val_y = data_gen(validation_data, self.max_sentence_length)
         # assert len(train_x) == 67349
         # assert len(test_x) == 1821
         # assert len(val_x) == 872
-        
+
         train_y = to_categorical(train_y)
         test_y = to_categorical(test_y)
         val_y = to_categorical(val_y)
         return (train_x, train_y),(test_x, test_y),(val_x, val_y)
-        
+
 
 
 class TRECDataReader(DataReader):
