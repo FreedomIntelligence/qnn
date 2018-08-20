@@ -6,7 +6,7 @@ from keras import regularizers
 from keras.models import Model
 import sys
 sys.path.append('complexnn')
-from index import Index
+
 from params import Params
 import models
 import dataset

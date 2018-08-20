@@ -12,8 +12,9 @@ import math
 
 class ComplexMeasurement(Layer):
 
-    def __init__(self, units = 5, **kwargs):
+    def __init__(self, units = 5, trainable =True,  **kwargs):
         self.units = units
+        self.trainable=trainable
         super(ComplexMeasurement, self).__init__(**kwargs)
 
     def get_config(self):
@@ -35,7 +36,7 @@ class ComplexMeasurement(Layer):
                                       shape=(self.units, self.dim,2),
                                       constraint = unit_norm(axis = (1,2)),
                                       initializer=Orthogonal(gain=1.0, seed=None),
-                                      trainable=True)
+                                      trainable=self.trainable)
 
         super(ComplexMeasurement, self).build(input_shape)  # Be sure to call this somewhere!
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # -*- coding: utf-8 -*-
-from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate
+from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape
 from .BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
@@ -19,9 +19,10 @@ from utils import GetReal
 from projection import Complex1DProjection
 import math
 import numpy as np
+from reshape import reshape
 
 from keras import regularizers
-
+import keras.backend as K
 
 
 class LocalMixtureNN(BasicModel):
@@ -30,7 +31,7 @@ class LocalMixtureNN(BasicModel):
         self.doc = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
         #############################################
         #This parameter should be passed from params
-        self.ngram = NGram(n_value = 3)
+        self.ngram =  NGram(n_value = self.opt.ngram_value ) 
         #############################################
         self.phase_embedding=phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
 
@@ -48,39 +49,49 @@ class LocalMixtureNN(BasicModel):
     def build(self):
 
         self.doc_ngram = self.ngram(self.doc)
-        self.prob_mat = []
-        for i in range(self.opt.max_sequence_length):
-            print(i)
-            self.input_i = Index(i)(self.doc_ngram)
-            self.weight = Activation('softmax')(self.weight_embedding(self.input_i))
-            self.phase_encoded = self.phase_embedding(self.input_i)
-            self.amplitude_encoded = self.amplitude_embedding(self.input_i)
+        self.inputs = [Index(i)(self.doc_ngram) for i in range(self.opt.max_sequence_length)]
+        self.inputs_count = len(self.inputs)
+        self.inputs = concatenate(self.inputs,axis=0)
+        self.weight = Activation('softmax')(self.weight_embedding(self.inputs))
+        self.phase_encoded = self.phase_embedding(self.inputs)
+        self.amplitude_encoded = self.amplitude_embedding(self.inputs)
 
-            if math.fabs(self.opt.dropout_rate_embedding -1) < 1e-6:
-                self.phase_encoded = self.dropout_embedding(self.phase_encoded)
-                self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)
+        if math.fabs(self.opt.dropout_rate_embedding -1) < 1e-6:
+            self.phase_encoded = self.dropout_embedding(self.phase_encoded)
+            self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)
 
-            [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([ self.phase_encoded, self.amplitude_encoded])
-            if self.opt.network_type.lower() == 'complex_mixture':
-                [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
+        [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([ self.phase_encoded, self.amplitude_encoded])
+        if self.opt.network_type.lower() == 'complex_mixture':
+            [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
 
-            elif self.opt.network_type.lower() == 'complex_superposition':
-                [sentence_embedding_real, sentence_embedding_imag]= ComplexSuperposition()([seq_embedding_real, seq_embedding_imag, self.weight])
+        elif self.opt.network_type.lower() == 'complex_superposition':
+            [sentence_embedding_real, sentence_embedding_imag]= ComplexSuperposition()([seq_embedding_real, seq_embedding_imag, self.weight])
 
-            else:
-                print('Wrong input network type -- The default mixture network is constructed.')
-                [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
+        else:
+            print('Wrong input network type -- The default mixture network is constructed.')
+            [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
 
-            probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
+        probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
 
-            if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
-                probs = self.dropout_probs(probs)
+        self.probs = reshape( (-1,self.opt.max_sequence_length*self.opt.measurement_size))(probs)
+        if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
+            probs = self.dropout_probs(probs)
                 # output =  self.dense(probs)
-            self.prob_mat.append(probs)
-
-        self.prob_flattened = concatenate(self.prob_mat)
-        output = self.dense(self.prob_flattened)
+        output = self.dense(self.probs)
         model = Model(self.doc, output)
         return model
 
+
+if __name__ == "__main__":
+    from  models.BasicModel import BasicModel
+    
+    from params import Params 
+    import dataset
+    
+    opt = Params()
+    config_file = 'config/local.ini'    # define dataset in the config
+    opt.parse_config(config_file)
+    reader = dataset.setup(opt)
+    opt = dataset.process_embedding(reader,opt)
+    self = BasicModel(opt)
 

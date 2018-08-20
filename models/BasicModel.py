@@ -6,7 +6,7 @@ class BasicModel(object):
         self.initialize()
         self.model = self.build()
     
-    def initialize():
+    def initialize(self):
         pass
     
     def build(self):

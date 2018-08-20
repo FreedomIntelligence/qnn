@@ -1,4 +1,4 @@
-from dense import ComplexDense
+from .dense import ComplexDense
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer
@@ -14,8 +14,8 @@ import math
 from dataset.data import get_lookup_table,data_gen
 from dataset.data_reader import SSTDataReader
 from keras.layers import Embedding
-from multiply import ComplexMultiply
-from positive_unit_norm import PositiveUnitNorm
+from .multiply import ComplexMultiply
+from .positive_unit_norm import PositiveUnitNorm
 from keras import regularizers
 
 def phase_embedding_layer(max_sequence_length, input_dim, embedding_dim = 1,trainable = True,l2_reg=0.0000005):
