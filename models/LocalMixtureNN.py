@@ -13,6 +13,8 @@ from superposition import ComplexSuperposition
 from dense import ComplexDense
 from mixture import ComplexMixture
 from measurement import ComplexMeasurement
+from l2_normalization import L2Normalization
+from l2_norm import L2Norm
 from index import Index
 from ngram import NGram
 from utils import GetReal
@@ -36,6 +38,8 @@ class LocalMixtureNN(BasicModel):
         self.phase_embedding=phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
 
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
+        self.l2_normalization = L2Normalization(axis = 2)
+        self.l2_norm = L2Norm(axis = 2)
         self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True)
         self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
@@ -49,16 +53,27 @@ class LocalMixtureNN(BasicModel):
     def build(self):
 
         self.doc_ngram = self.ngram(self.doc)
+
         self.inputs = [Index(i)(self.doc_ngram) for i in range(self.opt.max_sequence_length)]
         self.inputs_count = len(self.inputs)
         self.inputs = concatenate(self.inputs,axis=0)
         self.weight = Activation('softmax')(self.weight_embedding(self.inputs))
         self.phase_encoded = self.phase_embedding(self.inputs)
         self.amplitude_encoded = self.amplitude_embedding(self.inputs)
+        
+        self.weight = Activation('softmax')(self.l2_norm(self.amplitude_encoded))
+        self.amplitude_encoded = self.l2_normalization(self.amplitude_encoded)
 
         if math.fabs(self.opt.dropout_rate_embedding -1) < 1e-6:
             self.phase_encoded = self.dropout_embedding(self.phase_encoded)
             self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)
+
+        
+
+
+        self.phase_encoded = self.phase_embedding(self.input_i)
+
+
 
         [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([ self.phase_encoded, self.amplitude_encoded])
         if self.opt.network_type.lower() == 'complex_mixture':

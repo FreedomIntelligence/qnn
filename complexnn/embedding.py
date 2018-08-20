@@ -34,14 +34,14 @@ def amplitude_embedding_layer(embedding_matrix, max_sequence_length, trainable =
     if(random_init):
         return(Embedding(vocabulary_size,
                                 embedding_dim,
-                                embeddings_constraint = unit_norm(axis = 1),
+                                # embeddings_constraint = unit_norm(axis = 1),
                                 input_length=max_sequence_length,embeddings_regularizer= regularizers.l2(l2_reg),
                                 trainable=trainable))
     else:
         return(Embedding(vocabulary_size,
                                 embedding_dim,
                                 weights=[np.transpose(embedding_matrix)],
-                                embeddings_constraint = unit_norm(axis = 1),
+                                # embeddings_constraint = unit_norm(axis = 1),
                                 input_length=max_sequence_length,embeddings_regularizer= regularizers.l2(l2_reg),
                                 trainable=trainable))
 
