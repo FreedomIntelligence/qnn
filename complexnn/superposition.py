@@ -1,4 +1,4 @@
-from .dense import ComplexDense
+from complexnn import *
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer
@@ -8,7 +8,7 @@ import sys
 import os
 import keras.backend as K
 import math
-from .mixture import ComplexMixture
+
 
 
 class ComplexSuperposition(Layer):

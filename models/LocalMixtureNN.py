@@ -1,32 +1,20 @@
 # -*- coding: utf-8 -*-
 
 # -*- coding: utf-8 -*-
-from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape
-from .BasicModel import BasicModel
+from keras.layers import Embedding,GlobalMaxPooling1D, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape
+
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
 import sys
-sys.path.append('complexnn')
-from embedding import phase_embedding_layer, amplitude_embedding_layer
-from multiply import ComplexMultiply
-from superposition import ComplexSuperposition
-from dense import ComplexDense
-from mixture import ComplexMixture
-from measurement import ComplexMeasurement
-from l2_normalization import L2Normalization
-from l2_norm import L2Norm
-from index import Index
-from ngram import NGram
-from utils import GetReal
-from projection import Complex1DProjection
+
 import math
 import numpy as np
-from reshape import reshape
 
+from complexnn import *
 from keras import regularizers
 import keras.backend as K
 
-
+from .BasicModel import BasicModel
 class LocalMixtureNN(BasicModel):
 
     def initialize(self):
@@ -38,8 +26,8 @@ class LocalMixtureNN(BasicModel):
         self.phase_embedding=phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
 
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
-        self.l2_normalization = L2Normalization(axis = 2)
-        self.l2_norm = L2Norm(axis = 2)
+        self.l2_normalization = L2Normalization(axis = 2 )
+        self.l2_norm = L2Norm(axis = 2,keep_dims = False)
         self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True)
         self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
@@ -57,21 +45,24 @@ class LocalMixtureNN(BasicModel):
         self.inputs = [Index(i)(self.doc_ngram) for i in range(self.opt.max_sequence_length)]
         self.inputs_count = len(self.inputs)
         self.inputs = concatenate(self.inputs,axis=0)
-        self.weight = Activation('softmax')(self.weight_embedding(self.inputs))
+#        self.weight = Activation('softmax')(self.weight_embedding(self.inputs))
+        
+        
         self.phase_encoded = self.phase_embedding(self.inputs)
         self.amplitude_encoded = self.amplitude_embedding(self.inputs)
         
         self.weight = Activation('softmax')(self.l2_norm(self.amplitude_encoded))
+        self.weight = reshape( (-1,self.opt.ngram_value,1))(self.weight)
+
+#        self.weight = reshape( (-1,self.opt.max_sequence_length,self.opt.ngram_value))(self.weight)
+        
         self.amplitude_encoded = self.l2_normalization(self.amplitude_encoded)
 
         if math.fabs(self.opt.dropout_rate_embedding -1) < 1e-6:
             self.phase_encoded = self.dropout_embedding(self.phase_encoded)
-            self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)
+            self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)   
 
         
-
-
-        self.phase_encoded = self.phase_embedding(self.input_i)
 
 
 
@@ -88,9 +79,11 @@ class LocalMixtureNN(BasicModel):
 
         probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
 
-        self.probs = reshape( (-1,self.opt.max_sequence_length*self.opt.measurement_size))(probs)
+        self.probs = reshape( (-1,self.opt.max_sequence_length,self.opt.measurement_size))(probs)
+        if True:
+            self.probs=GlobalMaxPooling1D()(self.probs)
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
-            probs = self.dropout_probs(probs)
+            self.probs = self.dropout_probs(self.probs)
                 # output =  self.dense(probs)
         output = self.dense(self.probs)
         model = Model(self.doc, output)
@@ -108,5 +101,6 @@ if __name__ == "__main__":
     opt.parse_config(config_file)
     reader = dataset.setup(opt)
     opt = dataset.process_embedding(reader,opt)
+    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
     self = BasicModel(opt)
 

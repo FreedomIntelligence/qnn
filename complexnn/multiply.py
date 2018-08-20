@@ -1,4 +1,4 @@
-from .dense import ComplexDense
+
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer
@@ -8,7 +8,7 @@ import sys
 import os
 import keras.backend as K
 import math
-
+from complexnn import *
 class ComplexMultiply(Layer):
     # Input is [phase_embedding, amplitude_embedding]
     # Output is [sentence_embedding_real, sentence_embedding_imag]
