@@ -10,16 +10,17 @@ import os
 import keras.backend as K
 import math
 
-class L2Normalization(Layer):
+class L2Norm(Layer):
 
-    def __init__(self, axis = 1, **kwargs):
+    def __init__(self, axis = 1, keep_dims = True, **kwargs):
         # self.output_dim = output_dim
         self.axis = axis
-        super(L2Normalization, self).__init__(**kwargs)
+        self.keep_dims = keep_dims
+        super(L2Norm, self).__init__(**kwargs)
 
     def get_config(self):
-        config = {'axis': self.axis}
-        base_config = super(L2Normalization, self).get_config()
+        config = {'axis': self.axis, 'keep_dims': self.keep_dims}
+        base_config = super(L2Norm, self).get_config()
         return dict(list(base_config.items())+list(config.items()))
 
     def build(self, input_shape):
@@ -32,13 +33,14 @@ class L2Normalization(Layer):
         #                               shape=(input_shape[1], self.output_dim),
         #                               initializer='uniform',
         #                               trainable=True)
-        super(L2Normalization, self).build(input_shape)  # Be sure to call this somewhere!
+        super(L2Norm, self).build(input_shape)  # Be sure to call this somewhere!
 
     def call(self, inputs):
 
 
 
-        output = K.l2_normalize(inputs,axis = self.axis)
+        output = K.sqrt(K.sum(inputs**2, axis = self.axis, keepdims = self.keep_dims))
+
         return output
 
     def compute_output_shape(self, input_shape):
@@ -56,13 +58,14 @@ def main():
     input_dim = 300
     a=np.random.random([5,300])
     input_img = Input(shape=(input_dim,))
-    encoded = Dense(encoding_dim)(input_img) #,
-    new_code=L2Normalization()(encoded)
+    # encoded = Dense(encoding_dim)(input_img) #,
+    new_code=L2Norm()(input_img)
 
     encoder = Model(input_img, new_code)
 
     b=encoder.predict(a)
-    print(np.linalg.norm(b,axis=1))
+    print(b)
+    print(np.linalg.norm(a,axis=1))
 
 
 
