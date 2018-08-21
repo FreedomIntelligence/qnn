@@ -10,4 +10,8 @@ from .index import Index
 from .ngram import NGram
 from .utils import GetReal
 from .projection import Complex1DProjection
+from .l2_norm import L2Norm
+from .l2_normalization import L2Normalization
+from .utils import *
+from .reshape import reshape
 import numpy as np

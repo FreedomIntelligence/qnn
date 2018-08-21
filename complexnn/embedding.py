@@ -1,4 +1,3 @@
-from .dense import ComplexDense
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer
@@ -8,14 +7,12 @@ from keras.constraints import unit_norm
 import tensorflow as tf
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+#sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import keras.backend as K
 import math
 from dataset.data import get_lookup_table,data_gen
 from dataset.data_reader import SSTDataReader
 from keras.layers import Embedding
-from .multiply import ComplexMultiply
-from .positive_unit_norm import PositiveUnitNorm
 from keras import regularizers
 
 def phase_embedding_layer(max_sequence_length, input_dim, embedding_dim = 1,trainable = True,l2_reg=0.0000005):
@@ -34,14 +31,14 @@ def amplitude_embedding_layer(embedding_matrix, max_sequence_length, trainable =
     if(random_init):
         return(Embedding(vocabulary_size,
                                 embedding_dim,
-                                # embeddings_constraint = unit_norm(axis = 1),
+                                embeddings_constraint = unit_norm(axis = 1),
                                 input_length=max_sequence_length,embeddings_regularizer= regularizers.l2(l2_reg),
                                 trainable=trainable))
     else:
         return(Embedding(vocabulary_size,
                                 embedding_dim,
                                 weights=[np.transpose(embedding_matrix)],
-                                # embeddings_constraint = unit_norm(axis = 1),
+                                embeddings_constraint = unit_norm(axis = 1),
                                 input_length=max_sequence_length,embeddings_regularizer= regularizers.l2(l2_reg),
                                 trainable=trainable))
 
@@ -51,16 +48,16 @@ def amplitude_embedding_layer(embedding_matrix, max_sequence_length, trainable =
 
 
 def main():
-    path_to_vec = '../glove/glove.6B.100d.txt'
-    dir_name = '../'
+    path_to_vec = 'glove/glove.6B.100d.txt'
+    dir_name = 'data\\SST'
     reader = SSTDataReader(dir_name,nclasses = 2)
     embedding_params = reader.get_word_embedding(path_to_vec,orthonormalized=False)
     lookup_table = get_lookup_table(embedding_params)
     max_sequence_length = 60
+    sample_num = 10
 
-
-    sequence_input = Input(shape=(max_sequence_length,), dtype='int32')
-    phase_embedding = phase_embedding_layer(max_sequence_length, lookup_table.shape[0])
+    sequence_input = Input(shape=(sample_num, max_sequence_length,), dtype='int32')
+    phase_embedding = phase_embedding_layer(max_sequence_length, lookup_table.shape[0],100)
 
     amplitude_embedding = amplitude_embedding_layer(np.transpose(lookup_table), max_sequence_length)
 
@@ -98,7 +95,7 @@ def main():
 
     # model.summary()
 
-    x = train_x
+    x = np.rtrain_x
 
     y = model.predict(x)
     print(y)

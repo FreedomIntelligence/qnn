@@ -1,4 +1,3 @@
-from .dense import ComplexDense
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer
@@ -8,7 +7,6 @@ import sys
 import os
 import keras.backend as K
 import math
-from .mixture import ComplexMixture
 
 
 class ComplexSuperposition(Layer):
@@ -26,11 +24,11 @@ class ComplexSuperposition(Layer):
     def build(self, input_shape):
         if not isinstance(input_shape, list):
             raise ValueError('This layer should be called '
-                             'on a list of 3 inputs.')
+                             'on a list of 2/3 inputs.')
 
         if len(input_shape) != 3 and len(input_shape) != 2:
              raise ValueError('This layer should be called '
-                             'on a list of 3 inputs.'
+                             'on a list of 2/3 inputs.'
                               'Got ' + str(len(input_shape)) + ' inputs.')
 
         super(ComplexSuperposition, self).build(input_shape)  # Be sure to call this somewhere!
@@ -39,11 +37,11 @@ class ComplexSuperposition(Layer):
 
         if not isinstance(inputs, list):
             raise ValueError('This layer should be called '
-                             'on a list of 3 inputs.')
+                             'on a list of 2/3 inputs.')
 
         if len(inputs) != 3 and len(inputs) != 2:
             raise ValueError('This layer should be called '
-                            'on a list of 3 inputs.'
+                            'on a list of 2/3 inputs.'
                             'Got ' + str(len(inputs)) + ' inputs.')
 
 
@@ -53,55 +51,68 @@ class ComplexSuperposition(Layer):
         #                      'Got ' + str(len(input)) + ' inputs.')
         input_real = inputs[0]
         input_imag = inputs[1]
-
+        
+        ndims = len(inputs[0].shape)
         if self.average_weights:
-            output_r = K.mean(input_real,axis = 1, keepdims = False)
-            output_i = K.mean(input_imag,axis = 1, keepdims = False)
+            output_r = K.mean(input_real,axis = ndims-2, keepdims = False)
+            output_i = K.mean(input_imag,axis = ndims-2, keepdims = False)
         else:
             #For embedding layer inputs[2] is (None, embedding_dim,1)
             #For test inputs[2] is (None, embedding_dim)
-            if len(inputs[2].shape) == 2:
+            if len(inputs[2].shape) == ndims-1:
                 weight = K.expand_dims(inputs[2])
             else:
                 weight = inputs[2]
-            weight = K.repeat_elements(weight, input_real.shape[2], axis =2)
+
+            weight = K.repeat_elements(weight, input_real.shape[-1], axis = ndims-1)
 
             output_real = input_real*weight #shape: (None, 300, 300)
-            output_real = K.sum(output_real, axis = 1)
+            output_real = K.sum(output_real, axis = ndims-2)
             output_imag = input_imag*weight
-            output_imag = K.sum(output_imag, axis = 1)
+            output_imag = K.sum(output_imag, axis = ndims-2)
+        
+        
+        output_real_transpose = K.expand_dims(output_real,axis = ndims-2)
+        output_imag_transpose = K.expand_dims(output_imag,axis = ndims-2)
 
 
 
+#        output_real_transpose = K.permute_dimensions(output_real, (0,2,1))
+#        output_imag_transpose = K.permute_dimensions(output_imag, (0,2,1))
+        
         output_real = K.expand_dims(output_real)
         output_imag = K.expand_dims(output_imag)
+        
 
-        output_real_transpose = K.permute_dimensions(output_real, (0,2,1))
-        output_imag_transpose = K.permute_dimensions(output_imag, (0,2,1))
-        # print(output_real.shape)
-        # print(output_real_transpose.shape)
+        print(output_real.shape)
+        print(output_real_transpose.shape)
         # print(output_imag.shape)
 
-        output_r = K.batch_dot(output_real,output_real_transpose) + K.batch_dot(output_imag,output_imag_transpose)
-        output_i = K.batch_dot(output_imag,output_real_transpose) - K.batch_dot(output_real,output_imag_transpose)
+        output_r = K.batch_dot(output_real,output_real_transpose, axes = [ndims-1,ndims]) + K.batch_dot(output_imag,output_imag_transpose, axes = [ndims-1,ndims])
+        output_i = K.batch_dot(output_imag,output_real_transpose, axes = [ndims-1,ndims]) - K.batch_dot(output_real,output_imag_transpose, axes = [ndims-1,ndims])
 
-
-        print(output_r.shape)
-        print(output_i.shape)
         return [output_r, output_i]
 
     def compute_output_shape(self, input_shape):
         # print(type(input_shape[1]))
+        
         one_input_shape = list(input_shape[0])
-        one_output_shape = [one_input_shape[0], one_input_shape[2], one_input_shape[2]]
+        one_output_shape = []
+        for i in range(len(one_input_shape)):
+            if not i== len(one_input_shape)-2:
+                one_output_shape.append(one_input_shape[i])
+        one_output_shape.append(one_output_shape[-1])
+#        
+#        one_input_shape = list(input_shape[0])
+#        one_output_shape = [one_input_shape[0], one_input_shape[2], one_input_shape[2]]
         return [tuple(one_output_shape), tuple(one_output_shape)]
 
 
 
 def main():
-    input_2 = Input(shape=(3,5), dtype='float')
-    input_1 = Input(shape=(3,5), dtype='float')
-    weights = Input(shape = (3,),dtype= 'float')
+    input_2 = Input(shape=(2,3,5), dtype='float')
+    input_1 = Input(shape=(2,3,5), dtype='float')
+    weights = Input(shape = (2,3,),dtype= 'float')
     [output_1, output_2] = ComplexSuperposition(average_weights = False)([input_1, input_2, weights])
 
 
@@ -111,12 +122,12 @@ def main():
               metrics=['accuracy'])
     model.summary()
 
-    x = np.random.random((3,3,5))
-    x_2 = np.random.random((3,3,5))
+    x = np.random.random((4,2,3,5))
+    x_2 = np.random.random((4,2,3,5))
 
-    weights = np.random.random((3,3))
+    weights = np.random.random((4,2,3))
     output = model.predict([x,x_2, weights])
-    print(output)
+    print(output[0].shape)
 
 
     # rng = numpy.random.RandomState(123)

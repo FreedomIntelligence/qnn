@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
-
 from keras.layers import Layer
 
 class Index(Layer):

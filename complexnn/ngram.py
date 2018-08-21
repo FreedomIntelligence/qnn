@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys; sys.path.append('.')
 from keras.layers import Input,Layer
 from keras.models import Model
 import numpy as np
@@ -53,8 +54,8 @@ class NGram(Layer):
 
 def main():
 
-   input_1 = Input(shape=(5,), dtype='int32')
-   output = NGram(4)(input_1)
+   input_1 = Input(shape=(10,), dtype='float32')
+   output = NGram(5)(input_1)
 
    model = Model(input_1, output)
    model.compile(loss='binary_crossentropy',
@@ -62,7 +63,7 @@ def main():
              metrics=['accuracy'])
    model.summary()
 
-   x = np.random.randomInt((3,5))
+   x = np.random.randint(20,size = (3,10))
    y = model.predict(x)
    print(x)
    print(y)
