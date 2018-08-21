@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape
+from keras.layers import Embedding, GlobalMaxPooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape, Permute
 from .BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
@@ -72,8 +72,9 @@ class LocalMixtureNN(BasicModel):
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
 
         probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
-
-        self.probs = reshape((-1,self.opt.max_sequence_length*self.opt.measurement_size))(probs)
+#        probs = Permute((2,1))(probs)
+#        self.probs = reshape((-1,self.opt.max_sequence_length*self.opt.measurement_size))(probs)
+        self.probs = GlobalMaxPooling1D()(probs)
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             probs = self.dropout_probs(probs)
                 # output =  self.dense(probs)

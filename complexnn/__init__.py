@@ -14,4 +14,5 @@ from .l2_norm import L2Norm
 from .l2_normalization import L2Normalization
 from .utils import *
 from .reshape import reshape
+from .lambda_functions import *
 import numpy as np
