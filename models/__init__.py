@@ -1,8 +1,8 @@
-from .RealNN import RealNN
-from .QDNN import QDNN
-from .ComplexNN import ComplexNN
-from .QDNNAblation import QDNNAblation
-from .LocalMixtureNN import LocalMixtureNN
+from models.RealNN import RealNN
+from models.QDNN import QDNN
+from models.ComplexNN import ComplexNN
+from models.QDNNAblation import QDNNAblation
+from models.LocalMixtureNN import LocalMixtureNN
 
 def setup(opt):
     print("network type: " + opt.network_type)

@@ -39,7 +39,7 @@ class L2Norm(Layer):
 
 
 
-        output = K.sqrt(0.00001+K.sum(inputs**2, axis = self.axis, keepdims = self.keep_dims))
+        output = 0.00001+K.sum(inputs**2, axis = self.axis, keepdims = self.keep_dims)
 
         return output
 

@@ -8,16 +8,10 @@ from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
 import sys
 from .QDNN import QDNN
-sys.path.append('complexnn')
-from embedding import phase_embedding_layer, amplitude_embedding_layer
-from multiply import ComplexMultiply
-from superposition import ComplexSuperposition
-from dense import ComplexDense
-from mixture import ComplexMixture
-from measurement import ComplexMeasurement
+from complexnn import *
 
-from utils import GetReal
-from projection import Complex1DProjection
+
+
 import math
 import numpy as np
 
@@ -27,7 +21,7 @@ from keras.initializers import Constant
 from keras.models import Sequential
 
 
-from complexnn.utils import GetReal
+
 projector_to_dense = 1
 projector_without_training = 2
 amplitude_embedding_without_training =3
