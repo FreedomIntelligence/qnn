@@ -15,7 +15,7 @@ from tools.timer import log_time_delta
 from nltk.corpus import stopwords
 Overlap = 237
 import random
-
+from units import to_array 
 class Alphabet(dict):
     def __init__(self, start_feature_id = 1):
         self.fid = start_feature_id
@@ -34,25 +34,18 @@ class Alphabet(dict):
             for k in sorted(self.keys()):
                 out.write("{}\t{}\n".format(k, self[k]))
 
-def to_array(ll):
-    
-    lens = [len(l) for l in ll]
-    maxlen=max(lens)
-    arr = np.zeros((len(ll),maxlen),int)
-    mask = np.arange(maxlen) < np.array(lens)[:,None]
-    arr[mask] = np.concatenate(ll)
-    return arr
+
 
                 
 class BucketIterator(object):
-    def __init__(self,data,opt=None,batch_size=2,shuffle=True,test=False,position=False,backend="tensorflow"):
+    def __init__(self,data,always=False,opt=None,batch_size=2,shuffle=True,test=False,position=False,backend="tensorflow"):
         self.shuffle=shuffle
         self.data=data
         self.batch_size=batch_size
         self.test=test 
         self.backend=backend
         self.transform=self.setTransform()
-
+        self.always=always
         
         if opt is not None:
             self.setup(opt)
@@ -140,7 +133,7 @@ class dataHelper():
         
         print('get embedding')
         if opt.dataset_name=="NLPCC":     # can be updated
-            self.embeddings = self.get_embedding(anguage="cn",fname=opt.wordvec_path)
+            self.embeddings = self.get_embedding(language="cn",fname=opt.wordvec_path)
         else:
             self.embeddings = self.get_embedding(fname=opt.wordvec_path)
         opt.embeddings = self.embeddings
@@ -148,6 +141,7 @@ class dataHelper():
         opt.alphabet=self.alphabet
         opt.embedding_size = self.embeddings.shape[1]
         opt.max_sequence_length=self.max_sequence_length
+        opt.lookup_table = self.embeddings
         
 
 
@@ -199,9 +193,9 @@ class dataHelper():
     
 
     @log_time_delta
-    def get_embedding(self,fname=None,language ="en"):
+    def get_embedding(self,fname=None,language ="en", fresh = True):
         pkl_name="temp/"+self.dataset_name+".subembedding.pkl"
-        if  os.path.exists(pkl_name):
+        if  os.path.exists(pkl_name) and not fresh:
             return pickle.load(open(pkl_name,"rb"))
 #        if language=="en":
 #            fname = 'embedding/glove.6B/glove.6B.300d.txt'
@@ -261,7 +255,7 @@ class dataHelper():
         return vectors,embedding_size
     
     @log_time_delta
-    def getTrain(self,sort_by_len = True,shuffle = True,model=None,sess=None,overlap_feature= False):
+    def getTrain(self,sort_by_len = True,shuffle = True,model=None,sess=None,overlap_feature= False,iterable=True):
         
         q,a,neg_a,overlap1,overlap2 = [],[],[],[],[]
         for question,group in self.datas["train"].groupby("question"):
@@ -296,9 +290,14 @@ class dataHelper():
                     overlap1.append(self.overlap_index(seq_q,seq_a))
                     overlap2.append(self.overlap_index(seq_q,seq_neg_a))
         if  overlap_feature :
-            return BucketIterator( (q,a,neg_a,overlap1,overlap2),batch_size=self.batch_size,shuffle=True)
+            data= (q,a,neg_a,overlap1,overlap2)
         else:
-            return BucketIterator( (q,a,neg_a),batch_size=self.batch_size,shuffle=True) 
+            data = (q,a,neg_a)
+        
+        if iterable:
+            return BucketIterator( data,batch_size=self.batch_size,shuffle=True) 
+        else: 
+            return data
     # calculate the overlap_index
     def overlap_index(self,question,answer,stopwords = []):
 
@@ -323,7 +322,7 @@ class dataHelper():
     
 
             
-    def getTest(self,mode ="test",overlap_feature =False):
+    def getTest(self,mode ="test",overlap_feature =False, iterable = True):
         
         if overlap_feature:
             process = lambda row: (self.encode_to_split(row["question"]),
@@ -334,8 +333,25 @@ class dataHelper():
                                self.encode_to_split(row["answer"]))
         
         samples = self.datas[mode].apply( process,axis=1)
+        if iterable:
+            return BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=False)
+        else: 
+            return [i for i in zip(*samples)]
         
-        return BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=False)
+    def getPointWiseSamples(self, iterable = False):
+        q,a,neg = self.getTrain(iterable=False)
+        data = (q+q, a+neg, [1]*len(q) +[0]*len(q))
+        c = list(zip(*data))
+        random.shuffle(c)
+        result = [to_array(item,self.max_sequence_length) if i<2 else np.array(item)  for i,item in enumerate(zip(*c))]
+        if iterable:            
+            x,y,z = result
+            formated = ([i for i in zip(x,y)],z)
+            return BucketIterator( formated ,batch_size=self.batch_size,shuffle=False)
+        else:
+            return  result
+        
+            
     def prepare_data(self,seqs):
         lengths = [len(seq) for seq in seqs]
         n_samples = len(seqs)
@@ -365,8 +381,9 @@ if __name__ == "__main__":
 #    data = next(iter(reader.getTrain(overlap_feature=True)))
 #    for data in reader.getTest(overlap_feature=True,shuffle=False):
 #        print(len(data))
-    data = next(iter(reader.getTrain(overlap_feature=True,shuffle=False)))
-    data = next(iter(reader.getTest(overlap_feature=True)))
+#    data = next(iter(reader.getTrain(overlap_feature=True,shuffle=False)))
+#    data = next(iter(reader.getTest(overlap_feature=True)))
+    data = reader.getTrain(iterable=False)
 
 
 

@@ -56,4 +56,13 @@ def getLogger():
     logger.info("running %s" % ' '.join(sys.argv))
     
     return log_path,logger
-
+import numpy as np
+def to_array(ll,maxlen=0):
+    
+    lens = [len(l) for l in ll]
+    if maxlen ==0:
+        maxlen=max(lens)
+    arr = np.zeros((len(ll),maxlen),int)
+    mask = np.arange(maxlen) < np.array(lens)[:,None]
+    arr[mask] = np.concatenate(ll)
+    return arr

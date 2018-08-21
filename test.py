@@ -9,36 +9,54 @@ import models
 import models.Matching
 from params import Params
 
-import dataset
+from dataset import qa
 from save import save_experiment
 import keras.backend as K
 import units
 
 
+
+
 def test_match():
     
     params = Params()
-    config_file = 'config/local.ini'    # define dataset in the config
+    config_file = 'config/qalocal.ini'    # define dataset in the config
     params.parse_config(config_file)
-    reader = dataset.setup(params)
-    params = dataset.process_embedding(reader,params)
+    
+    
+    reader = qa.setup(params)
     qdnn = models.Matching.setup(params)
     model = qdnn.getModel()
+    
+    
+        
+
+
     
     model.compile(loss = params.loss,
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=['accuracy'])
     model.summary()
-    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
-    
-    train_y = np.random.randint(2,size = len(train_y))
-    model.fit(x = [train_x,train_x],y = train_y,epochs = 10)
 
+
+
+    
+#    generators = [reader.getTrain(iterable=False) for i in range(params.epochs)]
+    q,a,score = reader.getPointWiseSamples()
+    model.fit(x = [q,a],y = score,epochs = 1,batch_size =params.batch_size)
+    
+    def gen():
+        while True:
+            for sample in reader.getPointWiseSamples(iterable = True):
+                yield sample
+    model.fit_generator(gen(),epochs = 2,steps_per_epoch=100)
+    
 def test():
 
     params = Params()
     config_file = 'config/local.ini'    # define dataset in the config
     params.parse_config(config_file)
+    import dataset
     reader = dataset.setup(params)
     params = dataset.process_embedding(reader,params)
     qdnn = models.setup(params)
