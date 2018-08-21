@@ -10,8 +10,6 @@ import sys
 from .QDNN import QDNN
 from complexnn import *
 
-
-
 import math
 import numpy as np
 

@@ -14,3 +14,7 @@ log/*
 case study/*
 *.cases
 *.csv
+temp/*
+*.pkl
+.spyproject/*
+best_parameters/*

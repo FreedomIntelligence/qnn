@@ -1,4 +1,3 @@
-from complexnn import *
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer

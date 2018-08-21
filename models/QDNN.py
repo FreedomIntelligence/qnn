@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-
-# -*- coding: utf-8 -*-
-from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation
+from keras.layers import Embedding, GlobalAveragePooling1D, Dense, Masking, Flatten,Dropout, Activation
 from .BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
-import sys
-
 from complexnn import *
-
-
 import math
 import numpy as np
 
@@ -44,7 +38,7 @@ class QDNN(BasicModel):
             self.phase_encoded = self.dropout_embedding(self.phase_encoded)
             self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)
 
-        [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([ self.phase_encoded, self.amplitude_encoded])
+        [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([self.phase_encoded, self.amplitude_encoded])
         if self.opt.network_type.lower() == 'complex_mixture':
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
 

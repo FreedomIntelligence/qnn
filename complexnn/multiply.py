@@ -1,4 +1,3 @@
-
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer
@@ -8,7 +7,7 @@ import sys
 import os
 import keras.backend as K
 import math
-from complexnn import *
+
 class ComplexMultiply(Layer):
     # Input is [phase_embedding, amplitude_embedding]
     # Output is [sentence_embedding_real, sentence_embedding_imag]
@@ -56,22 +55,31 @@ class ComplexMultiply(Layer):
         amplitude = inputs[1]
 
 
-        sentence_length = amplitude.shape[1]
-        embedding_dim = amplitude.shape[2]
-
-        if(len(phase.shape) == 2):
-            cos = K.repeat_elements(K.cos(phase), embedding_dim, axis = 2)
-            sin = K.repeat_elements(K.sin(phase), embedding_dim, axis = 2)
-        elif(len(phase.shape) == 3):
+        embedding_dim = amplitude.shape[-1]
+        
+        if len(amplitude.shape) == len(phase.shape)+1: #Assigning each dimension with same phase
+            cos = K.repeat_elements(K.expand_dims(K.cos(phase)), embedding_dim, axis = len(phase.shape))
+            sin = K.repeat_elements(K.expand_dims(K.sin(phase)), embedding_dim, axis = len(phase.shape))
+            
+        elif len(amplitude.shape) == len(phase.shape): #Each dimension has different phases
             cos = K.cos(phase)
             sin = K.sin(phase)
+        
+       
         else:
-            raise ValueError('Each input should be of dimension 2 or 3.'
-                            'Got ' + str(len(phase.shape)) + ' dimension.')
+             raise ValueError('input dimensions of phase and amplitude do not agree to each other.')
+#        if(len(phase.shape) == 2):
+#            cos = K.repeat_elements(K.cos(phase), embedding_dim, axis = 2)
+#            sin = K.repeat_elements(K.sin(phase), embedding_dim, axis = 2)
+#        elif(len(phase.shape) == 3):
+#            cos = K.cos(phase)
+#            sin = K.sin(phase)
+#        else:
+#            raise ValueError('Each input should be of dimension 2 or 3.'
+#                            'Got ' + str(len(phase.shape)) + ' dimension.')
 
 #        print(cos.shape)
 #        print(sin.shape)
-
         real_part = cos*amplitude
         imag_part = sin*amplitude
         # print(real_part.shape)
@@ -88,8 +96,8 @@ class ComplexMultiply(Layer):
 def main():
 
 
-    input_2 = Input(shape=(3,5), dtype='float')
-    input_1 = Input(shape=(3,1), dtype='float')
+    input_2 = Input(shape=(3,3,2,), dtype='float')
+    input_1 = Input(shape=(3,3,), dtype='float')
     [output_1, output_2] = ComplexMultiply()([input_1, input_2])
 
 
@@ -99,8 +107,8 @@ def main():
               metrics=['accuracy'])
     model.summary()
 
-    x = np.random.random((3,3,1))
-    x_2 = np.random.random((3,3,5))
+    x = np.random.random((3,3,3))
+    x_2 = np.random.random((3,3,3,2))
 
 
     # print(x)
