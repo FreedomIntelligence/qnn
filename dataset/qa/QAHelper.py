@@ -120,11 +120,16 @@ class BucketIterator(object):
 class dataHelper():
     def __init__(self,opt):
         for key,value in opt.__dict__.items():
-            self.__setattr__(key,value)
-        dir_path = os.path.join(os.path.join(opt.datasets_dir, "QA"),opt.dataset_name)
+            self.__setattr__(key,value)        
+      
+            
+        dir_path = os.path.join(os.path.join(opt.datasets_dir, "QA"),opt.dataset_name.lower())
         self.datas = self.load(dir_path,filter = opt.clean)
         self.alphabet = self.get_alphabet(self.datas.values())
         self.optCallback(opt)
+        
+
+            
             
     def optCallback(self,opt):
         q_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['question'].str.split()))
@@ -150,10 +155,11 @@ class dataHelper():
             
     def load(self, data_dir, filter = True):
         datas = dict()
-        for data_name in ['train','test','dev']:
+        for data_name in ["train",'test']: #'dev'            
             data_file = os.path.join(data_dir,data_name+".txt")
             data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')
     #        data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"],quoting =3).fillna('0')
+            
             if filter == True:
                 datas[data_name]=self.removeUnanswerdQuestion(data)
             else:
@@ -254,7 +260,7 @@ class dataHelper():
         print( 'words found in wor2vec embedding ',len(vectors.keys()))
         return vectors,embedding_size
     
-    @log_time_delta
+#    @log_time_delta
     def getTrain(self,sort_by_len = True,shuffle = True,model=None,sess=None,overlap_feature= False,iterable=True):
         
         q,a,neg_a,overlap1,overlap2 = [],[],[],[],[]

@@ -48,7 +48,7 @@ def test_match():
         while True:
             for sample in reader.getPointWiseSamples(iterable = True):
                 yield sample
-    model.fit_generator(gen(),epochs = 2,steps_per_epoch=100)
+    model.fit_generator(gen(),epochs = 2,steps_per_epoch=1000)
 
 def test():
 
