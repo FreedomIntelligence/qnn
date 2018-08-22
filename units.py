@@ -56,13 +56,22 @@ def getLogger():
     logger.info("running %s" % ' '.join(sys.argv))
     
     return log_path,logger
+
 import numpy as np
 def to_array(ll,maxlen=0):
-    
     lens = [len(l) for l in ll]
     if maxlen ==0:
         maxlen=max(lens)
     arr = np.zeros((len(ll),maxlen),int)
     mask = np.arange(maxlen) < np.array(lens)[:,None]
+    if type(ll[0]) == tuple:
+        input_num = len(ll[0])
+        out = []
+        s = [[i[dd] for i in ll] for dd in range(input_num)]
+        for l in s:
+            out.append(np.asarray(np.ma.row_stack(l)))
+        return out
+#    print(mask)
+#    print(mask.shape)
     arr[mask] = np.concatenate(ll)
     return arr

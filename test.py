@@ -23,34 +23,33 @@ def test_match():
     config_file = 'config/qalocal.ini'    # define dataset in the config
     params.parse_config(config_file)
     
-    
     reader = qa.setup(params)
     qdnn = models.Matching.setup(params)
     model = qdnn.getModel()
     
-    
-        
-
-
     
     model.compile(loss = params.loss,
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=['accuracy'])
     model.summary()
 
-
-
+#    a = np.array([1,2])
+#    b = np.array([3,4])
+#    c = (a,b)
+#    d = (a,b)
+#    l= [c,d]
+#    np.concatenate(l)
     
 #    generators = [reader.getTrain(iterable=False) for i in range(params.epochs)]
-    q,a,score = reader.getPointWiseSamples()
-    model.fit(x = [q,a],y = score,epochs = 1,batch_size =params.batch_size)
+#    q,a,score = reader.getPointWiseSamples()
+#    model.fit(x = [q,a],y = score,epochs = 1,batch_size =params.batch_size)
     
     def gen():
         while True:
             for sample in reader.getPointWiseSamples(iterable = True):
                 yield sample
     model.fit_generator(gen(),epochs = 2,steps_per_epoch=100)
-    
+
 def test():
 
     params = Params()
@@ -72,7 +71,7 @@ def test():
     evaluation = model.evaluate(x = val_x, y = val_y)
     
 if __name__ == '__main__':
-    test()
+    test_match()
 #    test_match()
 
 

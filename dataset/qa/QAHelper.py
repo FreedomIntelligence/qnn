@@ -34,11 +34,9 @@ class Alphabet(dict):
             for k in sorted(self.keys()):
                 out.write("{}\t{}\n".format(k, self[k]))
 
-
-
-                
+           
 class BucketIterator(object):
-    def __init__(self,data,always=False,opt=None,batch_size=2,shuffle=True,test=False,position=False,backend="tensorflow"):
+    def __init__(self,data,always=False,opt=None,batch_size=2,max_sequence_length=0,shuffle=True,test=False,position=False,backend="keras"):
         self.shuffle=shuffle
         self.data=data
         self.batch_size=batch_size
@@ -46,6 +44,7 @@ class BucketIterator(object):
         self.backend=backend
         self.transform=self.setTransform()
         self.always=always
+        self.max_sequence_length = max_sequence_length
         
         if opt is not None:
             self.setup(opt)
@@ -56,6 +55,7 @@ class BucketIterator(object):
         self.shuffle=opt.__dict__.get("shuffle",self.shuffle)
 #        self.position=opt.__dict__.get("position",False)
         self.transform=self.setTransform()
+        
     def setTransform(self):
         if self.backend == "tensorflow":
             return self.transformTF
@@ -80,16 +80,16 @@ class BucketIterator(object):
         return DottableDict({"text":text,"label":label})
     
     def transformKeras(self,data):
-        return [to_array(i) for i in data]
+        return [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
     def transformTF(self,data):
-        return [to_array(i) for i in data]
+        return [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
     
-    def get_position(self,inst_data):
-        inst_position = np.array([[pos_i+1 if w_i != self.padding_token else 0 for pos_i, w_i in enumerate(inst)] for inst in inst_data])
-        inst_position_tensor = Variable( torch.LongTensor(inst_position), volatile=self.test) 
-        if torch.cuda.is_available():
-            inst_position_tensor=inst_position_tensor.cuda()
-        return inst_position_tensor
+#    def get_position(self,inst_data):
+#        inst_position = np.array([[pos_i+1 if w_i != self.padding_token else 0 for pos_i, w_i in enumerate(inst)] for inst in inst_data])
+#        inst_position_tensor = Variable( torch.LongTensor(inst_position), volatile=self.test) 
+#        if torch.cuda.is_available():
+#            inst_position_tensor=inst_position_tensor.cuda()
+#        return inst_position_tensor
 
     def __iter__(self):
         if self.shuffle and not self.test:
@@ -340,16 +340,18 @@ class dataHelper():
         
     def getPointWiseSamples(self, iterable = False):
         q,a,neg = self.getTrain(iterable=False)
-        data = (q+q, a+neg, [1]*len(q) +[0]*len(q))
+        data = [q+q, a+neg, [1]*len(q) +[0]*len(q)]
         c = list(zip(*data))
         random.shuffle(c)
+        
+#            print(type(item))
         result = [to_array(item,self.max_sequence_length) if i<2 else np.array(item)  for i,item in enumerate(zip(*c))]
         if iterable:            
             x,y,z = result
             formated = ([i for i in zip(x,y)],z)
-            return BucketIterator( formated ,batch_size=self.batch_size,shuffle=False)
+            return BucketIterator(formated,batch_size=self.batch_size,shuffle=False,max_sequence_length = self.max_sequence_length)
         else:
-            return  result
+            return result
         
             
     def prepare_data(self,seqs):
