@@ -12,22 +12,23 @@ from params import Params
 from dataset import qa
 import keras.backend as K
 import units
-
+from tools.evaluationKeras import map,mrr,ndcg
 
 def test_matchzoo():
     
     params = Params()
     config_file = 'config/qalocal.ini'    # define dataset in the config
     params.parse_config(config_file)
+    params.network_type = "anmm.ANMM"
     
     reader = qa.setup(params)
     qdnn = models.setup(params)
     model = qdnn.getModel()
     
-    
+    metrics= [map,mrr,ndcg(3),ndcg(5),'accuracy']
     model.compile(loss = params.loss,
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                metrics=['accuracy'])
+                metrics=metrics)
     model.summary()
 
 #    a = np.array([1,2])

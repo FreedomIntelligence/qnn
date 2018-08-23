@@ -34,3 +34,6 @@ class BasicModel(object):
 
     def check_list(self,check_list):
         self.check_list = check_list
+    
+    def getModel(self):
+        return self.build()
