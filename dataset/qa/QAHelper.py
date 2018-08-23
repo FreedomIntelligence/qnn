@@ -16,6 +16,7 @@ from nltk.corpus import stopwords
 Overlap = 237
 import random
 from units import to_array 
+from tools import evaluation
 class Alphabet(dict):
     def __init__(self, start_feature_id = 1):
         self.fid = start_feature_id
@@ -388,6 +389,8 @@ class dataHelper():
             x_mask[idx, :lengths[idx]] = 1.0
          # print( x, x_mask)
         return x, x_mask
+    def evaluate(self,predicted,mode= "test"):
+        return evaluation.evaluationBypandas(self.data[mode],predicted)
         
 
 if __name__ == "__main__":
