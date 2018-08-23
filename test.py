@@ -10,8 +10,16 @@ from dataset import qa
 import keras.backend as K
 import units
 from loss import *
+from units import to_array 
 
-
+def mse(y_true, y_pred, rel_threshold=0.):
+#    s = 0.
+#    y_true = _to_list(np.squeeze(y_true).tolist())
+#    y_pred = _to_list(np.squeeze(y_pred).tolist())
+#    return np.mean(np.square(y_pred - y_true), axis=-1)
+    x=K.squeeze(y_pred,axis=1)
+    y=K.squeeze(y_true,axis=1)
+    return K.mean(K.square(x-y))
 
 def test_matchzoo():
     
@@ -51,10 +59,21 @@ def test_match():
     model = qdnn.getModel()
     
     
-    model.compile(loss = rank_hinge_loss({'margin':0.2}),
-                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                metrics=['accuracy'])
-    model.summary()
+#    model.compile(loss = rank_hinge_loss({'margin':0.2}),
+#                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+#                metrics=['accuracy'])
+    model.compile(loss = 'mean_squared_error',
+            optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+            metrics=['accuracy'])
+    q,a,neg  = reader.getTrain(max_sequence_length=reader.max_sequence_length,iterable = False, shuffle = False)
+#    model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=1)
+    y_pred_pos = model.predict(x = [to_array(q,reader.max_sequence_length),to_array(a, reader.max_sequence_length)])
+#    print(y_pred_pos)
+    y_pred_neg = model.predict(x = [to_array(q,reader.max_sequence_length),to_array(neg, reader.max_sequence_length)])
+#    print(y_pred_neg)
+    
+    y_pred = np.concatenate([y_pred_pos,y_pred_neg])
+#    model.summary()
     
     
     
@@ -67,7 +86,7 @@ def test_match():
 #        while True:
 #            for sample in reader.getTrain(iterable = True):
 #                yield sample
-    model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 20,steps_per_epoch=1000)
+
 
 def test():
     import models.representation as models

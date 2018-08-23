@@ -27,7 +27,7 @@ class LocalMixtureNN(BasicModel):
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
         self.dropout_probs = Dropout(self.opt.dropout_rate_probs)
         self.projection = ComplexMeasurement(units = self.opt.measurement_size)
-        self.distance = Lambda(l2_distance)
+#        self.distance = Lambda(l2_distance)
         self.distance = Lambda(cosine_similarity)
 #        self.triplet_loss = Lambda(triplet_hinge_loss)
 
