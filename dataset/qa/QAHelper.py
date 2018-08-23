@@ -16,6 +16,7 @@ from nltk.corpus import stopwords
 Overlap = 237
 import random
 from units import to_array 
+from tools import evaluation
 class Alphabet(dict):
     def __init__(self, start_feature_id = 1):
         self.fid = start_feature_id
@@ -132,6 +133,8 @@ class dataHelper():
         q_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['question'].str.split()))
         a_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['answer'].str.split()))    
         self.max_sequence_length = max(q_max_sent_length,a_max_sent_length)
+#        self.q_max_sent_length = q_max_sent_length
+#        self.a_max_sent_length = a_max_sent_length
         
         print('get embedding')
         if opt.dataset_name=="NLPCC":     # can be updated
@@ -386,6 +389,8 @@ class dataHelper():
             x_mask[idx, :lengths[idx]] = 1.0
          # print( x, x_mask)
         return x, x_mask
+    def evaluate(self,predicted,mode= "test"):
+        return evaluation.evaluationBypandas(self.data[mode],predicted)
         
 
 if __name__ == "__main__":
