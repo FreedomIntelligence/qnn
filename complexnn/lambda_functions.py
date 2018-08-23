@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-from keras.models import Model
-from keras.layers import Dense, Activation, Lambda, Input 
-import numpy as np
 import keras.backend as K
+ALPHA = 0.2
 def l2_distance(inputs):
     left = inputs[0]
     right = inputs[1]
@@ -16,7 +14,21 @@ def cosine_similarity(inputs):
     right = K.expand_dims(right, axis = 1)
     dot_prod = K.batch_dot(left, right,axes = (1,2))
     dot_prod = K.reshape(dot_prod, shape = (-1,1))
+#    print(dot_prod.shape)
     return dot_prod
+
+def triplet_hinge_loss(inputs):
+    anchor = inputs[0]
+    positive = inputs[1]
+    negative = inputs[2]
+
+    pos_dist = K.sum((anchor-positive)**2, keepdims = True)
+    neg_dist = K.sum((anchor-negative)**2, keepdims = True)
+
+    basic_loss = pos_dist-neg_dist+ALPHA
+    loss = K.mean(K.maximum(basic_loss, 0.0),keepdims = True)
+
+    return loss
 
 #a = Input(shape=(10,))
 #b = Input(shape=(10,))

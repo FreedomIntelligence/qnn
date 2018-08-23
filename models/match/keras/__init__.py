@@ -4,7 +4,7 @@
 #from .QDNN import QDNN
 #from .ComplexNN import ComplexNN
 #from .QDNNAblation import QDNNAblation
-from .LocalMixtureNN import LocalMixtureNN
+from models.match.keras.LocalMixtureNN import LocalMixtureNN
 
 def setup(opt):
     print("network type: " + opt.network_type)

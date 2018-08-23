@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 import keras
-from keras.layers import Input, Dense, Activation
+from keras.layers import Input, Dense, Activation, Lambda
 import numpy as np
 from keras import regularizers
 from keras.models import Model
 import sys
-
-from models.match import keras as models
 from params import Params
-
 from dataset import qa
 import keras.backend as K
 import units
+
 from tools.evaluationKeras import map,mrr,ndcg
+
+from loss import *
+
+
 
 def test_matchzoo():
     
@@ -30,13 +32,6 @@ def test_matchzoo():
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=metrics)
     model.summary()
-
-#    a = np.array([1,2])
-#    b = np.array([3,4])
-#    c = (a,b)
-#    d = (a,b)
-#    l= [c,d]
-#    np.concatenate(l)
     
 #    generators = [reader.getTrain(iterable=False) for i in range(params.epochs)]
 #    q,a,score = reader.getPointWiseSamples()
@@ -50,7 +45,7 @@ def test_matchzoo():
     
 
 def test_match():
-    
+    from models.match import keras as models
     params = Params()
     config_file = 'config/qalocal.ini'    # define dataset in the config
     params.parse_config(config_file)
@@ -60,30 +55,26 @@ def test_match():
     model = qdnn.getModel()
     
     
-    model.compile(loss = params.loss,
+    model.compile(loss = rank_hinge_loss({'margin':0.2}),
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=['accuracy'])
     model.summary()
-
-#    a = np.array([1,2])
-#    b = np.array([3,4])
-#    c = (a,b)
-#    d = (a,b)
-#    l= [c,d]
-#    np.concatenate(l)
+    
+    
+    
     
 #    generators = [reader.getTrain(iterable=False) for i in range(params.epochs)]
-#    q,a,score = reader.getPointWiseSamples()
-#    model.fit(x = [q,a],y = score,epochs = 1,batch_size =params.batch_size)
+#    [q,a,score] = reader.getPointWiseSamples()
+#    model.fit(x = [q,a,a],y = [q,a,q],epochs = 10,batch_size =params.batch_size)
     
-    def gen():
-        while True:
-            for sample in reader.getPointWiseSamples(iterable = True):
-                yield sample
-    model.fit_generator(gen(),epochs = 2,steps_per_epoch=1000)
+#    def gen():
+#        while True:
+#            for sample in reader.getTrain(iterable = True):
+#                yield sample
+    model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 20,steps_per_epoch=1000)
 
 def test():
-
+    import models.representation as models
     params = Params()
     config_file = 'config/local.ini'    # define dataset in the config
     params.parse_config(config_file)
@@ -103,8 +94,8 @@ def test():
     evaluation = model.evaluate(x = val_x, y = val_y)
     
 if __name__ == '__main__':
+#    test()
     test_match()
-#    test_match()
 
 
 # x_input = np.asarray([b])
