@@ -254,7 +254,7 @@ class dataHelper():
         return vectors,embedding_size
     
 #    @log_time_delta
-    def getTrain(self,sort_by_len = True,shuffle = True,model=None,sess=None,overlap_feature= False,iterable=True):
+    def getTrain(self,sort_by_len = True,shuffle = True,model=None,sess=None,overlap_feature= False,iterable=True,max_sequence_length=0):
         
         q,a,neg_a,overlap1,overlap2 = [],[],[],[],[]
         for question,group in self.datas["train"].groupby("question"):
@@ -294,7 +294,7 @@ class dataHelper():
             data = (q,a,neg_a)
         
         if iterable:
-            return BucketIterator( data,batch_size=self.batch_size,shuffle=True) 
+            return BucketIterator( data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
         else: 
             return data
     # calculate the overlap_index
@@ -337,20 +337,41 @@ class dataHelper():
         else: 
             return [i for i in zip(*samples)]
         
-    def getPointWiseSamples(self, iterable = False):
-        q,a,neg = self.getTrain(iterable=False)
-        data = [q+q, a+neg, [1]*len(q) +[0]*len(q)]
-        c = list(zip(*data))
-        random.shuffle(c)
+    def getPointWiseSamples4Keras(self, iterable = False):
+        while True:
+            for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
+                q,a,neg = batch
+                data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
+                        [1]*len(q) +[0]*len(q)]
+                yield data
+#        c = list(zip(*data))
+#        random.shuffle(c)
+#        
+##            print(type(item))
+#        result = [to_array(item,self.max_sequence_length) if i<2 else np.array(item)  for i,item in enumerate(zip(*c))]
+#        if iterable:            
+#            x,y,z = result
+#            formated = ([i for i in zip(x,y)],z)
+#            return BucketIterator(formated,batch_size=self.batch_size,shuffle=False,max_sequence_length = self.max_sequence_length)
+#        else:
+#            return result
         
-#            print(type(item))
-        result = [to_array(item,self.max_sequence_length) if i<2 else np.array(item)  for i,item in enumerate(zip(*c))]
-        if iterable:            
-            x,y,z = result
-            formated = ([i for i in zip(x,y)],z)
-            return BucketIterator(formated,batch_size=self.batch_size,shuffle=False,max_sequence_length = self.max_sequence_length)
-        else:
-            return result
+    
+    
+    def getPairWiseSamples4Keras(self, iterable = False):
+        
+        while True:
+            for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
+                yield batch,batch
+        
+        
+#        data = [q,a,neg]
+#        c = list(zip(*data))
+#        random.shuffle(c)
+#        
+##            print(type(item))
+#        result = [to_array(item,self.max_sequence_length) for i,item in enumerate(zip(*c))]
+#        return result
         
             
     def prepare_data(self,seqs):
@@ -370,42 +391,61 @@ class dataHelper():
 if __name__ == "__main__":
     
     
-    from dataset import qa
+#    from dataset import qa
+#    from params import Params
+#    
+#    params = Params()
+#    config_file = 'config/qa.ini'    # define dataset in the config
+#    params.parse_config(config_file)
+#    
+#    reader = qa.setup(params)
+##    data1 = next(iter(reader.getTest()))
+##    data = next(iter(reader.getTrain(overlap_feature=True)))
+##    for data in reader.getTest(overlap_feature=True,shuffle=False):
+##        print(len(data))
+##    data = next(iter(reader.getTrain(overlap_feature=True,shuffle=False)))
+##    data = next(iter(reader.getTest(overlap_feature=True)))
+#    data = reader.getTrain(iterable=False)
+    # -*- coding: utf-8 -*-
+    import keras
+    from keras.layers import Input, Dense, Activation, Lambda
+    import numpy as np
+    from keras import regularizers
+    from keras.models import Model
+    import sys
     from params import Params
-    
+    from dataset import qa
+    import keras.backend as K
+    import units
+    from loss import *
+
+    from models.match import keras as models
+    from params import Params
     params = Params()
-    config_file = 'config/qa.ini'    # define dataset in the config
+
+    config_file = 'config/qalocal.ini'    # define dataset in the config
     params.parse_config(config_file)
     
     reader = qa.setup(params)
-#    data1 = next(iter(reader.getTest()))
-#    data = next(iter(reader.getTrain(overlap_feature=True)))
-#    for data in reader.getTest(overlap_feature=True,shuffle=False):
-#        print(len(data))
-#    data = next(iter(reader.getTrain(overlap_feature=True,shuffle=False)))
-#    data = next(iter(reader.getTest(overlap_feature=True)))
-    data = reader.getTrain(iterable=False)
-
-
-
-  
-
-
-
-
+    qdnn = models.setup(params)
+    model = qdnn.getModel()
     
-
-
-
-
-#     
+    from loss import *
+    model.compile(loss = rank_hinge_loss({'margin':0.2}),
+                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+                metrics=['accuracy'])
+    model.summary()
     
-
-
-
-
-
-
-
-
+    
+    
+    
+#    generators = [reader.getTrain(iterable=False) for i in range(params.epochs)]
+#    [q,a,score] = reader.getPointWiseSamples()
+#    model.fit(x = [q,a,a],y = [q,a,q],epochs = 10,batch_size =params.batch_size)
+    
+#    def gen():
+#        while True:
+#            for sample in reader.getTrain(iterable = True):
+#                yield sample
+    model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 20,steps_per_epoch=1000)
 

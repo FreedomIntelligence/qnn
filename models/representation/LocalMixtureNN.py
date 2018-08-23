@@ -35,8 +35,13 @@ class LocalMixtureNN(BasicModel):
 
 
     def build(self):
-
-        self.doc_ngram = self.ngram(self.doc)
+        self.probs = self.get_representation(self.doc)
+        output = self.dense(self.probs)
+        model = Model(self.doc, output)
+        return model
+    
+    def get_representation(self,doc):
+        self.doc_ngram = self.ngram(doc)
 
         self.inputs = [Index(i)(self.doc_ngram) for i in range(self.opt.max_sequence_length)]
         self.inputs_count = len(self.inputs)
@@ -74,13 +79,13 @@ class LocalMixtureNN(BasicModel):
         probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
 #        probs = Permute((2,1))(probs)
 #        self.probs = reshape((-1,self.opt.max_sequence_length*self.opt.measurement_size))(probs)
-        self.probs = GlobalMaxPooling1D()(probs)
+        probs = GlobalMaxPooling1D()(probs)
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             probs = self.dropout_probs(probs)
-                # output =  self.dense(probs)
-        output = self.dense(self.probs)
-        model = Model(self.doc, output)
-        return model
+
+        
+        return(probs)
+    
 
 
 if __name__ == "__main__":
