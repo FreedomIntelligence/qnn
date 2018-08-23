@@ -126,10 +126,7 @@ class dataHelper():
         dir_path = os.path.join(os.path.join(opt.datasets_dir, "QA"),opt.dataset_name.lower())
         self.datas = self.load(dir_path,filter = opt.clean)
         self.alphabet = self.get_alphabet(self.datas.values())
-        self.optCallback(opt)
-        
-
-            
+        self.optCallback(opt)            
             
     def optCallback(self,opt):
         q_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['question'].str.split()))
@@ -146,11 +143,7 @@ class dataHelper():
         opt.alphabet=self.alphabet
         opt.embedding_size = self.embeddings.shape[1]
         opt.max_sequence_length=self.max_sequence_length
-        opt.lookup_table = self.embeddings
-        
-
-
-        
+        opt.lookup_table = self.embeddings      
         
             
     def load(self, data_dir, filter = True):

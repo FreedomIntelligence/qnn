@@ -5,17 +5,48 @@ import numpy as np
 from keras import regularizers
 from keras.models import Model
 import sys
-import models
-import models.Matching
+
+from models.match import keras as models
 from params import Params
 
 from dataset import qa
-from save import save_experiment
 import keras.backend as K
 import units
 
 
+def test_matchzoo():
+    
+    params = Params()
+    config_file = 'config/qalocal.ini'    # define dataset in the config
+    params.parse_config(config_file)
+    
+    reader = qa.setup(params)
+    qdnn = models.setup(params)
+    model = qdnn.getModel()
+    
+    
+    model.compile(loss = params.loss,
+                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+                metrics=['accuracy'])
+    model.summary()
 
+#    a = np.array([1,2])
+#    b = np.array([3,4])
+#    c = (a,b)
+#    d = (a,b)
+#    l= [c,d]
+#    np.concatenate(l)
+    
+#    generators = [reader.getTrain(iterable=False) for i in range(params.epochs)]
+#    q,a,score = reader.getPointWiseSamples()
+#    model.fit(x = [q,a],y = score,epochs = 1,batch_size =params.batch_size)
+    
+    def gen():
+        while True:
+            for sample in reader.getPointWiseSamples(iterable = True):
+                yield sample
+    model.fit_generator(gen(),epochs = 2,steps_per_epoch=1000)
+    
 
 def test_match():
     
@@ -24,7 +55,7 @@ def test_match():
     params.parse_config(config_file)
     
     reader = qa.setup(params)
-    qdnn = models.Matching.setup(params)
+    qdnn = models.setup(params)
     model = qdnn.getModel()
     
     

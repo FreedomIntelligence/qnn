@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from params import Params
-import models
+from models import representation as models
 import dataset
 import units
-from save import save_experiment
+from tools.save import save_experiment
 import itertools
 import argparse
 import keras.backend as K

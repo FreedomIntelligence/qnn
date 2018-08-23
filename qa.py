@@ -8,7 +8,7 @@ import datetime
 
 from params import Params
 from dataset import qa
-from models import match
+from models.match import tensorflow as models
 from tools import evaluation
 from dataset.qa import QAHelper as helper
 
@@ -38,7 +38,7 @@ with tf.Graph().as_default(): # ,tf.device("/cpu:" + str(params.gpu))
 #    sess = tf.Session(config=session_conf)
     sess = tf.InteractiveSession()
     
-    model = match.setup(params)
+    model = models.setup(params)
     model.build_graph()   
     saver = tf.train.Saver()
 
