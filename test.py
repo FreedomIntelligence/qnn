@@ -27,10 +27,10 @@ def test_matchzoo():
     qdnn = models.setup(params)
     model = qdnn.getModel()
     
-    metrics= [map,mrr,ndcg(3),ndcg(5),'accuracy']
+    
     model.compile(loss = params.loss,
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                metrics=metrics)
+                metrics=['accuracy'])
     model.summary()
     
 #    generators = [reader.getTrain(iterable=False) for i in range(params.epochs)]
@@ -53,11 +53,11 @@ def test_match():
     reader = qa.setup(params)
     qdnn = models.setup(params)
     model = qdnn.getModel()
-    
+    metrics= [map,mrr,ndcg(3),ndcg(5)]
     
     model.compile(loss = rank_hinge_loss({'margin':0.2}),
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                metrics=['accuracy'])
+                metrics=metrics)
     model.summary()
     
     
