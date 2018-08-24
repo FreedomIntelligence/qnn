@@ -15,14 +15,6 @@ from tools.evaluationKeras import map,mrr,ndcg
 from loss import *
 from units import to_array 
 
-def mse(y_true, y_pred, rel_threshold=0.):
-#    s = 0.
-#    y_true = _to_list(np.squeeze(y_true).tolist())
-#    y_pred = _to_list(np.squeeze(y_pred).tolist())
-#    return np.mean(np.square(y_pred - y_true), axis=-1)
-    x=K.squeeze(y_pred,axis=1)
-    y=K.squeeze(y_true,axis=1)
-    return K.mean(K.square(x-y))
 
 def test_matchzoo():
     
@@ -66,37 +58,36 @@ def test_match():
 #    model.compile(loss = rank_hinge_loss({'margin':0.2}),
 #                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
 #                metrics=['accuracy'])
-    model.compile(loss = 'mean_squared_error',
-            optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-            metrics=['accuracy'])
     
-    for i in range(params.epochs):
-        model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=1000)
-        test_data = reader.getTest(iterable = False)
-        test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
-    
-        y_pred = model.predict(x = test_data)
+    if params.match_type == 'pointwise':
+        model.compile(loss = 'mean_squared_error',
+                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+                metrics=['accuracy'])
         
-#    print(y_pred_pos)
-#    y_pred_neg = model.predict(x = [to_array(q,reader.max_sequence_length),to_array(neg, reader.max_sequence_length)])
-#    print(y_pred_neg)
-    
-#    y_pred = np.concatenate([y_pred_pos,y_pred_neg])
-        print(reader.evaluate(y_pred, mode = "test"))
-#    model.summary()
-    
-    
-    
-    
-#    generators = [reader.getTrain(iterable=False) for i in range(params.epochs)]
-#    [q,a,score] = reader.getPointWiseSamples()
-#    model.fit(x = [q,a,a],y = [q,a,q],epochs = 10,batch_size =params.batch_size)
-    
-#    def gen():
-#        while True:
-#            for sample in reader.getTrain(iterable = True):
-#                yield sample
-
+        for i in range(params.epochs):
+            model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=1000)
+            test_data = reader.getTest(iterable = False)
+            test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
+        
+            y_pred = model.predict(x = test_data)            
+            print(reader.evaluate(y_pred, mode = "test"))
+            
+    elif params.match_type == 'pairwise':
+        model.compile(loss = rank_hinge_loss({'margin':0.2}),
+                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+                metrics=['accuracy'])
+        
+        for i in range(params.epochs):
+            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=50)
+            test_data = reader.getTest(iterable = False)
+            test_data.append(test_data[0])
+            test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
+            y_pred = model.predict(x = test_data)
+            q = test_data[0]
+            a = test_data[1]
+            score = np.sum((q-a)**2, axis=1)
+            print(reader.evaluate(score, mode = "test"))
+            
 
 def test():
     import models.representation as models
