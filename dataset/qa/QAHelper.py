@@ -327,12 +327,12 @@ class dataHelper():
     def getTest(self,mode ="test",overlap_feature =False, iterable = True):
         
         if overlap_feature:
-            process = lambda row: (self.encode_to_split(row["question"]),
+            process = lambda row: [self.encode_to_split(row["question"]),
                                self.encode_to_split(row["answer"]), 
-                               self.overlap_index(row['question'],row['answer'] ))
+                               self.overlap_index(row['question'],row['answer'] )]
         else:
-            process = lambda row: (self.encode_to_split(row["question"]),
-                               self.encode_to_split(row["answer"]))
+            process = lambda row: [self.encode_to_split(row["question"]),
+                               self.encode_to_split(row["answer"])]
         
         samples = self.datas[mode].apply( process,axis=1)
         if iterable:
@@ -345,7 +345,7 @@ class dataHelper():
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
                 q,a,neg = batch
                 data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
-                        [1]*len(q) +[0]*len(q)]
+                        [0]*len(q) +[0]*len(q)]
                 yield data
 #        c = list(zip(*data))
 #        random.shuffle(c)
@@ -389,8 +389,9 @@ class dataHelper():
             x_mask[idx, :lengths[idx]] = 1.0
          # print( x, x_mask)
         return x, x_mask
+    
     def evaluate(self,predicted,mode= "test"):
-        return evaluation.evaluationBypandas(self.data[mode],predicted)
+        return evaluation.evaluationBypandas(self.datas[mode],predicted)
         
 
 if __name__ == "__main__":
