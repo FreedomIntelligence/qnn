@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from keras.layers import Embedding, GlobalMaxPooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape, Permute
+from keras.layers import Embedding, GlobalMaxPooling1D,GlobalAveragePooling1D, Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape, Permute
 from .BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
@@ -79,7 +79,15 @@ class LocalMixtureNN(BasicModel):
         probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
 #        probs = Permute((2,1))(probs)
 #        self.probs = reshape((-1,self.opt.max_sequence_length*self.opt.measurement_size))(probs)
-        probs = GlobalMaxPooling1D()(probs)
+        if self.opt.pooling_type == 'max':
+            probs = GlobalMaxPooling1D()(probs)
+        elif self.opt.pooling_type == 'average':
+            probs = GlobalAveragePooling1D()(probs)
+        elif self.opt.pooling_type == 'none':
+            probs = Flatten()(probs)
+        else:
+            print('Wrong input pooling type -- The default flatten layer is used.')
+            probs = Flatten()(probs)
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             probs = self.dropout_probs(probs)
 

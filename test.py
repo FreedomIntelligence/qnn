@@ -59,35 +59,35 @@ def test_match():
 #                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
 #                metrics=['accuracy'])
     
+    test_data = reader.getTest(iterable = False)
+    test_data.append(test_data[0])
+    test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
     if params.match_type == 'pointwise':
-        model.compile(loss = 'mean_squared_error',
+        model.compile(loss = params.loss,
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=['accuracy'])
         
         for i in range(params.epochs):
-            model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=1000)
-            test_data = reader.getTest(iterable = False)
-            test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
-        
+            model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=1000)        
             y_pred = model.predict(x = test_data)            
             print(reader.evaluate(y_pred, mode = "test"))
             
     elif params.match_type == 'pairwise':
-        model.compile(loss = rank_hinge_loss({'margin':0.2}),
+        model.compile(loss = rank_hinge_loss({'margin':params.margin}),
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=['accuracy'])
         
         for i in range(params.epochs):
-            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=50)
-            test_data = reader.getTest(iterable = False)
-            test_data.append(test_data[0])
-            test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
+            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=50,verbose = False)
+
             y_pred = model.predict(x = test_data)
-            q = test_data[0]
-            a = test_data[1]
+            q = y_pred[0]
+            a = y_pred[1]
             score = np.sum((q-a)**2, axis=1)
+#            print(score)
             print(reader.evaluate(score, mode = "test"))
             
+
 
 def test():
     import models.representation as models
@@ -110,8 +110,8 @@ def test():
     evaluation = model.evaluate(x = val_x, y = val_y)
     
 if __name__ == '__main__':
-#    test()
-    test_match()
+    test()
+#    test_match()
 
 
 # x_input = np.asarray([b])
