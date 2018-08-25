@@ -30,9 +30,19 @@ class QDNN(BasicModel):
 
 
     def build(self):
-        self.weight = Activation('softmax')(self.weight_embedding(self.doc))
-        self.phase_encoded = self.phase_embedding(self.doc)
-        self.amplitude_encoded = self.amplitude_embedding(self.doc)
+        probs = self.get_representation(self.doc)
+        if self.opt.network_type== "ablation" and self.opt.ablation == 1:
+            predictions = ComplexDense(units = self.opt.nb_classes, activation= "sigmoid", init_criterion = self.opt.init_mode)(probs)
+            output = GetReal()(predictions)
+        else:
+            output = self.dense(probs)
+        model = Model(self.doc, output)
+        return model
+    
+    def get_representation(self,doc):
+        self.weight = Activation('softmax')(self.weight_embedding(doc))
+        self.phase_encoded = self.phase_embedding(doc)
+        self.amplitude_encoded = self.amplitude_embedding(doc)
 
         if math.fabs(self.opt.dropout_rate_embedding -1) < 1e-6:
             self.phase_encoded = self.dropout_embedding(self.phase_encoded)
@@ -51,21 +61,12 @@ class QDNN(BasicModel):
         if self.opt.network_type== "ablation" and self.opt.ablation == 1:
             sentence_embedding_real = Flatten()(sentence_embedding_real)
             sentence_embedding_imag = Flatten()(sentence_embedding_imag)
+            probs = [sentence_embedding_real, sentence_embedding_imag]
         # output = Complex1DProjection(dimension = embedding_dimension)([sentence_embedding_real, sentence_embedding_imag])
-            predictions = ComplexDense(units = self.opt.nb_classes, activation= "sigmoid", init_criterion = self.opt.init_mode)([sentence_embedding_real, sentence_embedding_imag])
-
-            output = GetReal()(predictions)
         else:
-
             probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
-
             if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
                 probs = self.dropout_probs(probs)
-            output =  self.dense(probs)
-
-        model = Model(self.doc, output)
-
-
-        return model
+        return(probs)
 
 

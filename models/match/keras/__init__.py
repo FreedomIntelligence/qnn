@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-#from .RealNN import RealNN
-#from .QDNN import QDNN
-#from .ComplexNN import ComplexNN
+from .RealNN import RealNN
+from .QDNN import QDNN
+from .ComplexNN import ComplexNN
 #from .QDNNAblation import QDNNAblation
 from models.match.keras.LocalMixtureNN import LocalMixtureNN
 
@@ -16,9 +16,9 @@ def setup(opt):
         model = ComplexNN(opt)
     elif opt.network_type == "local_mixture":
         model = LocalMixtureNN(opt)        
-    elif opt.network_type == "ablation":
-        print("run ablation")
-        model = QDNNAblation(opt)
+#    elif opt.network_type == "ablation":
+#        print("run ablation")
+#        model = QDNNAblation(opt)
     else:
         from models.match.keras import matchzoo
         model = matchzoo.setup(opt)

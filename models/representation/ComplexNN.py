@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-
-# -*- coding: utf-8 -*-
-
-# -*- coding: utf-8 -*-
 from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation
 from .BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
@@ -11,8 +7,6 @@ import sys
 from complexnn import *
 
 from keras.initializers import Constant
-
-
 import math
 import numpy as np
 class ComplexNN(BasicModel):
@@ -30,9 +24,16 @@ class ComplexNN(BasicModel):
         
     
     def build(self):
-
-        self.phase_encoded = self.phase_embedding(self.doc)
-        self.amplitude_encoded = self.amplitude_embedding(self.doc)
+        [sentence_embedding_real,sentence_embedding_imag] = self.get_representation(self.doc)
+    # output = Complex1DProjection(dimension = embedding_dimension)([sentence_embedding_real, sentence_embedding_imag])
+        predictions = ComplexDense(units = self.opt.nb_classes, activation= "sigmoid", bias_initializer=Constant(value=-1), init_criterion = self.opt.init_mode)([sentence_embedding_real, sentence_embedding_imag])
+        output = GetReal()(predictions) 
+        model = Model(self.doc, output)
+        return model
+    
+    def get_representation(self,doc):
+        self.phase_encoded = self.phase_embedding(doc)
+        self.amplitude_encoded = self.amplitude_embedding(doc)
         
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             self.phase_encoded = self.dropout(self.phase_encoded)
@@ -51,13 +52,5 @@ class ComplexNN(BasicModel):
     
     
         sentence_embedding_real = Flatten()(sentence_embedding_real)
-        sentence_embedding_imag = Flatten()(sentence_embedding_imag)
-    # output = Complex1DProjection(dimension = embedding_dimension)([sentence_embedding_real, sentence_embedding_imag])
-        predictions = ComplexDense(units = self.opt.nb_classes, activation= "sigmoid", bias_initializer=Constant(value=-1), init_criterion = self.opt.init_mode)([sentence_embedding_real, sentence_embedding_imag])
-
-        output = GetReal()(predictions)
-    
-        model = Model(self.doc, output)
-    
-
-        return model
+        sentence_embedding_imag = Flatten()(sentence_embedding_imag)       
+        return [sentence_embedding_real, sentence_embedding_imag]

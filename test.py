@@ -9,12 +9,11 @@ from params import Params
 from dataset import qa
 import keras.backend as K
 import units
-
-from tools.evaluationKeras import map,mrr,ndcg
-
+import itertools
 from loss import *
 from units import to_array 
 from keras.utils import generic_utils
+import argparse
 
 
 def test_matchzoo():
@@ -47,52 +46,82 @@ def test_matchzoo():
 
 def test_match():
     from models.match import keras as models
+    gpu_count = len(units.get_available_gpus())
+    grid_parameters ={
+#        "dataset_name":["SST_2"],
+#        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
+#        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
+#        "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
+#        "batch_size":[16],#,32
+#        "activation":["sigmoid"],
+#        "amplitude_l2":[0], #0.0000005,0.0000001,
+#        "phase_l2":[0.00000005],
+#        "dense_l2":[0],#0.0001,0.00001,0],
+        "measurement_size" :[5,10,50,100,200,500],#,50100],
+#        "lr" : [0.1],#,1,0.01
+#        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
+#        "dropout_rate_probs" : [0.9],#,0.5,0.75,0.8,1]    ,
+#        "ablation" : [1],
+##        "network_type" : ["ablation"]
+    }
+    
+    parser = argparse.ArgumentParser(description='running the complex embedding network')
+    parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=gpu_count)
+    parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
+    args = parser.parse_args()
+    
+    parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
+    parameters= parameters[::-1]        
     params = Params()
     config_file = 'config/qalocal.ini'    # define dataset in the config
     params.parse_config(config_file)
-    
-    reader = qa.setup(params)
-    qdnn = models.setup(params)
-    model = qdnn.getModel()
+    for parameter in parameters:
+        params.setup(zip(grid_parameters.keys(),parameter))
+        reader = qa.setup(params)
+        qdnn = models.setup(params)
+        model = qdnn.getModel()
     
 #    model.compile(loss = rank_hinge_loss({'margin':0.2}),
 #                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
 #                metrics=['accuracy'])
     
-    test_data = reader.getTest(iterable = False)
-    test_data.append(test_data[0])
-    test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
-    if params.match_type == 'pointwise':
-        model.compile(loss = params.loss,
-                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                metrics=['accuracy'])
-        
-        for i in range(params.epochs):
-            model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch= params.steps_per_epoch)        
-            y_pred = model.predict(x = test_data)            
-            print(reader.evaluate(y_pred, mode = "test"))
+        test_data = reader.getTest(iterable = False)
+        test_data.append(test_data[0])
+        test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
+        print('#########################################################################################')
+        print('checking measurement size:{}'.format(params.measurement_size))
+        print('#########################################################################################')
+        if params.match_type == 'pointwise':
+            model.compile(loss = params.loss,
+                    optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+                    metrics=['accuracy'])
             
-    elif params.match_type == 'pairwise':
-        model.compile(loss = rank_hinge_loss({'margin':params.margin}),
-                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                metrics=['accuracy'])
-        
-        progbar = generic_utils.Progbar(params.epochs)
-        history = []
-        for i in range(params.epochs):
-            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=params.steps_per_epoch,verbose = False)
+            for i in range(params.epochs):
+                model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch= params.steps_per_epoch)        
+                y_pred = model.predict(x = test_data)            
+                print(reader.evaluate(y_pred, mode = "test"))
+                
+        elif params.match_type == 'pairwise':
+            model.compile(loss = rank_hinge_loss({'margin':params.margin}),
+                    optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+                    metrics=['accuracy'])
             
-            y_pred = model.predict(x = test_data)
-            q = y_pred[0]
-            a = y_pred[1]
-            score = np.sum((q-a)**2, axis=1)
-#            print(score)
-            
-            MAP, MRR, PREC_1 = reader.evaluate(score, mode = "test")
-            progbar.add(1, values=[('MAP',MAP), ('MRR',MRR), ('PREC_1',PREC_1)])
-            history.append((MAP,MRR,PREC_1))
+            progbar = generic_utils.Progbar(params.epochs)
+            history = []
+            for i in range(params.epochs):
+                model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=params.steps_per_epoch,verbose = False)
+                
+                y_pred = model.predict(x = test_data)
+                q = y_pred[0]
+                a = y_pred[1]
+                score = np.sum((q-a)**2, axis=1)
+    #            print(score)
+                
+                MAP, MRR, PREC_1 = reader.evaluate(score, mode = "test")
+                progbar.add(1, values=[('MAP',MAP), ('MRR',MRR), ('PREC_1',PREC_1)])
+                history.append((MAP,MRR,PREC_1))
 
-
+ 
 def test():
     import models.representation as models
     params = Params()
