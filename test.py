@@ -14,6 +14,7 @@ from tools.evaluationKeras import map,mrr,ndcg
 
 from loss import *
 from units import to_array 
+from keras.utils import generic_utils
 
 
 def test_matchzoo():
@@ -53,7 +54,6 @@ def test_match():
     reader = qa.setup(params)
     qdnn = models.setup(params)
     model = qdnn.getModel()
-    metrics= [map,mrr,ndcg(3),ndcg(5)]
     
 #    model.compile(loss = rank_hinge_loss({'margin':0.2}),
 #                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
@@ -68,7 +68,7 @@ def test_match():
                 metrics=['accuracy'])
         
         for i in range(params.epochs):
-            model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=1000)        
+            model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch= params.steps_per_epoch)        
             y_pred = model.predict(x = test_data)            
             print(reader.evaluate(y_pred, mode = "test"))
             
@@ -77,16 +77,20 @@ def test_match():
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=['accuracy'])
         
+        progbar = generic_utils.Progbar(params.epochs)
+        history = []
         for i in range(params.epochs):
-            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=50,verbose = False)
-
+            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=params.steps_per_epoch,verbose = False)
+            
             y_pred = model.predict(x = test_data)
             q = y_pred[0]
             a = y_pred[1]
             score = np.sum((q-a)**2, axis=1)
 #            print(score)
-            print(reader.evaluate(score, mode = "test"))
             
+            MAP, MRR, PREC_1 = reader.evaluate(score, mode = "test")
+            progbar.add(1, values=[('MAP',MAP), ('MRR',MRR), ('PREC_1',PREC_1)])
+            history.append((MAP,MRR,PREC_1))
 
 
 def test():
@@ -110,8 +114,8 @@ def test():
     evaluation = model.evaluate(x = val_x, y = val_y)
     
 if __name__ == '__main__':
-    test()
-#    test_match()
+#    test()
+    test_match()
 
 
 # x_input = np.asarray([b])
