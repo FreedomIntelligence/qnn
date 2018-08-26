@@ -22,7 +22,7 @@ class ComplexNN(BasicModel):
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init)
         self.dense = Dense(self.opt.nb_classes, activation="sigmoid")        
         self.dropout = Dropout(self.opt.dropout_rate_probs)
-        self.distance = Lambda(cosine_similarity)
+        self.distance = Lambda(l2_distance)
         
     def __init__(self,opt):
         super(ComplexNN, self).__init__(opt) 

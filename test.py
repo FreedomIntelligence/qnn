@@ -78,24 +78,24 @@ def test_match():
     for parameter in parameters:
         params.setup(zip(grid_parameters.keys(),parameter))
         reader = qa.setup(params)
+        params.reader = reader
         qdnn = models.setup(params)
         model = qdnn.getModel()
-    
+        model.summary()
 #    model.compile(loss = rank_hinge_loss({'margin':0.2}),
 #                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
 #                metrics=['accuracy'])
     
-        test_data = reader.getTest(iterable = False)
-        test_data.append(test_data[0])
-        test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
-        print('#########################################################################################')
+
+        print('############################################################')
         print('checking measurement size:{}'.format(params.measurement_size))
-        print('#########################################################################################')
+        print('############################################################')
         if params.match_type == 'pointwise':
             model.compile(loss = params.loss,
                     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=['accuracy'])
-            
+            test_data = reader.getTest(iterable = False)
+            test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
             for i in range(params.epochs):
                 model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch= params.steps_per_epoch)        
                 y_pred = model.predict(x = test_data)            
@@ -106,6 +106,9 @@ def test_match():
                     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=['accuracy'])
             
+            test_data = reader.getTest(iterable = False)
+            test_data.append(test_data[0])
+            test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
             progbar = generic_utils.Progbar(params.epochs)
             history = []
             for i in range(params.epochs):

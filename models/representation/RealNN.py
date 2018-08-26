@@ -29,7 +29,7 @@ class RealNN(BasicModel):
         return Model(self.doc, output)
     
     def get_representation(self,doc):
-        self.encoded = self.embedding(self.doc)
+        self.encoded = self.embedding(doc)
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             self.encoded = self.dropout(self.encoded)
         representation =GlobalAveragePooling1D()(self.encoded)

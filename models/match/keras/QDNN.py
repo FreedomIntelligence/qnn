@@ -38,7 +38,9 @@ class QDNN(BasicModel):
             for doc in [self.question, self.answer]:
                 # Take the real part of the output
                 rep.append(rep_m.get_representation(doc))
+
             output = self.distance(rep)
+            
             model = Model([self.question, self.answer], output)
         elif self.opt.match_type == 'pairwise':
             rep = []
