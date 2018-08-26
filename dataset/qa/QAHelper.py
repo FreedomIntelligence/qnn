@@ -345,7 +345,7 @@ class dataHelper():
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
                 q,a,neg = batch
                 data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
-                        [0]*len(q) +[0]*len(q)]
+                        [1]*len(q) +[0]*len(q)]
                 yield data
 #        c = list(zip(*data))
 #        random.shuffle(c)
