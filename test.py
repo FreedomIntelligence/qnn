@@ -15,7 +15,8 @@ from units import to_array
 from keras.utils import generic_utils
 import argparse
 
-
+gpu_count = len(units.get_available_gpus())
+dir_path,global_logger = units.getLogger()
 def test_matchzoo():
     
     params = Params()
@@ -58,6 +59,8 @@ def test_match():
 #        "phase_l2":[0.00000005],
 #        "dense_l2":[0],#0.0001,0.00001,0],
         "measurement_size" :[5,10,50,100,200,500],#,50100],
+        "match_type":['pointwise','pairwise'],
+        "network_type": ['real','qdnn','local_mixture']
 #        "lr" : [0.1],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.9],#,0.5,0.75,0.8,1]    ,
@@ -146,8 +149,8 @@ def test():
     evaluation = model.evaluate(x = val_x, y = val_y)
     
 if __name__ == '__main__':
-#    test()
-    test_match()
+    test()
+#    test_match()
 
 
 # x_input = np.asarray([b])

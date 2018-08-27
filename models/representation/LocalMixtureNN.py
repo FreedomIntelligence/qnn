@@ -17,7 +17,7 @@ class LocalMixtureNN(BasicModel):
         self.doc = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
         #############################################
         #This parameter should be passed from params
-        self.ngram =  NGram(n_value = self.opt.ngram_value) 
+        self.ngram = NGram(n_value = self.opt.ngram_value)#[NGram(n_value = int(n_value)) for n_value in self.opt.ngram_value.split(',')]
         #############################################
         self.phase_embedding= phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
 
@@ -41,11 +41,17 @@ class LocalMixtureNN(BasicModel):
         return model
     
     def get_representation(self,doc):
-        self.doc_ngram = self.ngram(doc)
+        
+        
+#        for n_gram in self.ngram:
+        self.inputs = self.ngram(doc)
+#        self.doc_ngram = concatenate([ngram(doc) for ngram in self.ngram],axis = -1)
 
-        self.inputs = [Index(i)(self.doc_ngram) for i in range(self.opt.max_sequence_length)]
-        self.inputs_count = len(self.inputs)
-        self.inputs = concatenate(self.inputs)
+#        self.inputs = [Index(i)(self.doc_ngram) for i in range(self.opt.max_sequence_length)]
+#        self.inputs = [Index(i)(self.inputs)) for i in range(self.opt.max_sequence_length)]
+        
+#        self.inputs_count = len(self.inputs)
+#        self.inputs = concatenate(self.inputs)
 
         self.phase_encoded = self.phase_embedding(self.inputs)
         self.amplitude_encoded = self.amplitude_embedding(self.inputs)

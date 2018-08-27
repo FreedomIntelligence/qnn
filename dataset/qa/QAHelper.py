@@ -7,7 +7,6 @@ import tensorflow as tf
 from collections import Counter
 import pandas as pd
 
-from tqdm import tqdm
 import random
 import pickle
 from tools.timer import log_time_delta

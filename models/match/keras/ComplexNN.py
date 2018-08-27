@@ -18,10 +18,6 @@ class ComplexNN(BasicModel):
         self.question = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
         self.answer = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
         self.neg_answer = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
-        self.phase_embedding=phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable)
-        self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init)
-        self.dense = Dense(self.opt.nb_classes, activation="sigmoid")        
-        self.dropout = Dropout(self.opt.dropout_rate_probs)
         self.distance = Lambda(l2_distance)
         
     def __init__(self,opt):
