@@ -21,17 +21,18 @@ class RealNN(BasicModel):
         
     def __init__(self,opt):
         super(RealNN, self).__init__(opt)        
-
-
         
     
     def build(self):        
-        self.encoded = self.embedding(self.doc)
+        representation = self.get_representation(self.doc)
+        output = self.dense(representation)
+        return Model(self.doc, output)
+    
+    def get_representation(self,doc):
+        self.encoded = self.embedding(doc)
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             self.encoded = self.dropout(self.encoded)
         representation =GlobalAveragePooling1D()(self.encoded)
-        output = self.dense(representation)
-        return Model(self.doc, output)
-
+        return(representation)
 
 

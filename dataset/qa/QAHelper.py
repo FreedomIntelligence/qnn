@@ -7,7 +7,6 @@ import tensorflow as tf
 from collections import Counter
 import pandas as pd
 
-from tqdm import tqdm
 import random
 import pickle
 from tools.timer import log_time_delta
@@ -345,7 +344,7 @@ class dataHelper():
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
                 q,a,neg = batch
                 data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
-                        [0]*len(q) +[0]*len(q)]
+                        [1]*len(q) +[0]*len(q)]
                 yield data
 #        c = list(zip(*data))
 #        random.shuffle(c)

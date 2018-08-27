@@ -66,7 +66,7 @@ grid_parameters ={
         "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
         "dropout_rate_probs" : [0.9],#,0.5,0.75,0.8,1]    ,
         "ablation" : [1],
-        "network_type" : ["ablation"]
+#        "network_type" : ["ablation"]
     }
 if __name__=="__main__":
 
