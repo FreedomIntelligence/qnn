@@ -6,6 +6,7 @@ import sys
 import random
 import numpy as np
 import math
+import keras.backend as K
 
 def _to_list(x):
     if isinstance(x, list):
@@ -13,26 +14,30 @@ def _to_list(x):
     return [x]
 
 def map(y_true, y_pred, rel_threshold=0):
-    s = 0.
-    y_true = _to_list(np.squeeze(y_true).tolist())
-    y_pred = _to_list(np.squeeze(y_pred).tolist())
-    c = list(zip(y_true, y_pred))
-    random.shuffle(c)
-    c = sorted(c, key=lambda x:x[1], reverse=True)
-    ipos = 0
-    for j, (g, p) in enumerate(c):
-        if g > rel_threshold:
-            ipos += 1.
-            s += ipos / ( j + 1.)
-    if ipos == 0:
-        s = 0.
-    else:
-        s /= ipos
+#    s = 0.
+#    y_true = _to_list(np.squeeze(y_true).tolist())
+#    y_pred = _to_list(np.squeeze(y_pred).tolist())
+#    c = list(zip(y_true, y_pred))
+#    random.shuffle(c)
+#    c = sorted(c, key=lambda x:x[1], reverse=True)
+#    ipos = 0
+#    for j, (g, p) in enumerate(c):
+#        if g > rel_threshold:
+#            ipos += 1.
+#            s += ipos / ( j + 1.)
+#    if ipos == 0:
+#        s = 0.
+#    else:
+#        s /= ipos
+    x=K.squeeze(y_pred,axis=1)
+    y=K.squeeze(y_true,axis=1)
+    
     return s
 
 def mrr(y_true, y_pred, rel_threshold = 0.):
-    k = 10
-    s = 0.
+    x=K.squeeze(y_pred,axis=1)
+    index =K.argmax(x)
+    
     return s
 
 def ndcg(k=10):
@@ -109,11 +114,18 @@ def recall(k=10):
         return recall
     return top_k
 
+
+y_true = K.constant([[1.0],[1.0],[0],[0]]) 
+y_pred = K.constant([[1.0],[0.8],[0.1],[0.2]]) 
 def mse(y_true, y_pred, rel_threshold=0.):
-    s = 0.
-    y_true = _to_list(np.squeeze(y_true).tolist())
-    y_pred = _to_list(np.squeeze(y_pred).tolist())
-    return np.mean(np.square(y_pred - y_true), axis=-1)
+#    s = 0.
+#    y_true = _to_list(np.squeeze(y_true).tolist())
+#    y_pred = _to_list(np.squeeze(y_pred).tolist())
+#    return np.mean(np.square(y_pred - y_true), axis=-1)
+    x=K.squeeze(y_pred,axis=1)
+    y=K.squeeze(y_true,axis=1)
+    return K.mean(K.square(x-y))
+#     K.mean(K.square(x-y)).eval(session=sess)
 
 def accuracy(y_true, y_pred):
     y_true = _to_list(np.squeeze(y_true).tolist())
