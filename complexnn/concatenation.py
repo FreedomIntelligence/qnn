@@ -51,8 +51,8 @@ class Concatenation(Layer):
         output_shape =input_shape[0].copy()
         output_shape[self.axis] = new_dim
 
-        print('Input shape concatenation layer:{}'.format(input_shape))
-        print([output_shape])
+#        print('Input shape concatenation layer:{}'.format(input_shape))
+#        print([output_shape])
         return [tuple(output_shape)]
 
 

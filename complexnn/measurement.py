@@ -93,8 +93,8 @@ class ComplexMeasurement(Layer):
         output_shape.append(self.units)
 #        output_shape = [input_shape[0][0:-3],self.units]
         
-        print('Input shape of measurment layer:{}'.format(input_shape))
-        print(output_shape)
+#        print('Input shape of measurment layer:{}'.format(input_shape))
+#        print(output_shape)
         return([output_shape])
 
 def main():
