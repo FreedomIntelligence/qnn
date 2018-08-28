@@ -77,9 +77,10 @@ class ComplexMixture(Layer):
             if len(inputs[2].shape) == ndims-1:
 
                 weight = K.expand_dims(K.expand_dims(inputs[2]))
+                weight = K.repeat_elements(weight, output_real.shape[-1], axis = ndims-1)
             else:
                 weight = K.expand_dims(inputs[2])
-            weight = K.repeat_elements(weight, output_real.shape[-1], axis = ndims-1)
+            
             weight = K.repeat_elements(weight, output_real.shape[-1], axis = ndims)
             output_real = output_real*weight #shape: (None, 300, 300)
             output_r = K.sum(output_real, axis = ndims-2)
@@ -99,6 +100,8 @@ class ComplexMixture(Layer):
         one_output_shape.append(one_output_shape[-1])
 #        one_output_shape = [one_input_shape[0], one_input_shape[2], one_input_shape[2]]
 #        print(one_output_shape)
+        print('Input shape of mixture layer:{}'.format(input_shape))
+        print([tuple(one_output_shape), tuple(one_output_shape)])
         return [tuple(one_output_shape), tuple(one_output_shape)]
 
 

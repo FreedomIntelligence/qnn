@@ -9,17 +9,18 @@ import sys
 import os
 import keras.backend as K
 import math
+from copy import copy
 
-class L2Normalization(Layer):
+class Concatenation(Layer):
 
     def __init__(self, axis = 1, **kwargs):
         # self.output_dim = output_dim
         self.axis = axis
-        super(L2Normalization, self).__init__(**kwargs)
+        super(Concatenation, self).__init__(**kwargs)
 
     def get_config(self):
         config = {'axis': self.axis}
-        base_config = super(L2Normalization, self).get_config()
+        base_config = super(Concatenation, self).get_config()
         return dict(list(base_config.items())+list(config.items()))
 
     def build(self, input_shape):
@@ -32,19 +33,27 @@ class L2Normalization(Layer):
         #                               shape=(input_shape[1], self.output_dim),
         #                               initializer='uniform',
         #                               trainable=True)
-        super(L2Normalization, self).build(input_shape)  # Be sure to call this somewhere!
+        super(Concatenation, self).build(input_shape)  # Be sure to call this somewhere!
 
     def call(self, inputs):
 
 
 
-        output = K.l2_normalize(inputs,axis = self.axis)
+        output = K.concatenate(inputs,axis = self.axis)
         return output
 
     def compute_output_shape(self, input_shape):
         # print(type(input_shape[1]))
-        
-        return input_shape
+
+        if self.axis<0:
+            self.axis = self.axis + len(input_shape[0])
+        new_dim = sum( [single_shape[self.axis]  for single_shape in input_shape])
+        output_shape =input_shape[0].copy()
+        output_shape[self.axis] = new_dim
+
+        print('Input shape concatenation layer:{}'.format(input_shape))
+        print([output_shape])
+        return [tuple(output_shape)]
 
 
 def main():
@@ -57,7 +66,7 @@ def main():
     a=np.random.random([5,300])
     input_img = Input(shape=(input_dim,))
     encoded = Dense(encoding_dim)(input_img) #,
-    new_code=L2Normalization()(encoded)
+    new_code=Concatenation()(encoded)
 
     encoder = Model(input_img, new_code)
 

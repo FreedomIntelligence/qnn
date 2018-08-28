@@ -53,6 +53,8 @@ class L2Norm(Layer):
                 output_shape.append(input_shape[i])
         if self.keep_dims:
             output_shape.append(1)
+        print('Input shape of L2Norm layer:{}'.format(input_shape))
+        print(output_shape)
         return([tuple(output_shape)])
 
 
