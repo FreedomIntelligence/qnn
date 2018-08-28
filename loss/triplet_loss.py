@@ -14,7 +14,7 @@ def rank_hinge_loss(kwargs=None):
         return K.mean(loss)
 
     return _margin_loss
-def percision(inputs):
+def percision(sb,inputs):
     anchor = inputs[0]
     positive = inputs[1]
     negative = inputs[2]
