@@ -105,6 +105,7 @@ def test():
                 metrics=['accuracy'])
     model.summary()
     (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
+    print(train_x.shape,train_y.shape)
     history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
 
     evaluation = model.evaluate(x = val_x, y = val_y)

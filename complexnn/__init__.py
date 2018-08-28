@@ -6,6 +6,7 @@ from .superposition import ComplexSuperposition
 from .dense import ComplexDense
 from .mixture import ComplexMixture
 from .measurement import ComplexMeasurement
+from .concatenation import Concatenation
 from .index import Index
 from .ngram import NGram
 from .utils import GetReal
