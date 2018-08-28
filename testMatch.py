@@ -82,7 +82,7 @@ if __name__ == '__main__':
                 metrics=['accuracy'])
         
         for i in range(params.epochs):
-            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=50,verbose = False)
+            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=500,verbose = True)
 
             y_pred = model.predict(x = test_data)
             q = y_pred[0]
