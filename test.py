@@ -119,12 +119,12 @@ if __name__ == '__main__':
         "batch_size":[16],#,32
 #        "activation":["sigmoid"],
         "amplitude_l2":[0.0000005,0.0000001,0],
-        "phase_l2":[0.00000005,0],
+        "phase_l2":[0.00000005,0.0000005],
 #        "dense_l2":[0],#0.0001,0.00001,0],
 #        "measurement_size" :[1400,1600,1800,2000],#,50100],
         "lr" : [0.1],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
-        "dropout_rate_probs" : [0.9,0.8]#,0.5,0.75,0.8,1]   
+        "dropout_rate_probs" : [0.8]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
     }
     import argparse
