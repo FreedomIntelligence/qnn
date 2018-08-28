@@ -100,8 +100,8 @@ class ComplexMixture(Layer):
         one_output_shape.append(one_output_shape[-1])
 #        one_output_shape = [one_input_shape[0], one_input_shape[2], one_input_shape[2]]
 #        print(one_output_shape)
-        print('Input shape of mixture layer:{}'.format(input_shape))
-        print([tuple(one_output_shape), tuple(one_output_shape)])
+#        print('Input shape of mixture layer:{}'.format(input_shape))
+#        print([tuple(one_output_shape), tuple(one_output_shape)])
         return [tuple(one_output_shape), tuple(one_output_shape)]
 
 

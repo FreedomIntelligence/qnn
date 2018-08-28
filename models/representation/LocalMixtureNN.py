@@ -50,10 +50,10 @@ class LocalMixtureNN(BasicModel):
             
             #(batch_size,  max_seq_length,n,embedding_dim)
             self.phase_encoded = self.phase_embedding(self.inputs)
-            print(self.phase_encoded.shape)
+#            print(self.phase_encoded.shape)
             #(batch_size,  max_seq_length,n,embedding_dim)
             self.amplitude_encoded = self.amplitude_embedding(self.inputs)
-            print(self.amplitude_encoded.shape)
+#            print(self.amplitude_encoded.shape)
         
 #            self.phase_encoded = reshape((-1,self.opt.max_sequence_length,self.opt.ngram_value,self.opt.lookup_table.shape[1]))(self.phase_encoded)
 #            self.amplitude_encoded = reshape((-1,self.opt.max_sequence_length,self.opt.ngram_value,self.opt.lookup_table.shape[1]))(self.amplitude_encoded)
@@ -61,10 +61,10 @@ class LocalMixtureNN(BasicModel):
             
             #(batch_size,  max_seq_length,n)
             self.weight = Activation('softmax')(self.l2_norm(self.amplitude_encoded))
-            print(self.weight.shape)
+#            print(self.weight.shape)
 #            self.weight = reshape((-1,self.opt.max_sequence_length,self.opt.ngram_value,1))(self.weight)
             self.amplitude_encoded = self.l2_normalization(self.amplitude_encoded)
-            print(self.amplitude_encoded.shape)
+#            print(self.amplitude_encoded.shape)
         
         
 #        self.weight = reshape( (-1,self.opt.max_sequence_length,self.opt.ngram_value))(self.weight)
@@ -81,16 +81,16 @@ class LocalMixtureNN(BasicModel):
                 [sentence_embedding_real, sentence_embedding_imag]= ComplexSuperposition()([seq_embedding_real, seq_embedding_imag, self.weight])
 
             else:
-                print('Wrong input network type -- The default mixture network is constructed.')
+#                print('Wrong input network type -- The default mixture network is constructed.')
                 [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
         
             probs_list.append(self.projection([sentence_embedding_real, sentence_embedding_imag]))
             #        probs = Permute((2,1))(probs)
             #        self.probs = reshape((-1,self.opt.max_sequence_length*self.opt.measurement_size))(probs)
-        print(probs_list[0].shape)
-        print(probs_list[1].shape)
+#        print(probs_list[0].shape)
+#        print(probs_list[1].shape)
         probs = Concatenation(axis = -1)(probs_list)
-        print(probs.shape)
+#        print(probs.shape)
         if self.opt.pooling_type == 'max':
             probs = GlobalMaxPooling1D()(probs)
         elif self.opt.pooling_type == 'average':

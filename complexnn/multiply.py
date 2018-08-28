@@ -90,8 +90,8 @@ class ComplexMultiply(Layer):
     def compute_output_shape(self, input_shape):
         # print(type(input_shape[1]))
         
-        print('Input shape of multiply layer:{}'.format(input_shape))
-        print([input_shape[1], input_shape[1]])
+#        print('Input shape of multiply layer:{}'.format(input_shape))
+#        print([input_shape[1], input_shape[1]])
         return [input_shape[1], input_shape[1]]
 
 
