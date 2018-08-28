@@ -116,15 +116,15 @@ if __name__ == '__main__':
 #        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
 #        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
 #        "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
-        "batch_size":[16],#,32
+        "batch_size":[16,32],#,32
 #        "activation":["sigmoid"],
-#        "amplitude_l2":[0], #0.0000005,0.0000001,
-#        "phase_l2":[0.00000005],
+        "amplitude_l2":[0.0000005,0.0000001,0],
+        "phase_l2":[0.00000005,0],
 #        "dense_l2":[0],#0.0001,0.00001,0],
 #        "measurement_size" :[1400,1600,1800,2000],#,50100],
-#        "lr" : [0.1],#,1,0.01
+        "lr" : [1,0.1],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
-#        "dropout_rate_probs" : [0.9]#,0.5,0.75,0.8,1]   
+        "dropout_rate_probs" : [0.9,0.8,0.7]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
     }
     import argparse
@@ -153,10 +153,10 @@ if __name__ == '__main__':
         model.compile(loss = params.loss,
                     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=['accuracy'])
-        model.summary()
+#        model.summary()
         (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
-        history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))#,verbose=False
-        print(params.ngram_value)
+        history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y),verbose=False)#,verbose=False
+        print(parameter)
         print(max(history.history["val_acc"]))
         evaluation = model.evaluate(x = val_x, y = val_y)
         K.clear_session()
