@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from .triplet_loss import rank_hinge_loss
+from .triplet_loss import rank_hinge_loss,percision

@@ -14,3 +14,15 @@ def rank_hinge_loss(kwargs=None):
         return K.mean(loss)
 
     return _margin_loss
+def percision(inputs):
+    anchor = inputs[0]
+    positive = inputs[1]
+    negative = inputs[2]
+
+    pos_dist = K.sum((anchor-positive)**2, keepdims = True)
+    neg_dist = K.sum((anchor-negative)**2, keepdims = True)
+
+    basic_loss =  (pos_dist-neg_dist)>0
+    loss = K.mean(basic_loss)
+
+    return loss

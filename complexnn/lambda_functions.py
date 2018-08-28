@@ -30,6 +30,7 @@ def triplet_hinge_loss(inputs):
 
     return loss
 
+
 #a = Input(shape=(10,))
 #b = Input(shape=(10,))
 #

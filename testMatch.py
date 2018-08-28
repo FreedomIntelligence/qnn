@@ -79,7 +79,7 @@ if __name__ == '__main__':
         test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
         model.compile(loss = rank_hinge_loss({'margin':params.margin}),
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                metrics=['accuracy'])
+                metrics=[percision])
         
         for i in range(params.epochs):
             model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=500,verbose = True)
