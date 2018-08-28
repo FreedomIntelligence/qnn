@@ -61,8 +61,11 @@ if __name__ == '__main__':
     
     test_data = reader.getTest(iterable = False)
     test_data.append(test_data[0])
-    test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
+    
     if params.match_type == 'pointwise':
+        
+        test_data = [to_array(i,reader.max_sequence_length) for i in test_data[:2]]
+        
         model.compile(loss = params.loss,
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=['accuracy'])
@@ -73,6 +76,7 @@ if __name__ == '__main__':
             print(reader.evaluate(y_pred, mode = "test"))
             
     elif params.match_type == 'pairwise':
+        test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
         model.compile(loss = rank_hinge_loss({'margin':params.margin}),
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=['accuracy'])
