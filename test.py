@@ -124,7 +124,7 @@ if __name__ == '__main__':
 #        "lr" : [0.1],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.9]#,0.5,0.75,0.8,1]   
-            "ngram_value" : [20]
+            "ngram_value" : [3]
     }
     import argparse
     import itertools
@@ -152,7 +152,7 @@ if __name__ == '__main__':
         model.compile(loss = params.loss,
                     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=['accuracy'])
-#        model.summary()
+        model.summary()
         (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
         history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))#,verbose=False
         print(params.ngram_value)
