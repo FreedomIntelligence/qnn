@@ -33,6 +33,37 @@ def map_metric(group):
 	#print( ap/len(correct_candidates))
 	return ap/len(correct_candidates)
 
+def map_metric(group):
+	group = sklearn.utils.shuffle(group,random_state =132)
+	ap=0
+	candidates=group.sort_values(by='score',ascending=False).reset_index()
+	correct_candidates=candidates[candidates["flag"]==1]
+	if len(correct_candidates)==0:
+		return 0
+	for i,index in enumerate(correct_candidates.index):
+		ap+=1.0* (i+1) /(index+1)
+	#print( ap/len(correct_candidates))
+	return ap/len(correct_candidates)
+
+def dcg_at_k(r, k, method=1):
+    r = np.asfarray(r)[:k]
+    if r.size:
+        if method == 0:
+            return r[0] + np.sum(r[1:] / np.log2(np.arange(2, r.size + 1)))
+        elif method == 1:
+            return np.sum(r / np.log2(np.arange(2, r.size + 2)))
+        else:
+            raise ValueError('method must be 0 or 1.')
+    return 0.
+
+
+def ndcg_at_k(r, k=5, method=1):
+    dcg_max = dcg_at_k(sorted(r, reverse=True), k, method)
+    if not dcg_max:
+        return 0.
+    return dcg_at_k(r, k, method) / dcg_max
+
+
 def evaluation_plus(modelfile, groundtruth=qa_path):
 	answers=pd.read_csv(groundtruth,header=None,sep="\t",names=["question","answer","flag"],quoting =3)
 	answers["score"]=pd.read_csv(modelfile,header=None,sep="\t",names=["score"],quoting =3)
@@ -115,10 +146,10 @@ def briany_test_file(df_test,  predicted=None,mode = 'test'):
 	df_gold.to_csv(os.path.join(nnet_outdir, 'gold.txt'), header=False, index=False, sep=' ')
 
 if __name__ =="__main__":
-	data_dir="data/"+"wiki"
+	data_dir="data/QA/"+"wiki"
 	train_file=os.path.join(data_dir,"train.txt")
 	test_file=os.path.join(data_dir,"test.txt")
 
 	train=pd.read_csv(train_file,header=None,sep="\t",names=["question","answer","flag"],quoting =3)
 	train["score"]=np.random.randn(len(train))
-	briany_test_file(train)
+	print(evaluationBypandas(train,train["score"]))
