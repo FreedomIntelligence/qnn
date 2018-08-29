@@ -25,7 +25,7 @@ class LocalMixtureNN(BasicModel):
         self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True)
         self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
-        self.dropout_probs = Dropout(self.opt.dropout_rate_probs)
+        self.dropout_probs = Dropout(1) #self.opt.dropout_rate_probs
         self.projection = ComplexMeasurement(units = self.opt.measurement_size)
 #        self.distance = Lambda(l2_distance)
         self.distance = Lambda(cosine_similarity)
@@ -46,10 +46,11 @@ class LocalMixtureNN(BasicModel):
 #            rep = []
 #            for doc in [self.question, self.answer, self.neg_answer]:
 #                rep.append(rep_m.get_representation(doc))
-            q_rep = rep_m.get_representation(self.question)
-            score1 = Cosinse() ([q_rep, rep_m.get_representation(self.answer)])
-            score2 = Cosinse() ([q_rep, rep_m.get_representation(self.neg_answer)])
+            q_rep = self.dropout_probs(rep_m.get_representation(self.question))
+            score1 = Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs) ([q_rep, self.dropout_probs(rep_m.get_representation(self.answer))])
+            score2 = Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs) ([q_rep, self.dropout_probs(rep_m.get_representation(self.neg_answer))])
             basic_loss = MarginLoss(self.opt.margin)( [score1,score2])
+            
             output=[score1,basic_loss,basic_loss]
             model = Model([self.question, self.answer, self.neg_answer], output)           
         else:

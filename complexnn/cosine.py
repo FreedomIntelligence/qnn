@@ -2,7 +2,7 @@
 import sys; sys.path.append('.')
 import numpy as np
 from keras import backend as K
-from keras.layers import Layer,Dense
+from keras.layers import Layer,Dense,Dropout
 from keras.models import Model, Input
 import tensorflow as tf
 import sys
@@ -12,10 +12,11 @@ import math
 
 class Cosinse(Layer):
 
-    def __init__(self, axis = -1, keep_dims = True, **kwargs):
+    def __init__(self, dropout_keep_prob = 1, axis = -1, keep_dims = True, **kwargs):
         # self.output_dim = output_dim
         self.axis = axis
         self.keep_dims = keep_dims
+        self.dropout_probs = Dropout(dropout_keep_prob)
         super(Cosinse, self).__init__(**kwargs)
 
     def get_config(self):
@@ -41,7 +42,7 @@ class Cosinse(Layer):
 
         norm1 = K.sqrt(0.00001+ K.sum(x**2, axis = self.axis, keepdims = False))
         norm2 = K.sqrt(0.00001+ K.sum(y**2, axis = self.axis, keepdims = False))
-        output= K.sum(x*y,1) / norm1 /norm2
+        output= K.sum(self.dropout_probs(x*y),1) / norm1 /norm2
 
 
         return K.expand_dims(output)

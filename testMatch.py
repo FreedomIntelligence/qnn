@@ -10,7 +10,13 @@ from dataset import qa
 import keras.backend as K
 import units
 
-from tools.evaluationKeras import map,mrr,ndcg
+
+import random
+import tensorflow as tf
+random.seed(49999)
+np.random.seed(49999)
+tf.set_random_seed(49999)
+
 
 from loss import *
 from units import to_array 
