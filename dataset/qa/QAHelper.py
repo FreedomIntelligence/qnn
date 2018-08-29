@@ -232,7 +232,7 @@ class dataHelper():
         embedding = np.zeros((len(vocab),dim))
         count = 1
         import codecs
-        with codecs.open("oov.txt","w") as f:
+        with codecs.open("oov.txt","w",encoding="utf-8") as f:
             for word in vocab:
                 if word in vectors:
                     count += 1
