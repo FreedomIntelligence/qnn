@@ -17,3 +17,5 @@ from .utils import *
 from .reshape import reshape
 from .lambda_functions import *
 import numpy as np
+from .cosine import Cosinse
+from .marginLoss import MarginLoss

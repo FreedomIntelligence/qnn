@@ -294,7 +294,7 @@ class dataHelper():
             data= (q,a,neg_a,overlap1,overlap2)
         else:
             data = (q,a,neg_a)
-        
+#        print("samples size : " +str(len(q)))
         if iterable:
             return BucketIterator( data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
         else: 
@@ -364,7 +364,7 @@ class dataHelper():
         
         while True:
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
-                yield batch,batch
+                yield batch, batch
         
         
 #        data = [q,a,neg]

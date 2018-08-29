@@ -43,10 +43,14 @@ class LocalMixtureNN(BasicModel):
             output = self.distance(rep)
             model = Model([self.question, self.answer], output)
         elif self.opt.match_type == 'pairwise':
-            rep = []
-            for doc in [self.question, self.answer, self.neg_answer]:
-                rep.append(rep_m.get_representation(doc))
-            output = rep
+#            rep = []
+#            for doc in [self.question, self.answer, self.neg_answer]:
+#                rep.append(rep_m.get_representation(doc))
+            q_rep = rep_m.get_representation(self.question)
+            score1 = Cosinse() ([q_rep, rep_m.get_representation(self.answer)])
+            score2 = Cosinse() ([q_rep, rep_m.get_representation(self.neg_answer)])
+            basic_loss = MarginLoss(self.opt.margin)( [score1,score2])
+            output=[score1,basic_loss,basic_loss]
             model = Model([self.question, self.answer, self.neg_answer], output)           
         else:
             raise ValueError('wrong input of matching type. Please input pairwise or pointwise.')

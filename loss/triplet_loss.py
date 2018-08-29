@@ -11,28 +11,39 @@ def rank_hinge_loss(kwargs=None):
 #        y_pos = Lambda(lambda a: a[::2, :], output_shape= (1,))(y_pred)
 #        y_neg = Lambda(lambda a: a[1::2, :], output_shape= (1,))(y_pred)
 #        loss = K.maximum(0., margin + y_neg - y_pos)
-        anchor = y_pred[0]
-        positive = y_pred[1]
-        negative = y_pred[2]
-    
-        pos_dist = K.sum((anchor-positive)**2, keepdims = True)
-        neg_dist = K.sum((anchor-negative)**2, keepdims = True)
-        basic_loss = pos_dist-neg_dist+margin
-        basic_loss = K.mean(K.maximum(basic_loss, 0.0),keepdims = True)
 
+        positive = y_pred[0]
+        negative = y_pred[1]       
+     
+        basic_loss = positive-negative+margin
 
-        return K.mean(basic_loss)
+        return  K.mean(K.maximum(basic_loss, 0.0),keepdims = True)
 
     return _margin_loss
 def percision(sb,inputs):
-    anchor = inputs[0]
-    positive = inputs[1]
-    negative = inputs[2]
 
-    pos_dist = K.sum((anchor-positive)**2, keepdims = True)
-    neg_dist = K.sum((anchor-negative)**2, keepdims = True)
+    positive = inputs[0]
+    negative = inputs[1]
 
-    basic_loss =  (pos_dist-neg_dist)>0
+
+    basic_loss =  (positive-negative)>0
     loss = K.mean(basic_loss)
+
+    return loss
+
+
+def positive(sb,inputs):
+
+    positive = inputs[0]
+
+    loss = K.mean(positive)
+
+    return loss
+
+def negative(sb,inputs):
+
+
+    negative = inputs[1]
+    loss = K.mean(negative)
 
     return loss

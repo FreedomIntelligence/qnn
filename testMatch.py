@@ -14,7 +14,13 @@ from tools.evaluationKeras import map,mrr,ndcg
 
 from loss import *
 from units import to_array 
+def identity_loss(y_true, y_pred):
 
+    return K.mean(y_pred)
+
+
+def percision_bacth(y_true, y_pred):
+    return K.mean(K.cast(K.equal(y_pred,0),"float32"))
 
 def test_matchzoo():
     
@@ -53,18 +59,18 @@ if __name__ == '__main__':
     reader = qa.setup(params)
     qdnn = models.setup(params)
     model = qdnn.getModel()
-    metrics= [map,mrr,ndcg(3),ndcg(5)]
+
     
 #    model.compile(loss = rank_hinge_loss({'margin':0.2}),
 #                optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
 #                metrics=['accuracy'])
     
     test_data = reader.getTest(iterable = False)
-    test_data.append(test_data[0])
+#    test_data.append(test_data[0])
     
     if params.match_type == 'pointwise':
         
-        test_data = [to_array(i,reader.max_sequence_length) for i in test_data[:2]]
+#        test_data = [to_array(i,reader.max_sequence_length) for i in test_data[:2]]
         
         model.compile(loss = params.loss,
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
@@ -76,18 +82,19 @@ if __name__ == '__main__':
             print(reader.evaluate(y_pred, mode = "test"))
             
     elif params.match_type == 'pairwise':
+        test_data.append(test_data[0])
         test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
-        model.compile(loss = rank_hinge_loss({'margin':params.margin}),
+        model.compile(loss = identity_loss,
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                metrics=[percision])
+                metrics=[percision_bacth],
+                loss_weights=[0.0, 1.0,0.0])
         
         for i in range(params.epochs):
-            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=1000,verbose = True)
+            model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=22,verbose = True)
 
             y_pred = model.predict(x = test_data)
-            q = y_pred[0]
-            a = y_pred[1]
-            score = np.sum((q-a)**2, axis=1)
+
+            score = y_pred[0]
 #            print(score)
             print(reader.evaluate(score, mode = "test"))
             
