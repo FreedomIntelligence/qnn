@@ -9,7 +9,7 @@ from params import Params
 from dataset import qa
 import keras.backend as K
 import units
-
+import pandas as pd
 
 import random
 import tensorflow as tf
@@ -21,6 +21,11 @@ tf.set_random_seed(49999)
 from loss import *
 from units import to_array 
 def identity_loss(y_true, y_pred):
+
+    return K.mean(y_pred)
+
+
+def pointwise_loss(y_true, y_pred):
 
     return K.mean(y_pred)
 
@@ -94,7 +99,7 @@ if __name__ == '__main__':
                 optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                 metrics=[percision_bacth],
                 loss_weights=[0.0, 1.0,0.0])
-        
+        evaluations=[]
         for i in range(params.epochs):
             model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=22,verbose = True)
 
@@ -102,7 +107,12 @@ if __name__ == '__main__':
 
             score = y_pred[0]
 #            print(score)
-            print(reader.evaluate(score, mode = "test"))
+            metric = reader.evaluate(score, mode = "test")
+            print(metric)
+            evaluations.append(metric)
+        df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
+        print(df.max())
+        
             
 
     

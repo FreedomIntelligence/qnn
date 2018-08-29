@@ -116,6 +116,14 @@ class BucketIterator(object):
             yield self.transform([item[index[0]:index[1]] for item in self.data])
 
 
+def clean(sentence):
+    import re, string
+
+    out = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
+    return out
+    
+
+
 
 class dataHelper():
     def __init__(self,opt):
@@ -124,7 +132,7 @@ class dataHelper():
       
             
         dir_path = os.path.join(os.path.join(opt.datasets_dir, "QA"),opt.dataset_name.lower())
-        self.datas = self.load(dir_path,filter = opt.clean)
+        self.datas = self.load(dir_path,filter =opt.clean)
         self.alphabet = self.get_alphabet(self.datas.values())
         self.optCallback(opt)            
             
@@ -159,10 +167,14 @@ class dataHelper():
                 datas[data_name]=self.removeUnanswerdQuestion(data)
             else:
                 datas[data_name]=data
+#            data.to_csv(data_name+"_cleaned.csv",index=False,encoding="utf-8",sep="\t")
         return datas
     
     @log_time_delta
     def removeUnanswerdQuestion(self,df):
+        if self.remove_punctuation:
+            df["question"] = df["question"].apply(lambda x : clean(x))
+            df["answer"] = df["answer"].apply(lambda x : clean(x))
         counter= df.groupby("question").apply(lambda group: sum(group["flag"]))
         questions_have_correct=counter[counter>0].index
         counter= df.groupby("question").apply(lambda group: sum(group["flag"]==0))
@@ -173,9 +185,9 @@ class dataHelper():
         return df[df["question"].isin(questions_have_correct) &  df["question"].isin(questions_have_correct) & df["question"].isin(questions_have_uncorrect)].reset_index()
 
                 
-    def get_alphabet(self,corpuses=None,dataset=""):
+    def get_alphabet(self,corpuses=None,dataset="",fresh=True):
         pkl_name="temp/"+self.dataset_name+".alphabet.pkl"
-        if  os.path.exists(pkl_name):
+        if  os.path.exists(pkl_name) and not fresh:
             return pickle.load(open(pkl_name,"rb"))
         alphabet = Alphabet(start_feature_id = 0)
         alphabet.add('[UNK]')  
@@ -186,7 +198,7 @@ class dataHelper():
                     tokens = sentence.lower().split()
                     for token in set(tokens):
                         alphabet.add(token)
-            print("alphabet size %d" % len(alphabet.keys()) )
+        print("alphabet size %d" % len(alphabet.keys()) )
         if not os.path.exists("temp"):
             os.mkdir("temp")
         pickle.dump( alphabet,open(pkl_name,"wb"))
@@ -202,7 +214,13 @@ class dataHelper():
 #            fname = 'embedding/glove.6B/glove.6B.300d.txt'
 #        else:
 #            fname= "embedding/embedding.200.header_txt"
-        embeddings,embedding_size = self.load_text_vec(fname)
+        if fname.endswith("bin"):
+            from gensim.models.keyedvectors import KeyedVectors
+            embeddings_raw = KeyedVectors.load_word2vec_format(fname, binary=True)
+            embeddings={x:y for x,y in zip(embeddings_raw.vocab,embeddings_raw.vectors)}
+            embedding_size=embeddings_raw.vectors.shape[1]
+        else:
+            embeddings,embedding_size = self.load_text_vec(fname)
         sub_embeddings = self.getSubVectorsFromDict(embeddings,embedding_size)
         self.embedding_size=embedding_size
         pickle.dump( sub_embeddings,open(pkl_name,"wb"))
@@ -213,12 +231,15 @@ class dataHelper():
         vocab= self.alphabet
         embedding = np.zeros((len(vocab),dim))
         count = 1
-        for word in vocab:
-            if word in vectors:
-                count += 0
-                embedding[vocab[word]]= vectors[word]
-            else:
-                embedding[vocab[word]]= np.random.uniform(-0.5,+0.5,dim)#vectors['[UNKNOW]'] #.tolist()
+        import codecs
+        with codecs.open("oov.txt","w") as f:
+            for word in vocab:
+                if word in vectors:
+                    count += 1
+                    embedding[vocab[word]]= vectors[word]
+                else:
+                    f.write(word+"\n")
+                    embedding[vocab[word]]= np.random.uniform(-0.5,+0.5,dim)#vectors['[UNKNOW]'] #.tolist()
         print( 'word in embedding',count)
         print( 'word not in embedding',len(vocab)-count)
         return embedding
