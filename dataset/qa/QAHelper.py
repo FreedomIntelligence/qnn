@@ -115,12 +115,19 @@ class BucketIterator(object):
 
             yield self.transform([item[index[0]:index[1]] for item in self.data])
 
-
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import SnowballStemmer
+import re, string
+stemmer=SnowballStemmer('english')
 def clean(sentence):
-    import re, string
+    
 
-    out = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
-    return out
+#    sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
+
+    sentence = [stemmer.stem(w) for w  in word_tokenize(sentence.lower())]
+    sentence = [w for w in sentence if w not in stopwords.words('english')]
+    return " ".join( sentence)
     
 
 
@@ -152,7 +159,11 @@ class dataHelper():
         opt.nb_classes = 2               # for nli, this could be 3
         opt.alphabet=self.alphabet
         opt.embedding_size = self.embeddings.shape[1]
-        opt.max_sequence_length=self.max_sequence_length
+        if self.max_sequence_length >100:
+            self.max_sequence_length = 100
+            
+        opt.max_sequence_length= self.max_sequence_length
+        
         opt.lookup_table = self.embeddings      
         
             
@@ -163,7 +174,7 @@ class dataHelper():
             data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')
     #        data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"],quoting =3).fillna('0')
             
-            if filter == True:
+            if filter == True and data_name in ["test","dev"]:
                 datas[data_name]=self.removeUnanswerdQuestion(data)
             else:
                 datas[data_name]=data
@@ -378,8 +389,15 @@ class dataHelper():
 #            return BucketIterator(formated,batch_size=self.batch_size,shuffle=False,max_sequence_length = self.max_sequence_length)
 #        else:
 #            return result
-        
-    
+    def getPointWiseSamples4Keras_unbalanced(self):  
+        process = lambda row: [self.encode_to_split(row["question"]),
+                               self.encode_to_split(row["answer"]), 
+                               row['flag'] ]
+        samples = self.datas["train"].apply( process,axis=1)
+        while True:
+            for batch in BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length):
+                yield batch[:2], np.array(batch[2])
+
     
     def getPairWiseSamples4Keras(self, iterable = False):
         

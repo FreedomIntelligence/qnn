@@ -90,7 +90,7 @@ if __name__ == '__main__':
     import itertools
 
     params = Params()
-    config_file = 'config/qalocal_point.ini'    # define dataset in the config
+    config_file = 'config/qalocal_point.ini'    # define dataset in the config  
     params.parse_config(config_file)
 
     parser = argparse.ArgumentParser(description='running the complex embedding network')
@@ -126,7 +126,7 @@ if __name__ == '__main__':
                     metrics=['mean_squared_error'])
             
             for i in range(params.epochs):
-                model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=64,verbose = False)        
+                model.fit_generator(reader.getPointWiseSamples4Keras_unbalanced(),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
                 y_pred = model.predict(x = test_data)            
                 metric=reader.evaluate(y_pred, mode = "test")
                 print(metric)
@@ -141,7 +141,7 @@ if __name__ == '__main__':
                     loss_weights=[0.0, 1.0,0.0])
             
             for i in range(params.epochs):
-                model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=22,verbose = True)
+                model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique()),verbose = True)
     
                 y_pred = model.predict(x = test_data)
     
