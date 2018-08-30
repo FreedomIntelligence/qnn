@@ -15,6 +15,9 @@ import random
 import tensorflow as tf
 random.seed(49999)
 np.random.seed(49999)
+session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
+K.set_session(sess)
 tf.set_random_seed(49999)
 
 
@@ -70,17 +73,17 @@ if __name__ == '__main__':
 #        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
 #        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
 #        "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
-#        "batch_size":[16],#,32
+        "batch_size":[16],#,32
 #        "activation":["sigmoid"],
 #        "amplitude_l2":[0.0000005],
 #        "phase_l2":[0.00000005],
 #        "dense_l2":[0],#0.0001,0.00001,0],
-        "measurement_size" :[100,200],#,50100],
-        "ngram_value":["1,2,3","2,3,4","1,3,4"],
-        "margin":[0.1,0.2],
-        "lr" : [0.5,0.2],#,1,0.01
+#        "measurement_size" :[100,200],#,50100],
+#        "ngram_value":["1,2,3","2,3,4","1,3,4"],
+#        "margin":[0.1,0.2],
+#        "lr" : [0.5,0.2],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
-        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
+#        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
     }
     import argparse
