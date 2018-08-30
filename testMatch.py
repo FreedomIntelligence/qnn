@@ -91,7 +91,7 @@ if __name__ == '__main__':
     import itertools
 
     params = Params()
-    config_file = 'config/qalocal.ini'    # define dataset in the config
+    config_file = 'config/qalocal_point.ini'    # define dataset in the config
 
     params.parse_config(config_file)
 

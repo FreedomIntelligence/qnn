@@ -23,8 +23,6 @@ class NGram(Layer):
 
     def call(self, inputs):
         # print(inputs.shape[1])
-        output = K.expand_dims(inputs)
-        output = K.repeat_elements(output,self.n_value,axis = 2)
         seq_len = inputs.shape[1]
         list_of_ngrams = []
         for i in range(self.n_value):
