@@ -28,9 +28,18 @@ class LocalMixtureNN(BasicModel):
         self.dropout_probs = Dropout(1) #self.opt.dropout_rate_probs
         self.projection = ComplexMeasurement(units = self.opt.measurement_size)
 #        self.distance = Lambda(l2_distance)
-        self.distance = Lambda(cosine_similarity)
+#        self.distance = Lambda(cosine_similarity)
 #        self.triplet_loss = Lambda(triplet_hinge_loss)
-
+        distances= [getScore("AESD.AESD",mean="geometric",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="geometric",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="geometric",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="arithmetic",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="arithmetic",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="arithmetic",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("cosine.Cosinse",dropout_keep_prob =self.opt.dropout_rate_probs),
+                    ]
+                    
+        self.distance= distances[self.opt.distance_type]
     def __init__(self,opt):
         super(LocalMixtureNN, self).__init__(opt)
 
@@ -49,8 +58,9 @@ class LocalMixtureNN(BasicModel):
 #            for doc in [self.question, self.answer, self.neg_answer]:
 #                rep.append(rep_m.get_representation(doc))
             q_rep = self.dropout_probs(rep_m.get_representation(self.question))
-            score1 = Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs) ([q_rep, self.dropout_probs(rep_m.get_representation(self.answer))])
-            score2 = Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs) ([q_rep, self.dropout_probs(rep_m.get_representation(self.neg_answer))])
+            
+            score1 = self.distance(dropout_keep_prob=self.opt.dropout_rate_probs) ([q_rep, self.dropout_probs(rep_m.get_representation(self.answer))])
+            score2 = self.distance(dropout_keep_prob=self.opt.dropout_rate_probs) ([q_rep, self.dropout_probs(rep_m.get_representation(self.neg_answer))])
             basic_loss = MarginLoss(self.opt.margin)( [score1,score2])
             
             output=[score1,basic_loss,basic_loss]

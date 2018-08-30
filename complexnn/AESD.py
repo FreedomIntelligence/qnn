@@ -12,13 +12,14 @@ import math
 
 class AESD(Layer):
 
-    def __init__(self, delta =0.5,c=1,dropout_keep_prob = 1, axis = -1, keep_dims = True, **kwargs):
+    def __init__(self, delta =0.5,c=1,dropout_keep_prob = 1, mean="geometric",axis = -1, keep_dims = True, **kwargs):
         # self.output_dim = output_dim
         self.axis = axis
         self.keep_dims = keep_dims
         self.dropout_probs = Dropout(dropout_keep_prob)
         self.delta = delta
         self.c = c
+        self.mean=mean
         super(AESD, self).__init__(**kwargs)
 
     def get_config(self):
@@ -45,9 +46,11 @@ class AESD(Layer):
 #        norm1 = K.sqrt(0.00001+ K.sum(x**2, axis = self.axis, keepdims = False))
 #        norm2 = K.sqrt(0.00001+ K.sum(y**2, axis = self.axis, keepdims = False))
 #        output= K.sum(self.dropout_probs(x*y),1) / norm1 /norm2
-        l2norm = K.sqrt(K.sum((x-y)**2,keepdims = False)+0.01)
-        
-        output =  1 /(1+ l2norm) *   1 /( 1+ K.exp(-1*self.delta*(self.c+K.sum(x*y,1)))) 
+        l2norm = K.sqrt(K.sum(self.dropout_probs((x-y)**2,keepdims = False,axis=-1))+0.00001)
+        if self.mean=="geometric":            
+            output =  1 /(1+ l2norm) *   1 /( 1+ K.exp(-1*self.delta*(self.c+K.sum(self.dropout_probs(x*y),-1)))) 
+        else:
+            output =  0.5 /(1+ l2norm) +   0.5 /( 1+ K.exp(-1*self.delta*(self.c+K.sum(self.dropout_probs(x*y),-1)))) 
         
          
 
@@ -93,8 +96,8 @@ if __name__ == '__main__':
 #    encoder.fit(x=a, y=b, epochs = 10)
     
 
-    x =  Input(shape=(2,))
-    y =  Input(shape=(2,))
+    x =  Input(shape=(2,10))
+    y =  Input(shape=(2,10))
 
     output = Cosinse()([x,y])
 

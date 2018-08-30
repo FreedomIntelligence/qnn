@@ -149,6 +149,7 @@ class dataHelper():
         self.max_sequence_length = max(q_max_sent_length,a_max_sent_length)
 #        self.q_max_sent_length = q_max_sent_length
 #        self.a_max_sent_length = a_max_sent_length
+
         
         print('get embedding')
         if opt.dataset_name=="NLPCC":     # can be updated
@@ -174,7 +175,7 @@ class dataHelper():
             data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')
     #        data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"],quoting =3).fillna('0')
             
-            if filter == True and data_name in ["test","dev"]:
+            if filter == True and data_name in ["train","test","dev"]:
                 datas[data_name]=self.removeUnanswerdQuestion(data)
             else:
                 datas[data_name]=data
