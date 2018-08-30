@@ -15,6 +15,9 @@ import random
 import tensorflow as tf
 random.seed(49999)
 np.random.seed(49999)
+session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
+K.set_session(sess)
 tf.set_random_seed(49999)
 
 
@@ -70,13 +73,14 @@ if __name__ == '__main__':
 #        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
 #        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
 #        "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
-#        "batch_size":[16],#,32
+        "batch_size":[16],#,32
 #        "activation":["sigmoid"],
 #        "amplitude_l2":[0.0000005],
 #        "phase_l2":[0.00000005],
 #        "dense_l2":[0],#0.0001,0.00001,0],
 #        "measurement_size" :[100,200],#,50100],
 #        "ngram_value":["1,2,3","2,3,4","1,3,4","3,4"],
+
 #        "margin":[0.1,0.2],
 #        "lr" : [0.5,0.2],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
@@ -88,6 +92,7 @@ if __name__ == '__main__':
 
     params = Params()
     config_file = 'config/qalocal.ini'    # define dataset in the config
+
     params.parse_config(config_file)
 
     parser = argparse.ArgumentParser(description='running the complex embedding network')
@@ -123,7 +128,7 @@ if __name__ == '__main__':
                     metrics=['mean_squared_error'])
             
             for i in range(params.epochs):
-                model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=64,verbose = False)        
+                model.fit_generator(reader.getPointWiseSamples4Keras_unbalanced(),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
                 y_pred = model.predict(x = test_data)            
                 metric=reader.evaluate(y_pred, mode = "test")
                 print(metric)
@@ -138,7 +143,7 @@ if __name__ == '__main__':
                     loss_weights=[0.0, 1.0,0.0])
             
             for i in range(params.epochs):
-                model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=22,verbose = True)
+                model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique()),verbose = True)
     
                 y_pred = model.predict(x = test_data)
     
