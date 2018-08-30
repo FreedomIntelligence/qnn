@@ -21,17 +21,6 @@ def mrr_metric(group):
 	if rr!=rr:
 		return 0
 	return 1.0/rr
-def map_metric(group):
-	group = sklearn.utils.shuffle(group,random_state =132)
-	ap=0
-	candidates=group.sort_values(by='score',ascending=False).reset_index()
-	correct_candidates=candidates[candidates["flag"]==1]
-	if len(correct_candidates)==0:
-		return 0
-	for i,index in enumerate(correct_candidates.index):
-		ap+=1.0* (i+1) /(index+1)
-	#print( ap/len(correct_candidates))
-	return ap/len(correct_candidates)
 
 def map_metric(group):
 	group = sklearn.utils.shuffle(group,random_state =132)
@@ -44,6 +33,7 @@ def map_metric(group):
 		ap+=1.0* (i+1) /(index+1)
 	#print( ap/len(correct_candidates))
 	return ap/len(correct_candidates)
+
 
 def dcg_at_k(r, k, method=1):
     r = np.asfarray(r)[:k]

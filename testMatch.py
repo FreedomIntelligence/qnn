@@ -65,7 +65,7 @@ if __name__ == '__main__':
     from models.match import keras as models
     params = Params()
     config_file = 'config/qalocal.ini'    # define dataset in the config
-    config_file = 'config/qalocal_point.ini' 
+#    config_file = 'config/qalocal_point.ini' 
     params.parse_config(config_file)
 
     reader = qa.setup(params)
