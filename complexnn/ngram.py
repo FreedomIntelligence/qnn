@@ -23,29 +23,49 @@ class NGram(Layer):
 
     def call(self, inputs):
         # print(inputs.shape[1])
-        output = K.expand_dims(inputs)
-        output = K.repeat_elements(output,self.n_value,axis = 2)
+        seq_len = inputs.shape[1]
+        list_of_ngrams = []
+        for i in range(self.n_value):
+            begin = max(0,i-math.floor(self.n_value/2))
+            end = min(seq_len-1+i-math.floor(self.n_value/2),seq_len-1)
+#            print(begin,end)
+            l =  K.slice(inputs, [0,begin], [-1,end-begin+1])
+#            print(l.shape)
+            padded_zeros = K.zeros_like(K.slice(inputs, [0,0], [-1,int(seq_len-(end-begin+1))]))
+#            print(padded_zeros.shape)
+            if begin == 0:
+                #left_padding
+                list_of_ngrams.append(K.expand_dims(K.concatenate([padded_zeros,l])))
+                #right_padding
+            else:
+                list_of_ngrams.append(K.expand_dims(K.concatenate([l,padded_zeros])))
+                
+        
+        ngram_mat = K.concatenate(list_of_ngrams,axis = -1)
+#        w_list = []
+#        seq_len = inputs.shape[1]
+#        # print(math.floor(self.n_value/2))
+#        for n in range(self.n_value):
+#          w = np.zeros(shape = (seq_len,seq_len))
+#          for i in range(seq_len):
+#            if (i+n-math.floor(self.n_value/2)>= 0) and (i+n-math.floor(self.n_value/2) < seq_len):
+#              w[i+n-math.floor(self.n_value/2),i] = 1
+#          w_list.append(w)
 
-        w_list = []
-        seq_len =inputs.shape[1]
-        # print(math.floor(self.n_value/2))
-        for n in range(self.n_value):
-          w = np.zeros(shape = (seq_len,seq_len))
-          for i in range(seq_len):
-            if (i+n-math.floor(self.n_value/2)>= 0) and (i+n-math.floor(self.n_value/2) < seq_len):
-              w[i+n-math.floor(self.n_value/2),i] = 1
-          w_list.append(w)
-
-        kernel = K.zeros(shape =(self.n_value,inputs.shape[1],inputs.shape[1]))
+#        kernel = K.zeros(shape =(self.n_value,inputs.shape[1],inputs.shape[1]))
         # print(np.asarray(w_list).shape)
-        K.set_value(kernel, np.asarray(w_list))
+#        K.set_value(kernel, np.asarray(w_list))
 
-        output = K.dot(inputs,kernel)
-        output = K.permute_dimensions(output, pattern = (0,2,1))
+#        output = K.dot(inputs,kernel)
+#        output = K.permute_dimensions(output, pattern = (0,2,1))
         # output = K.gather(inputs, (:,[0,-3]))
         # print(output.shape)
         # output = inputs[:,self.index,:]
-        return(output)
+        return(ngram_mat)
+        
+    def compute_mask(self, inputs, mask=None):
+        
+        return None
 
     def compute_output_shape(self, input_shape):
         # print(input_shape)
