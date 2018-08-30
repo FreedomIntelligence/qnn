@@ -232,14 +232,14 @@ class dataHelper():
         embedding = np.zeros((len(vocab),dim))
         count = 1
         import codecs
-#        with codecs.open("oov.txt","w") as f:
-        for word in vocab:
-            if word in vectors:
-                count += 1
-                embedding[vocab[word]]= vectors[word]
-            else:
-#                    f.write(word+"\n")
-                embedding[vocab[word]]= np.random.uniform(-0.5,+0.5,dim)#vectors['[UNKNOW]'] #.tolist()
+        with codecs.open("oov.txt","w",encoding="utf-8") as f:
+            for word in vocab:
+                if word in vectors:
+                    count += 1
+                    embedding[vocab[word]]= vectors[word]
+                else:
+                    f.write(word+"\n")
+                    embedding[vocab[word]]= np.random.uniform(-0.5,+0.5,dim)#vectors['[UNKNOW]'] #.tolist()
         print( 'word in embedding',count)
         print( 'word not in embedding',len(vocab)-count)
         return embedding

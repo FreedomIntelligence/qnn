@@ -42,6 +42,7 @@ class LocalMixtureNN(BasicModel):
                 rep.append(rep_m.get_representation(doc))
 #            output = self.distance(rep)
             output =  Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs)(rep) 
+#            output = AESD()(rep)
             model = Model([self.question, self.answer], output)
         elif self.opt.match_type == 'pairwise':
 #            rep = []
