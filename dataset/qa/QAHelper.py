@@ -149,6 +149,7 @@ class dataHelper():
         self.max_sequence_length = max(q_max_sent_length,a_max_sent_length)
 #        self.q_max_sent_length = q_max_sent_length
 #        self.a_max_sent_length = a_max_sent_length
+
         
         print('get embedding')
         if opt.dataset_name=="NLPCC":     # can be updated
