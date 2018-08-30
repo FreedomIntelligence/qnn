@@ -89,20 +89,31 @@ class LocalMixtureNN(BasicModel):
             #        self.probs = reshape((-1,self.opt.max_sequence_length*self.opt.measurement_size))(probs)
 #        print(probs_list[0].shape)
 #        print(probs_list[1].shape)
-        probs = Concatenation(axis = -1)(probs_list)
+        self.probs = Concatenation(axis = -1)(probs_list)
 #        print(probs.shape)
-        if self.opt.pooling_type == 'max':
-            probs = GlobalMaxPooling1D()(probs)
-        elif self.opt.pooling_type == 'average':
-            probs = GlobalAveragePooling1D()(probs)
-        elif self.opt.pooling_type == 'none':
-            probs = Flatten()(probs)
+        probs_feature = []
+        for one_type in self.opt.pooling_type.split(','):
+            if self.opt.pooling_type == 'max':
+                probs = GlobalMaxPooling1D()(self.probs)
+            elif self.opt.pooling_type == 'average':
+                probs = GlobalAveragePooling1D()(self.probs)
+            elif self.opt.pooling_type == 'none':
+                probs = Flatten()(self.probs)
+            elif self.opt.pooling_type == 'max_col':
+                probs = GlobalMaxPooling1D()(Permute((2,1))(self.probs))
+            elif self.opt.pooling_type == 'average_col':
+                probs = GlobalAveragePooling1D()(Permute((2,1))(self.probs))
+            else:
+                print('Wrong input pooling type -- The default flatten layer is used.')
+                probs = Flatten()(self.probs)
+            probs_feature.append(probs)
+        
+        if len(probs_feature)>1:
+            probs = concatenate(probs_feature)
         else:
-            print('Wrong input pooling type -- The default flatten layer is used.')
-            probs = Flatten()(probs)
+            probs = probs_feature[0]
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
-            probs = self.dropout_probs(probs)
-
+                probs = self.dropout_probs(probs)
         
         return(probs)
     
