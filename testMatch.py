@@ -126,7 +126,7 @@ if __name__ == '__main__':
                     metrics=['mean_squared_error'])
             
             for i in range(params.epochs):
-                model.fit_generator(reader.getPointWiseSamples4Keras_unbalanced(),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
+                model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
                 y_pred = model.predict(x = test_data)            
                 metric=reader.evaluate(y_pred, mode = "test")
                 print(metric)
