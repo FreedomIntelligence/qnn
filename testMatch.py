@@ -79,7 +79,8 @@ if __name__ == '__main__':
 #        "phase_l2":[0.00000005],
 #        "dense_l2":[0],#0.0001,0.00001,0],
 #        "measurement_size" :[100,200],#,50100],
-#        "ngram_value":["1,2,3","2,3,4","1,3,4"],
+#        "ngram_value":["1,2,3","2,3,4","1,3,4","3,4"],
+
 #        "margin":[0.1,0.2],
 #        "lr" : [0.5,0.2],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
@@ -90,7 +91,8 @@ if __name__ == '__main__':
     import itertools
 
     params = Params()
-    config_file = 'config/qalocal_point.ini'    # define dataset in the config  
+    config_file = 'config/qalocal.ini'    # define dataset in the config
+
     params.parse_config(config_file)
 
     parser = argparse.ArgumentParser(description='running the complex embedding network')
