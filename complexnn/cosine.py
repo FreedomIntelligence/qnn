@@ -16,6 +16,7 @@ class Cosinse(Layer):
         # self.output_dim = output_dim
         self.axis = axis
         self.keep_dims = keep_dims
+        self.dropout_keep_prob=dropout_keep_prob
         self.dropout_probs = Dropout(dropout_keep_prob)
         super(Cosinse, self).__init__(**kwargs)
 
