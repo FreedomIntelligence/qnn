@@ -150,10 +150,10 @@ if __name__ == '__main__':
             if params.onehot:
                 params.lr = 10 *params.lr
             test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
-            loss_type = "categorical_crossentropy" if params.onehot else "mean_squared_error"
+            loss_type,metric_type = ("categorical_hinge","acc") if params.onehot else ("mean_squared_error","mean_squared_error")
             model.compile(loss =loss_type, #""
                     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                    metrics=[loss_type])
+                    metrics=[metric_type])
             
             for i in range(params.epochs):
                 model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
