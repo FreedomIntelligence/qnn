@@ -45,7 +45,12 @@ class Params(object):
     def get_parameter_list(self):
         info=[]
         for k, v in self.__dict__.items():
-            info.append("%s -> %s"%(k,str(v)))
+            if k in ['dataset_name','batch_size','epochs','network_type',
+                     'dropout_rate_embedding','dropout_rate_probs','measurement_size',
+                     'lr','ngram_value','clean','remove_punctuation',
+                     'match_type','margin','pooling_type','steps_per_epoch',
+                     'distance_type','embedding_size']:
+                info.append("%s -> %s"%(k,str(v)))
         return info
     def to_string(self):
         return " ".join(self.get_parameter_list())

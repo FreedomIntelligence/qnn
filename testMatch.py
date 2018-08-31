@@ -91,7 +91,7 @@ if __name__ == '__main__':
 #        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
 #        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
 #        "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
-        "batch_size":[16],#,32
+        "batch_size":[16,32],#,32
 #        "activation":["sigmoid"],
 #        "amplitude_l2":[0.0000005],
 #        "phase_l2":[0.00000005],
@@ -109,22 +109,28 @@ if __name__ == '__main__':
     import itertools
 
     params = Params()
-    config_file = 'config/qalocal_pair.ini'    # define dataset in the config  
-    params.parse_config(config_file)
-
+#    config_file = 'config/qalocal_pair.ini'    # define dataset in the config  
+    
     parser = argparse.ArgumentParser(description='running the complex embedding network')
     parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)
     parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
+    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/qalocal_pair.ini')
     args = parser.parse_args()
     parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
-    reader = qa.setup(params)
-    test_data = reader.getTest(iterable = False)
+    
+    params.parse_config(args.config)
+    file_writer = open(params.output_file,'w')
     for parameter in parameters:
 #        old_dataset = params.dataset_name
+        old_dataset = params.dataset_name
         params.setup(zip(grid_parameters.keys(),parameter))
+        if old_dataset != params.dataset_name:
+            print("switch %s to %s"%(old_dataset,params.dataset_name))
+            reader=dataset.setup(params)
+            params.reader = reader
         from models.match import keras as models      
-    
-        
+        reader = qa.setup(params)
+        test_data = reader.getTest(iterable = False)
         qdnn = models.setup(params)
         model = qdnn.getModel()
     
@@ -135,6 +141,7 @@ if __name__ == '__main__':
         
         
     #    test_data.append(test_data[0])
+        
         evaluations=[]
         if params.match_type == 'pointwise':
             
@@ -151,6 +158,11 @@ if __name__ == '__main__':
                 print(metric)
                 evaluations.append(metric)
                 
+            df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
+            file_writer.write(params.to_string()+'\n')
+            file_writer.write(str(df.max())+'\n\n')
+            file_writer.write('_________________________\n\n\n')
+                
         elif params.match_type == 'pairwise':
             test_data.append(test_data[0])
             test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
@@ -161,18 +173,21 @@ if __name__ == '__main__':
             
             for i in range(params.epochs):
                 model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique()),verbose = True)
-    
+#            for i in range(1):
+#                model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=1,verbose = True)
+
                 y_pred = model.predict(x = test_data)
-    
                 score = y_pred[0]
     #            print(score)
                 metric = reader.evaluate(score, mode = "test")
-                print(metric)
                 evaluations.append(metric)
-        print(parameter)
-        df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
-        print(df.max())
-        print("_____________")
+                
+#        print(params.to_string())
+            df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
+            file_writer.write(params.to_string()+'\n')
+            file_writer.write(str(df.max())+'\n\n')
+            file_writer.write('_________________________')
+#        print("_____________")
             
                 
     
