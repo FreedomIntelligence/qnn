@@ -160,8 +160,8 @@ class dataHelper():
         opt.nb_classes = 2               # for nli, this could be 3
         opt.alphabet=self.alphabet
         opt.embedding_size = self.embeddings.shape[1]
-        if self.max_sequence_length >50:
-            self.max_sequence_length = 50
+        if self.max_sequence_length >self.max_len:
+            self.max_sequence_length = self.max_len
             
         opt.max_sequence_length= self.max_sequence_length
         
@@ -372,11 +372,15 @@ class dataHelper():
         else: 
             return [i for i in zip(*samples)]
         
-    def getPointWiseSamples4Keras(self, iterable = False):
+    def getPointWiseSamples4Keras(self, iterable = False ,onehot=False):
         while True:
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
                 q,a,neg = batch
-                data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
+                if onehot:
+                    data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
+                        np.array([[0,1]]*len(q) +[[1,0]]*len(q))]
+                else:
+                    data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
                         [1]*len(q) +[0]*len(q)]
                 yield data
 #        c = list(zip(*data))

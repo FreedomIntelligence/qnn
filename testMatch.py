@@ -20,6 +20,11 @@ sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
 K.set_session(sess)
 tf.set_random_seed(49999)
 
+def batch_softmax_with_first_item(x):
+    x_exp = np.exp(x)
+    x_sum = np.repeat(np.expand_dims(np.sum(x_exp, axis=1),1), x.shape[1], axis=1)
+    return x_exp / x_sum
+    
 
 from loss import *
 from units import to_array 
@@ -137,16 +142,19 @@ if __name__ == '__main__':
     #    test_data.append(test_data[0])
         evaluations=[]
         if params.match_type == 'pointwise':
-            
+            if params.onehot:
+                params.lr = 10 *params.lr
             test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
-            
-            model.compile(loss ="mean_squared_error", #""
+            loss_type = "categorical_crossentropy" if params.onehot else "mean_squared_error"
+            model.compile(loss =loss_type, #""
                     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-                    metrics=['mean_squared_error'])
+                    metrics=[loss_type])
             
             for i in range(params.epochs):
-                model.fit_generator(reader.getPointWiseSamples4Keras(),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
-                y_pred = model.predict(x = test_data)            
+                model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
+                y_pred = model.predict(x = test_data) 
+                y_pred =batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
+
                 metric=reader.evaluate(y_pred, mode = "test")
                 print(metric)
                 evaluations.append(metric)
@@ -164,7 +172,7 @@ if __name__ == '__main__':
     
                 y_pred = model.predict(x = test_data)
     
-                score = y_pred[0]
+                score = y_pred[0] 
     #            print(score)
                 metric = reader.evaluate(score, mode = "test")
                 print(metric)
