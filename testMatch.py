@@ -114,8 +114,8 @@ if __name__ == '__main__':
     import itertools
 
     params = Params()
-#    config_file = 'config/qalocal_pair.ini'    # define dataset in the config  
-    
+    config_file = 'config/qalocal_point.ini'    # define dataset in the config  
+    params.parse_config(config_file)
     parser = argparse.ArgumentParser(description='running the complex embedding network')
     parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)
     parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
