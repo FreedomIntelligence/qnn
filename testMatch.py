@@ -158,16 +158,19 @@ if __name__ == '__main__':
             for i in range(params.epochs):
                 model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
                 y_pred = model.predict(x = test_data) 
-                y_pred =batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
-
-                metric=reader.evaluate(y_pred, mode = "test")
-                print(metric)
-                evaluations.append(metric)
+                score =batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
                 
-            df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
-            file_writer.write(params.to_string()+'\n')
-            file_writer.write(str(df.max())+'\n\n')
-            file_writer.write('_________________________\n\n\n')
+                metric = reader.evaluate(score, mode = "test")
+                evaluations.append(metric)
+                print(metric)
+                df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
+                file_writer.write(params.to_string()+'\n')
+                file_writer.write(str(df.max())+'\n\n')
+                file_writer.write('_________________________')
+        #        print("_____________")
+                K.clear_session()
+              
+
                 
         elif params.match_type == 'pairwise':
             test_data.append(test_data[0])
@@ -184,16 +187,15 @@ if __name__ == '__main__':
 
                 y_pred = model.predict(x = test_data)
                 score = y_pred[0] 
-    #            print(score)
                 metric = reader.evaluate(score, mode = "test")
                 evaluations.append(metric)
-                
-#        print(params.to_string())
-            df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
-            file_writer.write(params.to_string()+'\n')
-            file_writer.write(str(df.max())+'\n\n')
-            file_writer.write('_________________________')
-#        print("_____________")
+                print(metric)
+                df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
+                file_writer.write(params.to_string()+'\n')
+                file_writer.write(str(df.max())+'\n\n')
+                file_writer.write('_________________________')
+        #        print("_____________")
+                K.clear_session()
             
                 
     
