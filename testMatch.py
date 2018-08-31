@@ -85,13 +85,13 @@ if __name__ == '__main__':
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
-        "distance_type":[0,1,2,3,4,5,6]
+        "distance_type":[6]
     }
     import argparse
     import itertools
 
     params = Params()
-    config_file = 'config/qalocal_point.ini'    # define dataset in the config  
+    config_file = 'config/qalocal_pair.ini'    # define dataset in the config  
     params.parse_config(config_file)
 
     parser = argparse.ArgumentParser(description='running the complex embedding network')

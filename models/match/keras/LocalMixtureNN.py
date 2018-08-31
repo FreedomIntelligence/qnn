@@ -50,7 +50,7 @@ class LocalMixtureNN(BasicModel):
             for doc in [self.question, self.answer]:
                 rep.append(rep_m.get_representation(doc))
 #            output = self.distance(rep)
-            output =  Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs)(rep) 
+            output =  self.distance(rep) 
 #            output = AESD()(rep)
             model = Model([self.question, self.answer], output)
         elif self.opt.match_type == 'pairwise':
@@ -59,8 +59,8 @@ class LocalMixtureNN(BasicModel):
 #                rep.append(rep_m.get_representation(doc))
             q_rep = self.dropout_probs(rep_m.get_representation(self.question))
             
-            score1 = self.distance(dropout_keep_prob=self.opt.dropout_rate_probs) ([q_rep, self.dropout_probs(rep_m.get_representation(self.answer))])
-            score2 = self.distance(dropout_keep_prob=self.opt.dropout_rate_probs) ([q_rep, self.dropout_probs(rep_m.get_representation(self.neg_answer))])
+            score1 = self.distance ([q_rep, self.dropout_probs(rep_m.get_representation(self.answer))])
+            score2 = self.distance ([q_rep, self.dropout_probs(rep_m.get_representation(self.neg_answer))])
             basic_loss = MarginLoss(self.opt.margin)( [score1,score2])
             
             output=[score1,basic_loss,basic_loss]
