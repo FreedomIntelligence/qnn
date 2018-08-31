@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .BasicModel import BasicModel
+from models.match.keras.BasicModel import BasicModel
 from keras.layers import Embedding, GlobalMaxPooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape, Permute,Lambda, Subtract
 from keras.models import Model, Input, model_from_json, load_model, Sequential
 from keras.constraints import unit_norm
@@ -40,6 +40,9 @@ class LocalMixtureNN(BasicModel):
                     ]
                     
         self.distance= distances[self.opt.distance_type]
+        
+#        self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))
+                
     def __init__(self,opt):
         super(LocalMixtureNN, self).__init__(opt)
 
@@ -49,18 +52,17 @@ class LocalMixtureNN(BasicModel):
             rep = []
             for doc in [self.question, self.answer]:
                 rep.append(rep_m.get_representation(doc))
-#            output = self.distance(rep)
-            output =  self.distance(rep) 
-#            output = AESD()(rep)
+            output = self.distance(rep)
+#            output =  Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs)(rep) 
             model = Model([self.question, self.answer], output)
         elif self.opt.match_type == 'pairwise':
 #            rep = []
 #            for doc in [self.question, self.answer, self.neg_answer]:
 #                rep.append(rep_m.get_representation(doc))
             q_rep = self.dropout_probs(rep_m.get_representation(self.question))
-            
-            score1 = self.distance ([q_rep, self.dropout_probs(rep_m.get_representation(self.answer))])
-            score2 = self.distance ([q_rep, self.dropout_probs(rep_m.get_representation(self.neg_answer))])
+
+            score1 = self.distance([q_rep, rep_m.get_representation(self.answer)])
+            score2 = self.distance([q_rep, rep_m.get_representation(self.neg_answer)])
             basic_loss = MarginLoss(self.opt.margin)( [score1,score2])
             
             output=[score1,basic_loss,basic_loss]
@@ -72,19 +74,15 @@ class LocalMixtureNN(BasicModel):
 
 
 if __name__ == "__main__":
-    from models.BasicModel import BasicModel
+
     from params import Params
     import numpy as np
-    import dataset
+    from dataset import qa
     import units
     opt = Params()
-    config_file = 'config/local.ini'    # define dataset in the config
+    config_file = 'config/qalocal_point.ini'    # define dataset in the config
     opt.parse_config(config_file)
-    reader = dataset.setup(opt)
-    opt = dataset.process_embedding(reader,opt)
-    
-    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
-    train_y = np.random.randint(2,size = len(train_y))
+    reader = qa.setup(opt)
     self = BasicModel(opt)
 #    model.compile(loss = opt.loss,
 #            optimizer = units.getOptimizer(name=opt.optimizer,lr=opt.lr),

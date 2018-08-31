@@ -124,9 +124,9 @@ def clean(sentence):
     
 
 #    sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
-
-    sentence = [stemmer.stem(w) for w  in word_tokenize(sentence.lower())]
-    sentence = [w for w in sentence if w not in stopwords.words('english')]
+    sentence = [w for w  in word_tokenize(sentence.lower())]
+#    sentence = [stemmer.stem(w) for w  in sentence]
+#    sentence = [w for w in sentence if w not in stopwords.words('english')]
     return " ".join( sentence)
     
 
@@ -160,8 +160,8 @@ class dataHelper():
         opt.nb_classes = 2               # for nli, this could be 3
         opt.alphabet=self.alphabet
         opt.embedding_size = self.embeddings.shape[1]
-        if self.max_sequence_length >100:
-            self.max_sequence_length = 100
+        if self.max_sequence_length >50:
+            self.max_sequence_length = 50
             
         opt.max_sequence_length= self.max_sequence_length
         

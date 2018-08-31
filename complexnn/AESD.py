@@ -46,7 +46,7 @@ class AESD(Layer):
 #        norm1 = K.sqrt(0.00001+ K.sum(x**2, axis = self.axis, keepdims = False))
 #        norm2 = K.sqrt(0.00001+ K.sum(y**2, axis = self.axis, keepdims = False))
 #        output= K.sum(self.dropout_probs(x*y),1) / norm1 /norm2
-        l2norm = K.sqrt(K.sum(self.dropout_probs((x-y)**2,keepdims = False,axis=-1))+0.00001)
+        l2norm = K.sqrt(K.sum(self.dropout_probs((x-y)**2),keepdims = False,axis=-1)+0.00001)
         if self.mean=="geometric":            
             output =  1 /(1+ l2norm) *   1 /( 1+ K.exp(-1*self.delta*(self.c+K.sum(self.dropout_probs(x*y),-1)))) 
         else:
