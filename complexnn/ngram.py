@@ -20,7 +20,7 @@ class NGram(Layer):
     def build(self, input_shape):
 
         super(NGram, self).build(input_shape)  # Be sure to call this somewhere!
-
+        
     def call(self, inputs):
         # print(inputs.shape[1])
         seq_len = inputs.shape[1]
@@ -49,6 +49,7 @@ class NGram(Layer):
 #          w = np.zeros(shape = (seq_len,seq_len))
 #          for i in range(seq_len):
 #            if (i+n-math.floor(self.n_value/2)>= 0) and (i+n-math.floor(self.n_value/2) < seq_len):
+        
 #              w[i+n-math.floor(self.n_value/2),i] = 1
 #          w_list.append(w)
 
