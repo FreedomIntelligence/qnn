@@ -117,7 +117,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='running the complex embedding network')
     parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)
     parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
-    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/qalocal_pair.ini')
+    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/qalocal_point_wiki.ini')
     args = parser.parse_args()
     parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
     
@@ -168,7 +168,7 @@ if __name__ == '__main__':
                 file_writer.write(str(df.max())+'\n\n')
                 file_writer.write('_________________________')
         #        print("_____________")
-                K.clear_session()
+        
               
 
                 
@@ -195,7 +195,7 @@ if __name__ == '__main__':
                 file_writer.write(str(df.max())+'\n\n')
                 file_writer.write('_________________________')
         #        print("_____________")
-                K.clear_session()
+            K.clear_session()
             
                 
     
