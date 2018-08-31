@@ -96,19 +96,25 @@ if __name__ == '__main__':
 #        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
 #        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
 #        "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
-        "batch_size":[16,32],#,32
+        "batch_size":[16],#,32
 #        "activation":["sigmoid"],
 #        "amplitude_l2":[0.0000005],
 #        "phase_l2":[0.00000005],
 #        "dense_l2":[0],#0.0001,0.00001,0],
-#        "measurement_size" :[100,200],#,50100],
+        "measurement_size" :[100,300],#,50100],
 #        "ngram_value":["1,2,3","2,3,4","1,3,4"],
 #        "margin":[0.1,0.2],
-#        "lr" : [0.5,0.2],#,1,0.01
+        "lr" : [1,0.1,0.01],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
-        "distance_type":[6]
+        "max_len":[50,100,200],
+        "one_hot": [0,1],
+        "distance_type":[6],
+        "train_verbose":[0,1],
+        "remove_punctuation": [0,1],
+        "stem" : [0,1],
+        "remove_stowords" : [0,1]
     }
     import argparse
     import itertools
@@ -127,7 +133,7 @@ if __name__ == '__main__':
 #        old_dataset = params.dataset_name
         old_dataset = params.dataset_name
         params.setup(zip(grid_parameters.keys(),parameter))
-        if old_dataset != params.dataset_name:
+        if old_dataset != params.dataset_name:   # batch_size
             print("switch %s to %s"%(old_dataset,params.dataset_name))
             reader=dataset.setup(params)
             params.reader = reader
@@ -144,7 +150,7 @@ if __name__ == '__main__':
         
         
     #    test_data.append(test_data[0])
-        
+        print(parameter)
         evaluations=[]
         if params.match_type == 'pointwise':
             if params.onehot:
@@ -154,7 +160,6 @@ if __name__ == '__main__':
             model.compile(loss =loss_type, #""
                     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=[metric_type])
-            
             for i in range(params.epochs):
                 model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
                 y_pred = model.predict(x = test_data) 
@@ -168,6 +173,7 @@ if __name__ == '__main__':
                 file_writer.write(str(df.max())+'\n\n')
                 file_writer.write('_________________________')
         #        print("_____________")
+            K.clear_session()
         
               
 
