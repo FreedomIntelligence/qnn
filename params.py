@@ -60,17 +60,3 @@ class Params(object):
             f.write("\n".join(self.get_parameter_list()))
         
 
-clean_sentence = 1
-random_init = 0 ; attention
-match_type = pointwise
-margin = 0.1
-pooling_type = max
-steps_per_epoch = 100
-distance_type = 6
-onehot = 1
-max_len = 50
-output_file = output_point_wiki.txt
-train_verbose = 1
-remove_punctuation= 0
-stem = 0
-remove_stowords = 0
