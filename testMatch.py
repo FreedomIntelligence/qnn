@@ -108,7 +108,7 @@ if __name__ == '__main__':
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
-        "max_len":[100],
+        "max_len":[50],
         "one_hot": [0],
         "distance_type":[6],
 #        "train_verbose":[0],
@@ -123,7 +123,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='running the complex embedding network')
     parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)
     parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
-    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/msra.ini')
+    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/yahoo.ini')
     args = parser.parse_args()
     parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
     
