@@ -104,17 +104,17 @@ if __name__ == '__main__':
         "measurement_size" :[100],#,50100],
 #        "ngram_value":["1,2,3","2,3,4","1,3,4"],
 #        "margin":[0.1,0.2],
-        "lr" : [1,0.1,0.01],#,1,0.01
+        "lr" : [0.1,0.01],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
         "max_len":[100],
         "one_hot": [0,1],
         "distance_type":[6],
-        "train_verbose":[0,1],
-        "remove_punctuation": [0,1],
-        "stem" : [0,1],
-        "remove_stowords" : [0,1]
+        "train_verbose":[0],
+        "remove_punctuation": [0],
+        "stem" : [0],
+        "remove_stowords" : [0]
     }
     import argparse
     import itertools
