@@ -36,10 +36,12 @@ class LocalMixtureNN(BasicModel):
                     getScore("AESD.AESD",mean="arithmetic",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
                     getScore("AESD.AESD",mean="arithmetic",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
                     getScore("AESD.AESD",mean="arithmetic",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    getScore("cosine.Cosinse",dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("cosine.Cosinse",dropout_keep_prob =self.opt.dropout_rate_probs)
                     ]
                     
         self.distance= distances[self.opt.distance_type]
+        if self.opt.onehot:
+            self.distance = getScore("multiple_loss.Multiple_loss",dropout_keep_prob =self.opt.dropout_rate_probs)
         
 #        self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))
                 

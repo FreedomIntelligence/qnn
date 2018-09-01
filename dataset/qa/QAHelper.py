@@ -120,13 +120,15 @@ from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
 import re, string
 stemmer=SnowballStemmer('english')
-def clean(sentence):
+def clean(sentence,remove_punctuation=False,stem=False,remove_stowords=False):
     
-
-#    sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
+    if remove_punctuation:
+        sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
     sentence = [w for w  in word_tokenize(sentence.lower())]
-#    sentence = [stemmer.stem(w) for w  in sentence]
-#    sentence = [w for w in sentence if w not in stopwords.words('english')]
+    if stem:
+        sentence = [stemmer.stem(w) for w  in sentence]
+    if remove_stowords:
+        sentence = [w for w in sentence if w not in stopwords.words('english')]
     return " ".join( sentence)
     
 
@@ -160,8 +162,8 @@ class dataHelper():
         opt.nb_classes = 2               # for nli, this could be 3
         opt.alphabet=self.alphabet
         opt.embedding_size = self.embeddings.shape[1]
-        if self.max_sequence_length >50:
-            self.max_sequence_length = 50
+        if self.max_sequence_length >self.max_len:
+            self.max_sequence_length = self.max_len
             
         opt.max_sequence_length= self.max_sequence_length
         
@@ -170,12 +172,13 @@ class dataHelper():
             
     def load(self, data_dir, filter = True):
         datas = dict()
+        
         for data_name in ["train",'test']: #'dev'            
             data_file = os.path.join(data_dir,data_name+".txt")
             data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')
     #        data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"],quoting =3).fillna('0')
-            
-            if filter == True and data_name in ["train","test","dev"]:
+            clean_set = ["test","dev"] if self.train_verbose else ["train","test","dev"]
+            if filter == True and data_name in clean_set:
                 datas[data_name]=self.removeUnanswerdQuestion(data)
             else:
                 datas[data_name]=data
@@ -184,8 +187,8 @@ class dataHelper():
     
     @log_time_delta
     def removeUnanswerdQuestion(self,df):
-        if self.remove_punctuation:
-            df["question"] = df["question"].apply(lambda x : clean(x))
+        if self.clean_sentence:
+            df["question"] = df["question"].apply(lambda x : clean(x,remove_punctuation=self.remove_punctuation,stem=self.stem,remove_stowords=self.remove_stowords))
             df["answer"] = df["answer"].apply(lambda x : clean(x))
         counter= df.groupby("question").apply(lambda group: sum(group["flag"]))
         questions_have_correct=counter[counter>0].index
@@ -372,11 +375,15 @@ class dataHelper():
         else: 
             return [i for i in zip(*samples)]
         
-    def getPointWiseSamples4Keras(self, iterable = False):
+    def getPointWiseSamples4Keras(self, iterable = False ,onehot=False):
         while True:
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
                 q,a,neg = batch
-                data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
+                if onehot:
+                    data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
+                        np.array([[0,1]]*len(q) +[[1,0]]*len(q))]
+                else:
+                    data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
                         [1]*len(q) +[0]*len(q)]
                 yield data
 #        c = list(zip(*data))
