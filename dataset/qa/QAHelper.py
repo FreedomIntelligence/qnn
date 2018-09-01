@@ -140,8 +140,8 @@ class dataHelper():
             self.__setattr__(key,value)        
       
             
-        dir_path = os.path.join(os.path.join(opt.datasets_dir, "QA"),opt.dataset_name.lower())
-        self.datas = self.load(dir_path,filter =opt.clean)
+        self.dir_path = os.path.join(os.path.join(opt.datasets_dir, "QA"),opt.dataset_name.lower())
+        self.datas = self.load(filter =opt.clean)
         self.alphabet = self.get_alphabet(self.datas.values())
         self.optCallback(opt)            
             
@@ -170,26 +170,26 @@ class dataHelper():
         opt.lookup_table = self.embeddings      
         
             
-    def load(self, data_dir, filter = True):
+    def load(self,  filter = True):
         datas = dict()
         
         for data_name in ["train",'test']: #'dev'            
-            data_file = os.path.join(data_dir,data_name+".txt")
+            data_file = os.path.join(self.dir_path,data_name+".txt")
             data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')
     #        data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"],quoting =3).fillna('0')
+            
             clean_set = ["test","dev"] if self.train_verbose else ["train","test","dev"]
             if filter == True and data_name in clean_set:
-                datas[data_name]=self.removeUnanswerdQuestion(data)
-            else:
-                datas[data_name]=data
+                data=self.removeUnanswerdQuestion(data)
 #            data.to_csv(data_name+"_cleaned.csv",index=False,encoding="utf-8",sep="\t")
+            if self.clean_sentence:
+                data["question"] = data["question"].apply(lambda x : clean(x,remove_punctuation=self.remove_punctuation,stem=self.stem,remove_stowords=self.remove_stowords))
+                data["answer"] = data["answer"].apply(lambda x : clean(x))
+            datas[data_name] = data
         return datas
     
     @log_time_delta
     def removeUnanswerdQuestion(self,df):
-        if self.clean_sentence:
-            df["question"] = df["question"].apply(lambda x : clean(x,remove_punctuation=self.remove_punctuation,stem=self.stem,remove_stowords=self.remove_stowords))
-            df["answer"] = df["answer"].apply(lambda x : clean(x))
         counter= df.groupby("question").apply(lambda group: sum(group["flag"]))
         questions_have_correct=counter[counter>0].index
         counter= df.groupby("question").apply(lambda group: sum(group["flag"]==0))
@@ -375,17 +375,30 @@ class dataHelper():
         else: 
             return [i for i in zip(*samples)]
         
-    def getPointWiseSamples4Keras(self, iterable = False ,onehot=False):
-        while True:
-            for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
-                q,a,neg = batch
-                if onehot:
-                    data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
-                        np.array([[0,1]]*len(q) +[[1,0]]*len(q))]
-                else:
-                    data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
-                        [1]*len(q) +[0]*len(q)]
-                yield data
+    def getPointWiseSamples4Keras(self, iterable = False ,onehot=False,unbalance=False):
+        if unbalance:
+            process = lambda row: [self.encode_to_split(row["question"]),
+                       self.encode_to_split(row["answer"]), 
+                       row['flag'] ]
+            samples = self.datas["train"].apply(process,axis=1)
+            while True:
+                for batch in BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length):
+                    if onehot:
+                        yield   batch[:2],np.array([[0,1] if i else [1,0] for i in batch[2]])
+                    else:
+                        yield batch[:2], np.array(batch[2])
+        else:
+            
+            while True:
+                for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
+                    q,a,neg = batch
+                    if onehot:
+                        data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
+                            np.array([[0,1]]*len(q) +[[1,0]]*len(q))]
+                    else:
+                        data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
+                            [1]*len(q) +[0]*len(q)]
+                    yield data
 #        c = list(zip(*data))
 #        random.shuffle(c)
 #        
@@ -397,14 +410,8 @@ class dataHelper():
 #            return BucketIterator(formated,batch_size=self.batch_size,shuffle=False,max_sequence_length = self.max_sequence_length)
 #        else:
 #            return result
-    def getPointWiseSamples4Keras_unbalanced(self):  
-        process = lambda row: [self.encode_to_split(row["question"]),
-                               self.encode_to_split(row["answer"]), 
-                               row['flag'] ]
-        samples = self.datas["train"].apply( process,axis=1)
-        while True:
-            for batch in BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length):
-                yield batch[:2], np.array(batch[2])
+
+
 
     
     def getPairWiseSamples4Keras(self, iterable = False):

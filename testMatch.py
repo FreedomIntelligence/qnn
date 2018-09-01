@@ -93,13 +93,13 @@ if __name__ == '__main__':
     
     grid_parameters ={
 #        "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
-        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
+#        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
 #        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
         "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
 #        "batch_size":[16,32],#,32
 #        "activation":["sigmoid"],
-        "amplitude_l2":[0.0000005],
-        "phase_l2":[0.00000005],
+#        "amplitude_l2":[0.0000005],
+#        "phase_l2":[0.00000005],
 #        "dense_l2":[0],#0.0001,0.00001,0],
 #        "measurement_size" :[400,300],#,50100],
 #        "ngram_value":["1,2,3","2,3,4","1,3,4"],
@@ -108,13 +108,15 @@ if __name__ == '__main__':
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
-        "max_len":[100],
+#        "max_len":[100],
 #        "one_hot": [1],
+        "dataset_name": ["wiki","trec"],
+        "pooling_type": ["max","average","none"],
         "distance_type":[6],
         "train_verbose":[0],
         "remove_punctuation": [1],
-        "stem" : [1],
-        "remove_stowords" : [1]    }
+        "stem" : [0],
+        "remove_stowords" : [0]    }
     import argparse
     import itertools
 
@@ -122,7 +124,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='running the complex embedding network')
     parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)
     parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
-    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/qalocal_pair_wiki.ini')
+    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/swem.ini')
     args = parser.parse_args()
     parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
     params.parse_config(args.config)
@@ -169,8 +171,8 @@ if __name__ == '__main__':
                 print(metric)
             df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
             file_writer.write(params.to_string()+'\n')
-            file_writer.write(str(df.max())+'\n\n')
-            file_writer.write('_________________________')
+            file_writer.write(str(df.max())+'\n')
+            file_writer.write('_________________________\n\n\n')
         #        print("_____________")
             K.clear_session()
         
@@ -196,8 +198,8 @@ if __name__ == '__main__':
                 print(metric)
             df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
             file_writer.write(params.to_string()+'\n')
-            file_writer.write(str(df.max())+'\n\n')
-            file_writer.write('_________________________')
+            file_writer.write(str(df.max())+'\n')
+            file_writer.write('_________________________\n\n\n')
         #        print("_____________")
             K.clear_session()
             
