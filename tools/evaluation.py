@@ -83,17 +83,22 @@ def write2file(datas,filename="train.QApair.TJU_IR_QA.score"):
 			f.write(("%.10f" %data )+"\n")
 	return filename
 
-
+def accurancy(df,predicted):
+    label =  np.random.rand(len(df))>0.5
+    return sum(label==df["flag"]) * 1.0 / len(df)
 def evaluationbyFile(modelfile,resultfile="result.text",groundtruth=qa_path):
 	cmd="test.exe " + " ".join([groundtruth,modelfile,resultfile])
 	print( modelfile[19:-6]+":") # )
 	subprocess.call(cmd, shell=True)
-def evaluationBypandas(df,predicted):
+def evaluationBypandas(df,predicted,acc=False):
     df["score"]=predicted
     mrr= df.groupby("question").apply(mrr_metric).mean()
     map= df.groupby("question").apply(map_metric).mean()
     percsisionAT1= df.groupby("question").apply(percisionAT1_metric).mean()
-    return map,mrr,percsisionAT1
+    if acc:
+        return map,mrr,percsisionAT1, accurancy(df,predicted)
+    else:
+        return map,mrr,percsisionAT1
 def precision_per(group):
 	group = sklearn.utils.shuffle(group,random_state =132)
 	candidates=group.sort_values(by='score',ascending=False).reset_index()

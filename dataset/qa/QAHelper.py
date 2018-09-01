@@ -443,8 +443,8 @@ class dataHelper():
          # print( x, x_mask)
         return x, x_mask
     
-    def evaluate(self,predicted,mode= "test"):
-        return evaluation.evaluationBypandas(self.datas[mode],predicted)
+    def evaluate(self,predicted,mode= "test",acc=False):
+        return evaluation.evaluationBypandas(self.datas[mode],predicted,acc=acc)
         
 
 if __name__ == "__main__":

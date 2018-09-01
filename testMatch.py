@@ -116,7 +116,11 @@ if __name__ == '__main__':
         "train_verbose":[0],
         "remove_punctuation": [1],
         "stem" : [0],
-        "remove_stowords" : [0]    }
+        "remove_stowords" : [0],        
+        "max_len":[50],
+        "one_hot": [0],
+        "distance_type":[6],
+    }
     import argparse
     import itertools
 
@@ -162,7 +166,10 @@ if __name__ == '__main__':
                     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=[metric_type])
             for i in range(params.epochs):
-                model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
+                if "unbalance" in  params.__dict__ and params.unbalance:
+                    model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot,unbalance=params.unbalance),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
+                else:
+                    model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique())/reader.batch_size,verbose = True)        
                 y_pred = model.predict(x = test_data) 
                 score =batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
                 
