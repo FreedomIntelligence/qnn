@@ -108,7 +108,7 @@ if __name__ == '__main__':
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
-        "max_len":[100],
+        "max_len":[50],
         "one_hot": [0],
         "distance_type":[6],
 #        "train_verbose":[0],
@@ -164,7 +164,7 @@ if __name__ == '__main__':
                 if "unbalance" in  params.__dict__ and params.unbalance:
                     model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot,unbalance=params.unbalance),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
                 else:
-                    model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
+                    model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique())/reader.batch_size,verbose = True)        
                 y_pred = model.predict(x = test_data) 
                 score =batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
                 
@@ -190,7 +190,7 @@ if __name__ == '__main__':
                     loss_weights=[0.0, 1.0,0.0])
             
             for i in range(params.epochs):
-                model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique()),verbose = True)
+                model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique())/reader.batch_size,verbose = True)
 #            for i in range(1):
 #                model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=1,verbose = True)
 
