@@ -131,12 +131,12 @@ if __name__ == '__main__':
     file_writer = open(params.output_file,'w')
     for parameter in parameters:
 #        old_dataset = params.dataset_name
-        old_dataset = params.dataset_name
+#        old_dataset = params.dataset_name
         params.setup(zip(grid_parameters.keys(),parameter))
-        if old_dataset != params.dataset_name:   # batch_size
-            print("switch %s to %s"%(old_dataset,params.dataset_name))
-            reader=dataset.setup(params)
-            params.reader = reader
+#        if old_dataset != params.dataset_name:   # batch_size
+#            print("switch %s to %s"%(old_dataset,params.dataset_name))
+#            reader=dataset.setup(params)
+#            params.reader = reader
         from models.match import keras as models      
         reader = qa.setup(params)
         test_data = reader.getTest(iterable = False)
