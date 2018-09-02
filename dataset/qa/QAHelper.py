@@ -380,7 +380,7 @@ class dataHelper():
             process = lambda row: [self.encode_to_split(row["question"]),
                        self.encode_to_split(row["answer"]), 
                        row['flag'] ]
-            samples = self.datas["train"].apply( process,axis=1)
+            samples = self.datas["train"].apply(process,axis=1)
             while True:
                 for batch in BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length):
                     if onehot:
@@ -393,10 +393,10 @@ class dataHelper():
                 for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
                     q,a,neg = batch
                     if onehot:
-                        data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
+                        data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
                             np.array([[0,1]]*len(q) +[[1,0]]*len(q))]
                     else:
-                        data = [[np.concatenate([q,q],0),np.concatenate([a,neg],0)],
+                        data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
                             [1]*len(q) +[0]*len(q)]
                     yield data
 #        c = list(zip(*data))

@@ -25,9 +25,20 @@ class RealNN(BasicModel):
             self.embedding = Embedding(trainable=self.opt.embedding_trainable, input_dim=self.opt.lookup_table.shape[0],output_dim=self.opt.lookup_table.shape[1],embeddings_constraint = unit_norm(axis = 1))
         
         self.dense = Dense(self.opt.nb_classes, activation="sigmoid")       
-        self.dropout = Dropout(self.opt.dropout_rate_probs)
+        self.dropout_probs = Dropout(self.opt.dropout_rate_probs)
 #        self.distance = Lambda(l2_distance)
-        self.distance = Lambda(cosine_similarity)
+        distances= [getScore("AESD.AESD",mean="geometric",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="geometric",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="geometric",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="arithmetic",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="arithmetic",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("AESD.AESD",mean="arithmetic",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    getScore("cosine.Cosinse",dropout_keep_prob =self.opt.dropout_rate_probs)
+                    ]
+                    
+        self.distance= distances[self.opt.distance_type]
+        if self.opt.onehot:
+            self.distance = getScore("multiple_loss.Multiple_loss",dropout_keep_prob =self.opt.dropout_rate_probs)
 #        self.triplet_loss = Lambda(triplet_hinge_loss)
 
     def __init__(self,opt):
@@ -40,12 +51,19 @@ class RealNN(BasicModel):
             for doc in [self.question, self.answer]:
                 rep.append(rep_m.get_representation(doc))
             output = self.distance(rep)
+#            output =  Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs)(rep) 
             model = Model([self.question, self.answer], output)
         elif self.opt.match_type == 'pairwise':
-            rep = []
-            for doc in [self.question, self.answer, self.neg_answer]:
-                rep.append(rep_m.get_representation(doc))
-            output = rep
+#            rep = []
+#            for doc in [self.question, self.answer, self.neg_answer]:
+#                rep.append(rep_m.get_representation(doc))
+            q_rep = self.dropout_probs(rep_m.get_representation(self.question))
+
+            score1 = self.distance([q_rep, rep_m.get_representation(self.answer)])
+            score2 = self.distance([q_rep, rep_m.get_representation(self.neg_answer)])
+            basic_loss = MarginLoss(self.opt.margin)( [score1,score2])
+            
+            output=[score1,basic_loss,basic_loss]
             model = Model([self.question, self.answer, self.neg_answer], output)           
         else:
             raise ValueError('wrong input of matching type. Please input pairwise or pointwise.')
