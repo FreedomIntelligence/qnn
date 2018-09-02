@@ -117,6 +117,7 @@ class BucketIterator(object):
 
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+stopwords_set = set(stopwords.words('english'))
 from nltk.stem import SnowballStemmer
 import re, string
 stemmer=SnowballStemmer('english')
@@ -128,7 +129,7 @@ def clean(sentence,remove_punctuation=False,stem=False,remove_stowords=False):
     if stem:
         sentence = [stemmer.stem(w) for w  in sentence]
     if remove_stowords:
-        sentence = [w for w in sentence if w not in stopwords.words('english')]
+        sentence = [w for w in sentence if w not in stopwords_set]
     return " ".join( sentence)
     
 
