@@ -96,28 +96,28 @@ if __name__ == '__main__':
 #        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
 #        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
         "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
-#        "batch_size":[16,32],#,32
+        "batch_size":[16],#,32
 #        "activation":["sigmoid"],
 #        "amplitude_l2":[0.0000005],
 #        "phase_l2":[0.00000005],
 #        "dense_l2":[0],#0.0001,0.00001,0],
-#        "measurement_size" :[400,300],#,50100],
+        "measurement_size" :[300],#,50100],
 #        "ngram_value":["1,2,3","2,3,4","1,3,4"],
 #        "margin":[0.1,0.2],
-#        "lr" : [0.01],#,1,0.01
+        "lr" : [1],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
 #        "max_len":[100],
 #        "one_hot": [1],
-        "dataset_name": ["wiki","trec"],
-        "pooling_type": ["max","average","none"],
+#        "dataset_name": ["wiki","trec"],
+#        "pooling_type": ["max","average","none"],
         "distance_type":[6],
         "train_verbose":[0],
-        "remove_punctuation": [1],
+        "remove_punctuation": [0],
         "stem" : [0],
-        "remove_stowords" : [0],        
-        "max_len":[50],
+        "remove_stowords" : [1],        
+        "max_len":[100],
         "one_hot": [0],
         "distance_type":[6],
     }
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='running the complex embedding network')
     parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)
     parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
-    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/swem.ini')
+    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/qalocal_pair_trec.ini')
     args = parser.parse_args()
     parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
     params.parse_config(args.config)
