@@ -192,12 +192,12 @@ class dataHelper():
     def removeUnanswerdQuestion(self,df):
         counter= df.groupby("question").apply(lambda group: sum(group["flag"]))
         questions_have_correct=counter[counter>0].index
-        counter= df.groupby("question").apply(lambda group: sum(group["flag"]==0))
-        questions_have_uncorrect=counter[counter>0].index
-        counter=df.groupby("question").apply(lambda group: len(group["flag"]))
+#        counter= df.groupby("question").apply(lambda group: sum(group["flag"]==0))
+#        questions_have_uncorrect=counter[counter>0].index
+#        counter=df.groupby("question").apply(lambda group: len(group["flag"]))
 #        questions_multi=counter[counter>1].index
     
-        return df[df["question"].isin(questions_have_correct) &  df["question"].isin(questions_have_correct) & df["question"].isin(questions_have_uncorrect)].reset_index()
+        return df[df["question"].isin(questions_have_correct) ].reset_index()  #&  df["question"].isin(questions_have_correct) & df["question"].isin(questions_have_uncorrect)
 
                 
     def get_alphabet(self,corpuses=None,dataset="",fresh=True):
