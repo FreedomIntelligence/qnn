@@ -89,10 +89,6 @@ def test_matchzoo():
 if __name__ == '__main__':
 #def test_match():
     
-    
-    
-
-    
     grid_parameters ={
 #        "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
 #        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
@@ -118,7 +114,7 @@ if __name__ == '__main__':
         "train_verbose":[0],
         "remove_punctuation": [0],
         "stem" : [0],
-        "remove_stowords" : [0],        
+        "remove_stopwords" : [0],        
         "max_len":[100],
         "one_hot": [0],
     }
@@ -129,7 +125,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='running the complex embedding network')
     parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)
     parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
-    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/qalocal.ini')
+    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/config.ini')
     args = parser.parse_args()
     parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
     params.parse_config(args.config)

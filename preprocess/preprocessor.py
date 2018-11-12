@@ -27,7 +27,7 @@ class Preprocess(object):
             sentence = [stemmer.stem(w) for w  in sentence]
         if self.remove_stopwords:
             sentence = [w for w in sentence if w not in stopwords_set]
-        return sentence
+        return " ".join(sentence)
     
     def run_seq(self,sentences):
         output = []

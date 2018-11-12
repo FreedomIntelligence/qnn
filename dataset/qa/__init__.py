@@ -9,9 +9,6 @@ def setup(opt):
     return reader
 
 
-
-
-    
     # -*- coding: utf-8 -*-
 
 

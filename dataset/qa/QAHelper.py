@@ -9,6 +9,7 @@ import pandas as pd
 
 import random
 import pickle
+import preprocess
 from tools.timer import log_time_delta
 
 from nltk.corpus import stopwords
@@ -140,9 +141,9 @@ class dataHelper():
         for key,value in opt.__dict__.items():
             self.__setattr__(key,value)        
       
-            
-        self.dir_path = os.path.join(os.path.join(opt.datasets_dir, "QA"),opt.dataset_name.lower())
-        self.datas = self.load(filter =opt.clean)
+        self.dir_path = os.path.join(opt.datasets_dir, 'QA', opt.dataset_name.lower())
+        self.preprocessor = preprocess.setup(opt)
+        self.datas = self.load(do_filter = opt.remove_unanswered_question)
         self.alphabet = self.get_alphabet(self.datas.values())
         self.optCallback(opt)            
             
@@ -154,7 +155,7 @@ class dataHelper():
 #        self.a_max_sent_length = a_max_sent_length
 
         
-        print('get embedding')
+        print('loading word embedding...')
         if opt.dataset_name=="NLPCC":     # can be updated
             self.embeddings = self.get_embedding(language="cn",fname=opt.wordvec_path)
         else:
@@ -163,7 +164,7 @@ class dataHelper():
         opt.nb_classes = 2               # for nli, this could be 3
         opt.alphabet=self.alphabet
         opt.embedding_size = self.embeddings.shape[1]
-        if self.max_sequence_length >self.max_len:
+        if self.max_sequence_length > self.max_len:
             self.max_sequence_length = self.max_len
             
         opt.max_sequence_length= self.max_sequence_length
@@ -171,21 +172,19 @@ class dataHelper():
         opt.lookup_table = self.embeddings      
         
             
-    def load(self,  filter = True):
+    def load(self,  do_filter = True):
         datas = dict()
         
-        for data_name in ["train",'test']: #'dev'            
+        
+        clean_set = ['test','dev'] if self.train_verbose else ['train','test','dev']
+        for data_name in ['train','test']: #'dev'            
             data_file = os.path.join(self.dir_path,data_name+".txt")
             data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')
-    #        data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"],quoting =3).fillna('0')
-            
-            clean_set = ["test","dev"] if self.train_verbose else ["train","test","dev"]
-            if filter == True and data_name in clean_set:
+            if do_filter == True and data_name in clean_set:
                 data=self.removeUnanswerdQuestion(data)
-#            data.to_csv(data_name+"_cleaned.csv",index=False,encoding="utf-8",sep="\t")
-            if self.clean_sentence:
-                data["question"] = data["question"].apply(lambda x : clean(x,remove_punctuation=self.remove_punctuation,stem=self.stem,remove_stowords=self.remove_stowords))
-                data["answer"] = data["answer"].apply(lambda x : clean(x))
+                
+            data["question"] = data["question"].apply(lambda x : self.preprocessor.run(x))
+            data["answer"] = data["answer"].apply(lambda x : self.preprocessor.run(x))
             datas[data_name] = data
         return datas
     
@@ -203,7 +202,7 @@ class dataHelper():
                 
     def get_alphabet(self,corpuses=None,dataset="",fresh=True):
         pkl_name="temp/"+self.dataset_name+".alphabet.pkl"
-        if  os.path.exists(pkl_name) and not fresh:
+        if os.path.exists(pkl_name) and not fresh:
             return pickle.load(open(pkl_name,"rb"))
         alphabet = Alphabet(start_feature_id = 0)
         alphabet.add('[UNK]')  
@@ -214,10 +213,10 @@ class dataHelper():
                     tokens = sentence.lower().split()
                     for token in set(tokens):
                         alphabet.add(token)
-        print("alphabet size %d" % len(alphabet.keys()) )
+        print("alphabet size = {}".format(len(alphabet.keys())))
         if not os.path.exists("temp"):
             os.mkdir("temp")
-        pickle.dump( alphabet,open(pkl_name,"wb"))
+        pickle.dump(alphabet,open(pkl_name,"wb"))
         return alphabet   
     
 
@@ -237,9 +236,10 @@ class dataHelper():
             embedding_size=embeddings_raw.vectors.shape[1]
         else:
             embeddings,embedding_size = self.load_text_vec(fname)
+            
         sub_embeddings = self.getSubVectorsFromDict(embeddings,embedding_size)
         self.embedding_size=embedding_size
-        pickle.dump( sub_embeddings,open(pkl_name,"wb"))
+        pickle.dump(sub_embeddings,open(pkl_name,"wb"))
         return sub_embeddings
     
 
@@ -277,7 +277,7 @@ class dataHelper():
             for line in f:
                 i += 1
                 if i % 100000 == 0:
-                    print( 'epch %d' % i)
+                    print( 'epoch %d' % i)
                 items = line.strip().split(' ')
                 if len(items) == 2:
                     vocab_size, embedding_size= items[0],items[1]
@@ -287,9 +287,9 @@ class dataHelper():
                     if word in self.alphabet:
                         vectors[word] = items[1:]
         embedding_size = len(items[1:])
-        print( 'embedding_size',embedding_size)
-        print( 'done')
-        print( 'words found in wor2vec embedding ',len(vectors.keys()))
+        print( 'embedding_size = {}'.format(embedding_size))
+        print( 'done.')
+        print( '{} words found in wor2vec embedding.'.format(len(vectors.keys())))
         return vectors,embedding_size
     
 #    @log_time_delta
@@ -356,9 +356,6 @@ class dataHelper():
             if a in overlap:
                 a_index[i] = Overlap
         return a_index
-
-    
-
             
     def getTest(self,mode ="test",overlap_feature =False, iterable = True):
         
@@ -375,6 +372,9 @@ class dataHelper():
             return BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=False)
         else: 
             return [i for i in zip(*samples)]
+    
+
+
         
     def getPointWiseSamples4Keras(self, iterable = False ,onehot=False,unbalance=False):
         if unbalance:
@@ -400,17 +400,6 @@ class dataHelper():
                         data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
                             [1]*len(q) +[0]*len(q)]
                     yield data
-#        c = list(zip(*data))
-#        random.shuffle(c)
-#        
-##            print(type(item))
-#        result = [to_array(item,self.max_sequence_length) if i<2 else np.array(item)  for i,item in enumerate(zip(*c))]
-#        if iterable:            
-#            x,y,z = result
-#            formated = ([i for i in zip(x,y)],z)
-#            return BucketIterator(formated,batch_size=self.batch_size,shuffle=False,max_sequence_length = self.max_sequence_length)
-#        else:
-#            return result
 
 
 
@@ -420,15 +409,6 @@ class dataHelper():
         while True:
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
                 yield batch, batch
-        
-        
-#        data = [q,a,neg]
-#        c = list(zip(*data))
-#        random.shuffle(c)
-#        
-##            print(type(item))
-#        result = [to_array(item,self.max_sequence_length) for i,item in enumerate(zip(*c))]
-#        return result
         
             
     def prepare_data(self,seqs):
