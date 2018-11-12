@@ -4,17 +4,22 @@ import io
 import logging
 import numpy as np
 from sklearn.model_selection import train_test_split
-from  .data import data_gen,set_wordphase,create_dictionary,get_wordvec,get_index_batch,clear
+from dataset.classification.data import data_gen,set_wordphase,create_dictionary,get_wordvec,get_index_batch
 from keras.utils import to_categorical
 from collections import Counter
 class DataReader(object):
-    def __init__(self, train, dev, test, nb_classes):
+    def __init__(self, train, dev, test, preprocessor, nb_classes):
 #        self.data = {'train': train, 'dev': dev, 'test': test}
-        self.data = {'train': clear(train), 'dev': clear(dev), 'test': clear(test)}
+        self.preprocessor = preprocessor
+        self.data = {'train': self.preprocess(train), 'dev': self.preprocess(dev), 'test': self.preprocess(test)}
         self.nb_classes = nb_classes
         self.max_sentence_length = self.get_max_sentence_length()
-
-
+    
+    
+    def preprocess(self, data):
+        data['X'] = self.preprocessor.run_seq(data['X'])
+        data['y'] = data['y']
+        return(data)
     def get_max_sentence_length(self):
 
         samples = self.data['train']['X'] + self.data['dev']['X'] + \
@@ -103,13 +108,13 @@ class DataReader(object):
 
 
 class TRECDataReader(DataReader):
-    def __init__(self, task_dir_path, seed=1111):
+    def __init__(self, task_dir_path, preprocessor, seed=1111):
         self.seed = seed
         train = self.loadFile(os.path.join(task_dir_path, 'train_5500.label'))
         train, dev = self.train_dev_split(train, train_dev_ratio = 1/9)
         test = self.loadFile(os.path.join(task_dir_path, 'TREC_10.label'))
         nb_classes = 6
-        super(TRECDataReader,self).__init__(train, dev, test, nb_classes)
+        super(TRECDataReader,self).__init__(train, dev, test, nb_classes, preprocessor)
         self.nb_classes = nb_classes
 
     def train_dev_split(self, samples, train_dev_ratio = 1/9):
@@ -127,14 +132,14 @@ class TRECDataReader(DataReader):
                 target, sample = line.strip().split(':', 1)
                 sample = sample.split(' ', 1)[1]
                 assert target in tgt2idx, target
-                trec_data['X'].append(sample)
+                trec_data['X'].append(sample.split())
                 trec_data['y'].append(tgt2idx[target])
         return trec_data
 
 
 
 class SSTDataReader(DataReader):
-    def __init__(self, task_dir_path, nclasses = 2, seed = 1111):
+    def __init__(self, task_dir_path, preprocessor, nclasses = 2, seed = 1111):
         self.seed = seed
 
         # binary of fine-grained
@@ -146,7 +151,7 @@ class SSTDataReader(DataReader):
         dev = self.loadFile(os.path.join(task_dir_path, self.task_name, 'sentiment-dev'))
         test = self.loadFile(os.path.join(task_dir_path, self.task_name, 'sentiment-test'))
 #        super().__init__(train, dev, test, nclasses)
-        super(SSTDataReader,self).__init__(train, dev, test, nclasses)
+        super(SSTDataReader,self).__init__(train, dev, test, nclasses, preprocessor)
         self.nb_classes = nclasses
 
     def loadFile(self, fpath):
@@ -156,21 +161,21 @@ class SSTDataReader(DataReader):
                 if self.nclasses == 2:
                     sample = line.strip().split('\t')
                     sst_data['y'].append(int(sample[1]))
-                    sst_data['X'].append(sample[0])
+                    sst_data['X'].append(sample[0].split())
                 elif self.nclasses == 5:
                     sample = line.strip().split(' ', 1)
                     sst_data['y'].append(int(sample[0]))
-                    sst_data['X'].append(sample[1])
+                    sst_data['X'].append(sample[1].split())
         assert max(sst_data['y']) == self.nclasses - 1
         return sst_data
 
 class BinaryClassificationDataReader(DataReader):
-    def __init__(self, pos, neg, seed=1111):
+    def __init__(self, pos, neg, preprocessor, seed=1111):
         self.seed = seed
         self.samples, self.labels = pos + neg, [1] * len(pos) + [0] * len(neg)
         train, test, dev = self.train_test_dev_split(0.1,1.0/9)
         nb_classes = 2
-        super(BinaryClassificationDataReader,self).__init__(train, test, dev, nb_classes)
+        super(BinaryClassificationDataReader,self).__init__(train, test, dev, preprocessor, nb_classes)
         self.nb_classes = nb_classes
 
     def loadFile(self, fpath):
@@ -188,51 +193,51 @@ class BinaryClassificationDataReader(DataReader):
 
 
 class CRDataReader(BinaryClassificationDataReader):
-    def __init__(self, task_path, seed=1111):
+    def __init__(self, task_path, preprocessor, seed=1111):
         # logging.debug('***** Transfer task : CR *****\n\n')
         pos = self.loadFile(os.path.join(task_path, 'custrev.pos'))
         neg = self.loadFile(os.path.join(task_path, 'custrev.neg'))
-        super(CRDataReader,self).__init__(pos, neg, seed)
+        super(CRDataReader,self).__init__(pos, neg, preprocessor, seed)
 
 
 class MRDataReader(BinaryClassificationDataReader):
-    def __init__(self, task_path, seed=1111):
+    def __init__(self, task_path, preprocessor, seed=1111):
         # logging.debug('***** Transfer task : MR *****\n\n')
         pos = self.loadFile(os.path.join(task_path, 'rt-polarity.pos'))
         neg = self.loadFile(os.path.join(task_path, 'rt-polarity.neg'))
-        super(MRDataReader,self).__init__(pos, neg, seed)
+        super(MRDataReader,self).__init__(pos, neg, preprocessor, seed)
 
 
 class SUBJDataReader(BinaryClassificationDataReader):
-    def __init__(self, task_path, seed=1111):
+    def __init__(self, task_path, preprocessor, seed=1111):
         # logging.debug('***** Transfer task : SUBJ *****\n\n')
         obj = self.loadFile(os.path.join(task_path, 'subj.objective'))
         subj = self.loadFile(os.path.join(task_path, 'subj.subjective'))
-        super(SUBJDataReader,self).__init__(obj, subj, seed)
+        super(SUBJDataReader,self).__init__(obj, subj, preprocessor, seed)
 
 
 class MPQADataReader(BinaryClassificationDataReader):
-    def __init__(self, task_path, seed=1111):
+    def __init__(self, task_path, preprocessor, seed=1111):
         # logging.debug('***** Transfer task : MPQA *****\n\n')
         pos = self.loadFile(os.path.join(task_path, 'mpqa.pos'))
         neg = self.loadFile(os.path.join(task_path, 'mpqa.neg'))
-        super(MPQADataReader,self).__init__(pos, neg, seed)
+        super(MPQADataReader,self).__init__(pos, neg, preprocessor, seed)
 
-def data_reader_initialize(reader_type, datasets_dir):
-    dir_path = os.path.join(datasets_dir, reader_type)
-    if(reader_type == 'CR'):
-        return(CRDataReader(dir_path))
-    if(reader_type == 'MR'):
-        return(MRDataReader(dir_path))
-    if(reader_type == 'SUBJ'):
-        return(SUBJDataReader(dir_path))
-    if(reader_type == 'MPQA'):
-        return(MPQADataReader(dir_path))
-    if(reader_type == 'SST_2'):
-        dir_path = os.path.join(datasets_dir, 'SST')
-        return(SSTDataReader(dir_path, nclasses = 2))
-    if(reader_type == 'SST_5'):
-        dir_path = os.path.join(datasets_dir, 'SST')
-        return(SSTDataReader(dir_path, nclasses = 5))
-    if(reader_type == 'TREC'):
-        return(TRECDataReader(dir_path))
+#def data_reader_initialize(reader_type, datasets_dir):
+#    dir_path = os.path.join(datasets_dir, reader_type)
+#    if(reader_type == 'CR'):
+#        return(CRDataReader(dir_path))
+#    if(reader_type == 'MR'):
+#        return(MRDataReader(dir_path))
+#    if(reader_type == 'SUBJ'):
+#        return(SUBJDataReader(dir_path))
+#    if(reader_type == 'MPQA'):
+#        return(MPQADataReader(dir_path))
+#    if(reader_type == 'SST_2'):
+#        dir_path = os.path.join(datasets_dir, 'SST')
+#        return(SSTDataReader(dir_path, nclasses = 2))
+#    if(reader_type == 'SST_5'):
+#        dir_path = os.path.join(datasets_dir, 'SST')
+#        return(SSTDataReader(dir_path, nclasses = 5))
+#    if(reader_type == 'TREC'):
+#        return(TRECDataReader(dir_path))

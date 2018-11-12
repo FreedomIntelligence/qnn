@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from .data_reader import CRDataReader,MRDataReader,SUBJDataReader,MPQADataReader,SSTDataReader,TRECDataReader
-from .data import get_lookup_table
+from dataset.classification.data_reader import CRDataReader,MRDataReader,SUBJDataReader,MPQADataReader,SSTDataReader,TRECDataReader
+from dataset.classification.data import get_lookup_table
 import os
 import codecs
 import numpy as np
@@ -8,25 +8,23 @@ from keras.utils import to_categorical
 import preprocess
 def setup(opt):
     dir_path = os.path.join(opt.datasets_dir, opt.dataset_name)
-    
+    preprocessor = preprocess.setup(opt)
     if(opt.dataset_name == 'CR'):
-        reader = CRDataReader(dir_path)
+        reader = CRDataReader(dir_path, preprocessor)
     if(opt.dataset_name == 'MR'):
-        reader = MRDataReader(dir_path)
+        reader = MRDataReader(dir_path, preprocessor)
     if(opt.dataset_name == 'SUBJ'):
-        reader = SUBJDataReader(dir_path)
+        reader = SUBJDataReader(dir_path, preprocessor)
     if(opt.dataset_name == 'MPQA'):
-        reader = MPQADataReader(dir_path)
+        reader = MPQADataReader(dir_path, preprocessor)
     if(opt.dataset_name == 'SST_2'):
         dir_path = os.path.join(opt.datasets_dir, 'SST')
-        reader = SSTDataReader(dir_path, nclasses = 2)
+        reader = SSTDataReader(dir_path, preprocessor, nclasses = 2)
     if(opt.dataset_name == 'SST_5'):
         dir_path = os.path.join(opt.datasets_dir, 'SST')
-        reader = SSTDataReader(dir_path, nclasses = 5)
+        reader = SSTDataReader(dir_path, preprocessor, nclasses = 5)
     if(opt.dataset_name == 'TREC'):
-        reader = TRECDataReader(dir_path)
-    
-    preprocess.setup(opt)
+        reader = TRECDataReader(preprocessor, dir_path)
     return reader
 
 def get_sentiment_dic_training_data(reader, opt):

@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
-import os
 import numpy as np
-from .QAHelper import dataHelper
+from dataset.qa.QAHelper import dataHelper
 
 def setup(opt):
     
