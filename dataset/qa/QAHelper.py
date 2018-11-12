@@ -115,22 +115,22 @@ class BucketIterator(object):
 
             yield self.transform([item[index[0]:index[1]] for item in self.data])
 
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-stopwords_set = set(stopwords.words('english'))
-from nltk.stem import SnowballStemmer
-import re, string
-stemmer=SnowballStemmer('english')
-def clean(sentence,remove_punctuation=False,stem=False,remove_stowords=False):
-    
-    if remove_punctuation:
-        sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
-    sentence = [w for w  in word_tokenize(sentence.lower())]
-    if stem:
-        sentence = [stemmer.stem(w) for w  in sentence]
-    if remove_stowords:
-        sentence = [w for w in sentence if w not in stopwords_set]
-    return " ".join( sentence)
+#from nltk.tokenize import word_tokenize
+#from nltk.corpus import stopwords
+#stopwords_set = set(stopwords.words('english'))
+#from nltk.stem import SnowballStemmer
+#import re, string
+#stemmer=SnowballStemmer('english')
+#def clean(sentence,remove_punctuation=False,stem=False,remove_stowords=False):
+#    
+#    if remove_punctuation:
+#        sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
+#    sentence = [w for w  in word_tokenize(sentence.lower())]
+#    if stem:
+#        sentence = [stemmer.stem(w) for w  in sentence]
+#    if remove_stowords:
+#        sentence = [w for w in sentence if w not in stopwords_set]
+#    return " ".join( sentence)
     
 
 
