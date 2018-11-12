@@ -51,7 +51,7 @@ class Params(object):
                      'match_type','margin','pooling_type','steps_per_epoch',
                      'distance_type','embedding_size',"max_len",
                      'remove_punctuation',"remove_stowords","clean_sentence",  "train_verbose","stem"]:
-                info.append("%s -> %s"%(k,str(v)))
+                info.append("%s:%s,"%(k,str(v)))
         return info
     def to_string(self):
         return " ".join(self.get_parameter_list())
