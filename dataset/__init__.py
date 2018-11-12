@@ -7,6 +7,7 @@ import numpy as np
 from keras.utils import to_categorical
 def setup(opt):
     dir_path = os.path.join(opt.datasets_dir, opt.dataset_name)
+    opt.dataset_name = opt.dataset_name.upper()
     if(opt.dataset_name == 'CR'):
         reader = CRDataReader(dir_path)
     if(opt.dataset_name == 'MR'):
@@ -23,6 +24,8 @@ def setup(opt):
         reader = SSTDataReader(dir_path, nclasses = 5)
     if(opt.dataset_name == 'TREC'):
         reader = TRECDataReader(dir_path)
+    else:
+        raise Exception("model not supported: {}".format(opt.network_type))
        
    
     return reader
