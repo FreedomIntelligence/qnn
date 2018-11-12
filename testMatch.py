@@ -106,7 +106,7 @@ if __name__ == '__main__':
         "measurement_size" :[300],#,50100],
 #        "ngram_value":["1,2,3","2,3,4","1,3,4"],
 #        "margin":[0.1,0.2],
-        "lr" : [0.5,0.1,0.05],#,1,0.01
+        "lr" : [0.5],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
@@ -115,13 +115,12 @@ if __name__ == '__main__':
 #        "dataset_name": ["wiki","trec"],
 #        "pooling_type": ["max","average","none"],
         "distance_type":[6],
-        "train_verbose":[0,1],
+        "train_verbose":[0],
         "remove_punctuation": [0],
         "stem" : [0],
-        "remove_stowords" : [1],        
+        "remove_stowords" : [0],        
         "max_len":[100],
         "one_hot": [0],
-        "distance_type":[6],
     }
     import argparse
     import itertools
@@ -130,7 +129,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='running the complex embedding network')
     parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)
     parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
-    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/qalocal_pair_trec.ini')
+    parser.add_argument('-config', action = 'store', dest = 'config', help = 'please enter the config path.',default='config/qalocal.ini')
     args = parser.parse_args()
     parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
     params.parse_config(args.config)
@@ -189,6 +188,7 @@ if __name__ == '__main__':
         elif params.match_type == 'pairwise':
             test_data.append(test_data[0])
             test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
+#            model.summary()
             model.compile(loss = identity_loss,
                     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=[percision_bacth],

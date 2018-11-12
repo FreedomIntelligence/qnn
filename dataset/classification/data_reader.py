@@ -6,6 +6,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from  .data import data_gen,set_wordphase,create_dictionary,get_wordvec,get_index_batch,clear
 from keras.utils import to_categorical
+from collections import Counter
 class DataReader(object):
     def __init__(self, train, dev, test, nb_classes):
 #        self.data = {'train': train, 'dev': dev, 'test': test}
@@ -36,9 +37,6 @@ class DataReader(object):
 
         #stores the value of theta for each word
         word_complex_phase = set_wordphase(word2id)
-
-
-        from collections import Counter
 
         idfs = np.array([0.5]*(len(word2id)+1))
         counter = Counter([word for sen in self.data['train']['X'] for word in sen])
@@ -127,7 +125,7 @@ class TRECDataReader(DataReader):
         with io.open(fpath, 'r', encoding='latin-1') as f:
             for line in f:
                 target, sample = line.strip().split(':', 1)
-                sample = sample.split(' ', 1)[1].split()
+                sample = sample.split(' ', 1)[1]
                 assert target in tgt2idx, target
                 trec_data['X'].append(sample)
                 trec_data['y'].append(tgt2idx[target])
@@ -158,11 +156,11 @@ class SSTDataReader(DataReader):
                 if self.nclasses == 2:
                     sample = line.strip().split('\t')
                     sst_data['y'].append(int(sample[1]))
-                    sst_data['X'].append(sample[0].split())
+                    sst_data['X'].append(sample[0])
                 elif self.nclasses == 5:
                     sample = line.strip().split(' ', 1)
                     sst_data['y'].append(int(sample[0]))
-                    sst_data['X'].append(sample[1].split())
+                    sst_data['X'].append(sample[1])
         assert max(sst_data['y']) == self.nclasses - 1
         return sst_data
 
@@ -177,7 +175,7 @@ class BinaryClassificationDataReader(DataReader):
 
     def loadFile(self, fpath):
         with io.open(fpath, 'r', encoding='latin-1') as f:
-            return [line.split() for line in f.read().splitlines()]
+            return [line for line in f.read().splitlines()]
 
     def train_test_dev_split(self, train_test_ratio = 0.1,train_dev_ratio = 1/9):
         X_train, X_test, y_train, y_test = train_test_split(self.samples, self.labels, test_size=train_test_ratio, random_state=self.seed)

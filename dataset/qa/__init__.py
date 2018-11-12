@@ -8,9 +8,6 @@ from .QAHelper import dataHelper
 def setup(opt):
     
     reader = dataHelper(opt)
-
-       
-   
     return reader
 
 

@@ -2,7 +2,7 @@ import numpy as np
 from keras import backend as K
 from keras.layers import Layer
 from keras.models import Model, Input
-from keras.initializers import RandomUniform
+from keras.initializers import RandomUniform, Zeros
 from keras.constraints import unit_norm
 import tensorflow as tf
 import sys
@@ -10,8 +10,8 @@ import os
 #sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import keras.backend as K
 import math
-from dataset.data import get_lookup_table,data_gen
-from dataset.data_reader import SSTDataReader
+#from dataset.classification.data import get_lookup_table,data_gen
+#from dataset.classification.data_reader import SSTDataReader
 from keras.layers import Embedding
 from keras import regularizers
 
@@ -19,6 +19,7 @@ def phase_embedding_layer(input_shape, input_dim, embedding_dim = 1,trainable = 
     embedding_layer = Embedding(input_dim,
                             embedding_dim,
                             embeddings_initializer=RandomUniform(minval=0, maxval=2*math.pi),
+#                            embeddings_initializer = Zeros(),
                             input_length=input_shape, trainable = trainable,
                             embeddings_regularizer= regularizers.l2(l2_reg))
     return embedding_layer

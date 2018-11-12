@@ -25,7 +25,7 @@ class LocalMixtureNN(BasicModel):
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), None, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
         self.l2_normalization = L2Normalization(axis = 3)
         self.l2_norm = L2Norm(axis = 3, keep_dims = False)
-        self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True)
+        self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True, input_length = None)
         self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
         self.dropout_probs = Dropout(self.opt.dropout_rate_probs)
