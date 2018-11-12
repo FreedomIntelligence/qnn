@@ -31,7 +31,7 @@ class RealNN(BasicModel):
     def get_representation(self,doc):
         doc = Masking(mask_value = 0)(doc)
         self.encoded = self.embedding(doc)
-        if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
+        if math.fabs(self.opt.dropout_rate_probs-1) < 1e-6:
             self.encoded = self.dropout(self.encoded)
         representation = []
         for one_type in self.opt.pooling_type.split(','):

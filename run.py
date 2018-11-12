@@ -12,7 +12,7 @@ gpu_count = len(units.get_available_gpus())
 dir_path,global_logger = units.getLogger()
 
 def run(params,reader):
-    params=dataset.process_embedding(reader,params)
+    params=dataset.classification.process_embedding(reader,params)
     qdnn = models.setup(params)
     model = qdnn.getModel()
     
@@ -36,7 +36,7 @@ def run(params,reader):
 
 
 grid_parameters ={
-        "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
+        #"dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
         "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
         "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
         "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
@@ -52,7 +52,7 @@ grid_parameters ={
     }
 
 grid_parameters ={
-        "dataset_name":["SST_2"],
+        #"dataset_name":["SST_2"],
         "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
         "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
         "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
@@ -80,15 +80,17 @@ if __name__=="__main__":
      
     parameters= parameters[::-1]        
     params = Params()
-    config_file = 'config/qdnn.ini'    # define dataset in the config
+    config_file = 'config/config.ini'    # define dataset in the config
     params.parse_config(config_file)    
     for parameter in parameters:
         old_dataset = params.dataset_name
         params.setup(zip(grid_parameters.keys(),parameter))
+        
         if old_dataset != params.dataset_name:
-            print("switch %s to %s"%(old_dataset,params.dataset_name))
-            reader=dataset.setup(params)
-            params.reader = reader
+            print("switch {} to {}".format(old_dataset,params.dataset_name))
+        
+        print('dataset type is {}.'.format(params.dataset_type))
+        reader = dataset.setup(params)
 #        params.print()
 #        dir_path,logger = units.getLogger()
 #        params.save(dir_path)
