@@ -8,6 +8,7 @@ import math
 import numpy as np
 
 from keras import regularizers
+
 from models.embedding.ComplexWordEmbedding import ComplexWordEmbedding
 
 

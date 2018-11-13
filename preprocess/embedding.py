@@ -67,7 +67,7 @@ class Embedding(object):
         embedding_size = len(items[1:])
         print( 'embedding_size = {}'.format(embedding_size))
         print( 'done.')
-        print( '{} words found in wor2vec embedding.'.format(len(vectors.keys())))
+        print( '{} words found in word2vec embedding.'.format(len(vectors.keys())))
         return vectors,embedding_size
     
     def text_to_sequence(self,sentence):    
@@ -76,3 +76,5 @@ class Embedding(object):
         seq = [self.dictionary[w] if w in self.dictionary else self.dictionary['[UNK]'] for w in tokens]
 
         return seq
+
+   
