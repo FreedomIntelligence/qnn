@@ -9,8 +9,6 @@ import numpy as np
 
 from keras import regularizers
 
-
-
 class QDNN(BasicModel):
 
     def initialize(self):

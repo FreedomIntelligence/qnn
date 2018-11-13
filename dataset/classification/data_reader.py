@@ -25,9 +25,9 @@ class DataReader(object):
         self.embedding = Embedding(self.get_dictionary(self.datas.values()),self.max_sequence_length)
         print('loading word embedding...')
         self.embedding.get_embedding(dataset_name = self.dataset_name, fname=opt.wordvec_path)
-        self.optCallback(opt) 
+        self.opt_callback(opt) 
     
-    def optCallback(self,opt):
+    def opt_callback(self,opt):
         opt.nb_classes = self.nb_classes            
         opt.embedding_size = self.embedding.lookup_table.shape[1]        
         opt.max_sequence_length= self.max_sequence_length
@@ -42,12 +42,11 @@ class DataReader(object):
         dictionary.add('[UNK]')  
 #        alphabet.add('END') 
         for corpus in corpuses:
-            for texts in corpus['X']:    
-                for sentence in texts:                   
-                    tokens = sentence.lower().split()
-                    for token in set(tokens):
-                        dictionary.add(token)
-        print("alphabet size = {}".format(len(dictionary.keys())))
+            for sentence in corpus['X']:    
+                tokens = sentence.lower().split()
+                for token in set(tokens):
+                    dictionary.add(token)
+        print("dictionary size = {}".format(len(dictionary.keys())))
         if not os.path.exists("temp"):
             os.mkdir("temp")
         pickle.dump(dictionary,open(pkl_name,"wb"))
@@ -69,7 +68,6 @@ class DataReader(object):
     def get_train(self,shuffle = True,iterable=True,max_sequence_length=0):
         x = self.datas['train']['X']
         x = [self.embedding.text_to_sequence(sent) for sent in x]
-        x,x_mask = self.prepare_data(x)
         y = to_categorical(np.asarray(self.datas['train']['y']))
         
         data = (x,y)
@@ -82,7 +80,6 @@ class DataReader(object):
     def get_test(self,shuffle = True,iterable=True,max_sequence_length=0):
         x = self.datas['test']['X']
         x = [self.embedding.text_to_sequence(sent) for sent in x]
-        x,x_mask = self.prepare_data(x)
         y = to_categorical(np.asarray(self.datas['test']['y']))
         data = (x,y)
         if iterable:
@@ -94,7 +91,6 @@ class DataReader(object):
     def get_val(self,shuffle = True,iterable=True,max_sequence_length=0):
         x = self.datas['dev']['X']
         x = [self.embedding.text_to_sequence(sent) for sent in x]
-        x,x_mask = self.prepare_data(x)
         y = to_categorical(np.asarray(self.datas['dev']['y']))
         data = (x,y)
         if iterable:

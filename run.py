@@ -1,63 +1,86 @@
 # -*- coding: utf-8 -*-
 from params import Params
-from models import representation as models
+#from models import representation as models
+ 
 import dataset
 import units
-from tools.save import save_experiment
+from units import to_array
+#from tools.save import save_experiment
 import itertools
 import argparse
 import keras.backend as K
 import numpy as np
+import preprocess.embedding
+from keras.models import Model
+from loss import *
 
 gpu_count = len(units.get_available_gpus())
 dir_path,global_logger = units.getLogger()
+    
+
+def batch_softmax_with_first_item(x):
+    x_exp = np.exp(x)
+    x_sum = np.repeat(np.expand_dims(np.sum(x_exp, axis=1),1), x.shape[1], axis=1)
+    return x_exp / x_sum
 
 def run(params):
+   
 #    params=dataset.classification.process_embedding(reader,params)
-    qdnn = models.setup(params)
-    model = qdnn.getModel()
+    if params.dataset_type == 'qa':
+        from models.match import keras as models   
+        qdnn = models.setup(params)
+        model = qdnn.getModel()
+        test_data = params.reader.get_test(iterable = False)
+        evaluation=[]
+        
+        test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
+        if params.match_type == 'pairwise':
+            model.compile(loss =identity_loss, #""
+                          optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+                          metrics=[precision_batch])
+        elif params.match_type == 'pointwise':
+            loss_type,metric_type = ("categorical_hinge","acc") if params.onehot else ("mean_squared_error","mean_squared_error")
+            model.compile(loss =loss_type, #""
+                          optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
+                          metrics=[metric_type])
     
-    model.compile(loss = params.loss,
-              optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-              metrics=['accuracy'])
-    
-    model.summary()    
-    train_data = params.reader.get_train(iterable = False)
-    test_data = params.reader.get_test(iterable = False)
-    val_data =params.reader.get_val(iterable = False)
-#    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
-    train_x, train_y = train_data
-    test_x, test_y = test_data
-    val_x, val_y = val_data
-    
-    
-    #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
-    #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
-    
-    history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
-    
-    evaluation = model.evaluate(x = val_x, y = val_y)
-    save_experiment(model, params, evaluation, history, reader)
-    #save_experiment(model, params, evaluation, history, reader, config_file)
+        for i in range(params.epochs):
+    #            model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique())/reader.batch_size,verbose = True)        
+            model.fit_generator(reader.batch_gen(reader.get_train(iterable = True)),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
+            y_pred = model.predict(x = test_data) 
+            score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
+                
+            metric = reader.evaluate(score, mode = "test")
+            evaluation.append(metric)
+            print(metric)
+            K.clear_session()
+            
+    elif params.dataset_type == 'classification':
+        from models import representation as models   
+        qdnn = models.setup(params)
+        model = qdnn.getModel()
+        model.compile(optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),loss = params.loss,metrics=["acc"])
+        
+    #    model.summary()    
+        train_data = params.reader.get_train(iterable = False)
+        test_data = params.reader.get_test(iterable = False)
+        val_data =params.reader.get_val(iterable = False)
+    #    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
+        train_x, train_y = train_data
+        test_x, test_y = test_data
+        val_x, val_y = val_data
+        train_x = to_array(train_x,reader.max_sequence_length)
+        test_x =  to_array(test_x,reader.max_sequence_length)
+        val_x =  to_array(val_x,reader.max_sequence_length)
+            #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
+        #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
+        
+        history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
+        
+        evaluation = model.evaluate(x = val_x, y = val_y)
+        print(history)
+        print(evaluation)
 
-    return history,evaluation
-
-
-grid_parameters ={
-        #"dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
-        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
-        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
-        "optimizer":["rmsprop"], #"adagrad","adamax","nadam"],,"adadelta","adam"
-        "batch_size":[16],#,32
-        "activation":["sigmoid"],
-        "amplitude_l2":[0], #0.0000005,0.0000001,
-        "phase_l2":[0.00000005],
-        "dense_l2":[0],#0.0001,0.00001,0],
-        "measurement_size" :[1400,1600,1800,2000],#,50100],
-        "lr" : [0.1],#,1,0.01
-        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
-        "dropout_rate_probs" : [0.9]#,0.5,0.75,0.8,1]     
-    }
 
 grid_parameters ={
         #"dataset_name":["SST_2"],
@@ -104,8 +127,8 @@ if __name__=="__main__":
 #        params.save(dir_path)
         params.reader = reader
         
-        history,evaluation=run(params)
-        global_logger.info("%s : %.4f "%( params.to_string() ,max(history.history["val_acc"])))
+        run(params)
+#        global_logger.info("%s : %.4f "%( params.to_string() ,max(history.history["val_acc"])))
         K.clear_session()
 
 

@@ -25,16 +25,22 @@ from preprocess.bucketiterator import BucketIterator
 
 class DataReader(object):
     def __init__(self,opt):
+        self.onehot = True
+        self.unbalanced_sampling = False
         for key,value in opt.__dict__.items():
             self.__setattr__(key,value)        
       
         self.dir_path = os.path.join(opt.datasets_dir, 'QA', opt.dataset_name.lower())
         self.preprocessor = preprocess.setup(opt)
         self.datas = self.load(do_filter = opt.remove_unanswered_question)
-        self.embedding = Embedding(self.get_dictionary(self.datas.values()))
         q_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['question'].str.split()))
         a_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['answer'].str.split()))    
         self.max_sequence_length = max(q_max_sent_length,a_max_sent_length)
+        if self.max_sequence_length > self.max_len:
+            self.max_sequence_length = self.max_len
+        self.nb_classes = 2
+        self.embedding = Embedding(self.get_dictionary(self.datas.values()),self.max_sequence_length)
+
 #        self.q_max_sent_length = q_max_sent_length
 #        self.a_max_sent_length = a_max_sent_length
 
@@ -43,13 +49,20 @@ class DataReader(object):
             self.embedding.get_embedding(dataset_name = self.dataset_name, language="cn",fname=opt.wordvec_path) 
         else:
             self.embedding.get_embedding(dataset_name = self.dataset_name, fname=opt.wordvec_path)
-            
-        self.nb_classes = 2
-#        opt.embedding_size = self.embeddings.shape[1]
-        if self.max_sequence_length > self.max_len:
-            self.max_sequence_length = self.max_len
-#        self.optCallback(opt)            
+        self.opt_callback(opt) 
         
+       
+        
+        
+#        opt.embedding_size = self.embeddings.shape[1]
+
+#        self.optCallback(opt)            
+    def opt_callback(self,opt):
+        opt.nb_classes = self.nb_classes            
+        opt.embedding_size = self.embedding.lookup_table.shape[1]        
+        opt.max_sequence_length= self.max_sequence_length
+        
+        opt.lookup_table = self.embedding.lookup_table 
             
     def load(self, do_filter = True):
         datas = dict()
@@ -98,7 +111,7 @@ class DataReader(object):
     
     
 #    @log_time_delta
-    def getTrain(self,shuffle = True,model=None,sess=None,overlap_feature= False,iterable=True,max_sequence_length=0):
+    def get_train(self,shuffle = True,model= None,sess= None,overlap_feature= False,iterable=True,max_sequence_length=0):
         
         q,a,neg_a,overlap1,overlap2 = [],[],[],[],[]
         for question,group in self.datas["train"].groupby("question"):
@@ -107,7 +120,9 @@ class DataReader(object):
             if len(pos_answers)==0 or len(neg_answers)==0:
     #            print(question)
                 continue
-            for pos in pos_answers:                
+            for pos in pos_answers:  
+                
+                #sampling with model
                 if model is not None and sess is not None:                    
                     pos_sent = self.embedding.text_to_sequence(pos)
                     q_sent,q_mask = self.prepare_data([pos_sent])                             
@@ -116,6 +131,8 @@ class DataReader(object):
                     scores = model.predict(sess,(np.tile(q_sent,(len(neg_answers),1)),a_sent))
                     neg_index = scores.argmax()   
                     seq_neg_a = neg_sents[neg_index]
+                    
+                #just random sampling
                 else:    
 #                    if len(neg_answers.index) > 0:
                     neg_index = np.random.choice(neg_answers.index)
@@ -137,12 +154,15 @@ class DataReader(object):
             data = (q,a,neg_a)
 #        print("samples size : " +str(len(q)))
         if iterable:
-            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
+#            data_generator = BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length) 
+            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length) 
+                        
+#            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
         else: 
             return data
         
     # calculate the overlap_index
-    def overlap_index(self,question,answer,stopwords = []):
+    def overlap_index(self,question,answer):
 
         qset = set(question)
         aset = set(answer)
@@ -157,7 +177,7 @@ class DataReader(object):
                 a_index[i] = Overlap
         return a_index
             
-    def getTest(self,mode ="test",overlap_feature = False, iterable = True):
+    def get_test(self,overlap_feature = False, iterable = True):
         
         if overlap_feature:
             process = lambda row: [self.embedding.text_to_sequence(row["question"]),
@@ -167,44 +187,47 @@ class DataReader(object):
             process = lambda row: [self.embedding.text_to_sequence(row["question"]),
                                self.embedding.text_to_sequence(row["answer"])]
         
-        samples = self.datas[mode].apply( process,axis=1)
+        samples = self.datas['test'].apply( process,axis=1)
         if iterable:
             return BucketIterator([i for i in zip(*samples)],batch_size=self.batch_size,shuffle=False)
         else: 
-            return [i for i in zip(*samples)]
+            if self.match_type == 'pointwise':
+                return [i for i in zip(*samples)]
+            else:
+                return [[i,i] for i in zip(*samples)]
     
 
-
-        
-    def getPointWiseSamples4Keras(self, iterable = False ,onehot=False,unbalance=False):
-        if unbalance:
-            process = lambda row: [self.embedding.text_to_sequence(row["question"]),
+    def batch_gen(self, data_generator):
+        if self.match_type == 'pointwise':
+#            self.unbalanced_sampling = False
+            if self.unbalanced_sampling == True:
+                process = lambda row: [self.embedding.text_to_sequence(row["question"]),
                        self.embedding.text_to_sequence(row["answer"]), 
                        row['flag'] ]
-            samples = self.datas["train"].apply(process,axis=1)
-            while True:
+                samples = self.datas["train"].apply(process,axis=1)
                 for batch in BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length):
-                    if onehot:
-                        yield batch[:2],np.array([[0,1] if i else [1,0] for i in batch[2]])
-                    else:
-                        yield batch[:2], np.array(batch[2])
-        else:
+                        if self.onehot:
+                            yield batch[:2],np.array([[0,1] if i else [1,0] for i in batch[2]])
+                        else:
+                            yield batch[:2], np.array(batch[2])
+            else:
+                while True:
+                    for batch in data_generator:
+                        q,a,neg = batch
+                        if self.onehot:
+                            data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
+                                 np.array([[0,1]]*len(q) +[[1,0]]*len(q))]
+                        else:
+                            data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
+                                     [1]*len(q) +[0]*len(q)]
+                        yield data
+                                   
+        if self.match_type == 'pairwise':
             while True:
-                for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
-                    q,a,neg = batch
-                    if onehot:
-                        data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
-                            np.array([[0,1]]*len(q) +[[1,0]]*len(q))]
-                    else:
-                        data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
-                            [1]*len(q) +[0]*len(q)]
-                    yield data
-    
-    def getPairWiseSamples4Keras(self, iterable = False):
-        
-        while True:
-            for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
-                yield batch, batch
+                for batch in data_generator:
+                    yield batch, batch
+                    
+
         
             
     def prepare_data(self,seqs):
