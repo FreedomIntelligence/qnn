@@ -2,10 +2,10 @@
 
 import numpy as np
 from dataset.qa.QAHelper import dataHelper
-
+from dataset.qa.data_reader import DataReader
 def setup(opt):
     
-    reader = dataHelper(opt)
+    reader = DataReader(opt)
     return reader
 
 

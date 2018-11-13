@@ -22,9 +22,9 @@ class Preprocess(object):
     
         if self.remove_punctuation:
             sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
-            sentence = [w for w  in word_tokenize(sentence.lower())]
+        sentence = [w for w in word_tokenize(sentence.lower())]
         if self.stem:
-            sentence = [stemmer.stem(w) for w  in sentence]
+            sentence = [stemmer.stem(w) for w in sentence]
         if self.remove_stopwords:
             sentence = [w for w in sentence if w not in stopwords_set]
         return " ".join(sentence)
@@ -34,16 +34,16 @@ class Preprocess(object):
         for sentence in sentences:
             if self.remove_punctuation:
                 sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
-                sentence = [w for w  in word_tokenize(sentence.lower())]
+            sentence = [w for w  in word_tokenize(sentence.lower())]
             if self.stem:
                 sentence = [stemmer.stem(w) for w in sentence]
             if self.remove_stopwords:
                 sentence = [w for w in sentence if w not in stopwords_set]
-            output.append(sentence)
+            output.append(" ".join(sentence))
         return output
     
 if __name__ == '__main__':
     a = ['today is a good day','it is a good day today']
     
     preprocessor = Preprocess(stem = True)
-    print(preprocessor.run(a[0].split()))
+    print(preprocessor.run_seq(a))

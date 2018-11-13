@@ -3,30 +3,118 @@ import os
 import io
 import logging
 import numpy as np
+import pickle
 from sklearn.model_selection import train_test_split
 from dataset.classification.data import data_gen,set_wordphase,create_dictionary,get_wordvec,get_index_batch
 from keras.utils import to_categorical
 from collections import Counter
+import preprocess
+from preprocess.dictionary import Dictionary
+from preprocess.bucketiterator import BucketIterator
+from preprocess.embedding import Embedding
+
 class DataReader(object):
-    def __init__(self, train, dev, test, preprocessor, nb_classes):
+    def __init__(self, train, dev, test, opt, nb_classes):
 #        self.data = {'train': train, 'dev': dev, 'test': test}
-        self.preprocessor = preprocessor
-        self.data = {'train': self.preprocess(train), 'dev': self.preprocess(dev), 'test': self.preprocess(test)}
+        for key,value in opt.__dict__.items():
+            self.__setattr__(key,value)  
+        self.preprocessor = preprocess.setup(opt)
+        self.datas = {'train': self.preprocess(train), 'dev': self.preprocess(dev), 'test': self.preprocess(test)}
         self.nb_classes = nb_classes
-        self.max_sentence_length = self.get_max_sentence_length()
+        self.max_sequence_length = self.get_max_sentence_length()
+        self.embedding = Embedding(self.get_dictionary(self.datas.values()),self.max_sequence_length)
+        print('loading word embedding...')
+        self.embedding.get_embedding(dataset_name = self.dataset_name, fname=opt.wordvec_path)
+        self.optCallback(opt) 
     
+    def optCallback(self,opt):
+        opt.nb_classes = self.nb_classes            
+        opt.embedding_size = self.embedding.lookup_table.shape[1]        
+        opt.max_sequence_length= self.max_sequence_length
+        
+        opt.lookup_table = self.embedding.lookup_table      
     
+    def get_dictionary(self, corpuses= None,dataset="",fresh=True):
+        pkl_name="temp/"+self.dataset_name+".alphabet.pkl"
+        if os.path.exists(pkl_name) and not fresh:
+            return pickle.load(open(pkl_name,"rb"))
+        dictionary = Dictionary(start_feature_id = 0)
+        dictionary.add('[UNK]')  
+#        alphabet.add('END') 
+        for corpus in corpuses:
+            for texts in corpus['X']:    
+                for sentence in texts:                   
+                    tokens = sentence.lower().split()
+                    for token in set(tokens):
+                        dictionary.add(token)
+        print("alphabet size = {}".format(len(dictionary.keys())))
+        if not os.path.exists("temp"):
+            os.mkdir("temp")
+        pickle.dump(dictionary,open(pkl_name,"wb"))
+        return dictionary   
+    
+    def prepare_data(self,seqs):
+        lengths = [len(seq) for seq in seqs]
+        n_samples = len(seqs)
+        max_len = self.max_sequence_length
+    
+        x = np.zeros((n_samples, max_len)).astype('int32')
+        x_mask = np.zeros((n_samples, max_len)).astype('float')
+        for idx, seq in enumerate(seqs):
+            x[idx, :lengths[idx]] = seq
+            x_mask[idx, :lengths[idx]] = 1.0
+         # print( x, x_mask)
+        return x, x_mask
+    
+    def get_train(self,shuffle = True,iterable=True,max_sequence_length=0):
+        x = self.datas['train']['X']
+        x = [self.embedding.text_to_sequence(sent) for sent in x]
+        x,x_mask = self.prepare_data(x)
+        y = to_categorical(np.asarray(self.datas['train']['y']))
+        
+        data = (x,y)
+        if iterable:
+            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
+        else: 
+            return data
+        
+        
+    def get_test(self,shuffle = True,iterable=True,max_sequence_length=0):
+        x = self.datas['test']['X']
+        x = [self.embedding.text_to_sequence(sent) for sent in x]
+        x,x_mask = self.prepare_data(x)
+        y = to_categorical(np.asarray(self.datas['test']['y']))
+        data = (x,y)
+        if iterable:
+            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
+        else: 
+            return data
+        
+        
+    def get_val(self,shuffle = True,iterable=True,max_sequence_length=0):
+        x = self.datas['dev']['X']
+        x = [self.embedding.text_to_sequence(sent) for sent in x]
+        x,x_mask = self.prepare_data(x)
+        y = to_categorical(np.asarray(self.datas['dev']['y']))
+        data = (x,y)
+        if iterable:
+            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
+        else: 
+            return data
+        
+        
     def preprocess(self, data):
         data['X'] = self.preprocessor.run_seq(data['X'])
         data['y'] = data['y']
         return(data)
+        
     def get_max_sentence_length(self):
 
-        samples = self.data['train']['X'] + self.data['dev']['X'] + \
-                self.data['test']['X']
+        samples = self.datas['train']['X'] + self.datas['dev']['X'] + \
+                self.datas['test']['X']
         max_sentence_length = 0
         for sample in samples:
-            sample_length = len(sample)
+            sample_length = len(sample.split())
             if max_sentence_length < sample_length:
                 max_sentence_length = sample_length
         return max_sentence_length
@@ -132,14 +220,14 @@ class TRECDataReader(DataReader):
                 target, sample = line.strip().split(':', 1)
                 sample = sample.split(' ', 1)[1]
                 assert target in tgt2idx, target
-                trec_data['X'].append(sample.split())
+                trec_data['X'].append(sample)
                 trec_data['y'].append(tgt2idx[target])
         return trec_data
 
 
 
 class SSTDataReader(DataReader):
-    def __init__(self, task_dir_path, preprocessor, nclasses = 2, seed = 1111):
+    def __init__(self, task_dir_path, opt, nclasses = 2, seed = 1111):
         self.seed = seed
 
         # binary of fine-grained
@@ -151,7 +239,7 @@ class SSTDataReader(DataReader):
         dev = self.loadFile(os.path.join(task_dir_path, self.task_name, 'sentiment-dev'))
         test = self.loadFile(os.path.join(task_dir_path, self.task_name, 'sentiment-test'))
 #        super().__init__(train, dev, test, nclasses)
-        super(SSTDataReader,self).__init__(train, dev, test, nclasses, preprocessor)
+        super(SSTDataReader,self).__init__(train, dev, test, nclasses, opt)
         self.nb_classes = nclasses
 
     def loadFile(self, fpath):
@@ -161,21 +249,21 @@ class SSTDataReader(DataReader):
                 if self.nclasses == 2:
                     sample = line.strip().split('\t')
                     sst_data['y'].append(int(sample[1]))
-                    sst_data['X'].append(sample[0].split())
+                    sst_data['X'].append(sample[0])
                 elif self.nclasses == 5:
                     sample = line.strip().split(' ', 1)
                     sst_data['y'].append(int(sample[0]))
-                    sst_data['X'].append(sample[1].split())
+                    sst_data['X'].append(sample[1])
         assert max(sst_data['y']) == self.nclasses - 1
         return sst_data
 
 class BinaryClassificationDataReader(DataReader):
-    def __init__(self, pos, neg, preprocessor, seed=1111):
+    def __init__(self, pos, neg, opt, seed=1111):
         self.seed = seed
         self.samples, self.labels = pos + neg, [1] * len(pos) + [0] * len(neg)
         train, test, dev = self.train_test_dev_split(0.1,1.0/9)
         nb_classes = 2
-        super(BinaryClassificationDataReader,self).__init__(train, test, dev, preprocessor, nb_classes)
+        super(BinaryClassificationDataReader,self).__init__(train, test, dev, opt, nb_classes)
         self.nb_classes = nb_classes
 
     def loadFile(self, fpath):
@@ -193,35 +281,35 @@ class BinaryClassificationDataReader(DataReader):
 
 
 class CRDataReader(BinaryClassificationDataReader):
-    def __init__(self, task_path, preprocessor, seed=1111):
+    def __init__(self, task_path, opt, seed=1111):
         # logging.debug('***** Transfer task : CR *****\n\n')
         pos = self.loadFile(os.path.join(task_path, 'custrev.pos'))
         neg = self.loadFile(os.path.join(task_path, 'custrev.neg'))
-        super(CRDataReader,self).__init__(pos, neg, preprocessor, seed)
+        super(CRDataReader,self).__init__(pos, neg, opt, seed)
 
 
 class MRDataReader(BinaryClassificationDataReader):
-    def __init__(self, task_path, preprocessor, seed=1111):
+    def __init__(self, task_path, opt, seed=1111):
         # logging.debug('***** Transfer task : MR *****\n\n')
         pos = self.loadFile(os.path.join(task_path, 'rt-polarity.pos'))
         neg = self.loadFile(os.path.join(task_path, 'rt-polarity.neg'))
-        super(MRDataReader,self).__init__(pos, neg, preprocessor, seed)
+        super(MRDataReader,self).__init__(pos, neg, opt, seed)
 
 
 class SUBJDataReader(BinaryClassificationDataReader):
-    def __init__(self, task_path, preprocessor, seed=1111):
+    def __init__(self, task_path, opt, seed=1111):
         # logging.debug('***** Transfer task : SUBJ *****\n\n')
         obj = self.loadFile(os.path.join(task_path, 'subj.objective'))
         subj = self.loadFile(os.path.join(task_path, 'subj.subjective'))
-        super(SUBJDataReader,self).__init__(obj, subj, preprocessor, seed)
+        super(SUBJDataReader,self).__init__(obj, subj, opt, seed)
 
 
 class MPQADataReader(BinaryClassificationDataReader):
-    def __init__(self, task_path, preprocessor, seed=1111):
+    def __init__(self, task_path, opt, seed=1111):
         # logging.debug('***** Transfer task : MPQA *****\n\n')
         pos = self.loadFile(os.path.join(task_path, 'mpqa.pos'))
         neg = self.loadFile(os.path.join(task_path, 'mpqa.neg'))
-        super(MPQADataReader,self).__init__(pos, neg, preprocessor, seed)
+        super(MPQADataReader,self).__init__(pos, neg, opt, seed)
 
 #def data_reader_initialize(reader_type, datasets_dir):
 #    dir_path = os.path.join(datasets_dir, reader_type)

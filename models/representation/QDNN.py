@@ -14,7 +14,7 @@ from keras import regularizers
 class QDNN(BasicModel):
 
     def initialize(self):
-        self.doc = Input(shape=(self.opt.max_sequence_length,), dtype='int32')
+        self.doc = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
         self.phase_embedding= phase_embedding_layer(None, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
 
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), None, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)

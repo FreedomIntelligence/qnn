@@ -7,12 +7,13 @@ from tools.save import save_experiment
 import itertools
 import argparse
 import keras.backend as K
+import numpy as np
 
 gpu_count = len(units.get_available_gpus())
 dir_path,global_logger = units.getLogger()
 
-def run(params,reader):
-    params=dataset.classification.process_embedding(reader,params)
+def run(params):
+#    params=dataset.classification.process_embedding(reader,params)
     qdnn = models.setup(params)
     model = qdnn.getModel()
     
@@ -21,7 +22,14 @@ def run(params,reader):
               metrics=['accuracy'])
     
     model.summary()    
-    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
+    train_data = params.reader.get_train(iterable = False)
+    test_data = params.reader.get_test(iterable = False)
+    val_data =params.reader.get_val(iterable = False)
+#    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
+    train_x, train_y = train_data
+    test_x, test_y = test_data
+    val_x, val_y = val_data
+    
     
     #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
     #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
@@ -94,7 +102,9 @@ if __name__=="__main__":
 #        params.print()
 #        dir_path,logger = units.getLogger()
 #        params.save(dir_path)
-        history,evaluation=run(params,reader)
+        params.reader = reader
+        
+        history,evaluation=run(params)
         global_logger.info("%s : %.4f "%( params.to_string() ,max(history.history["val_acc"])))
         K.clear_session()
 
