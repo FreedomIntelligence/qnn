@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation
-from .BasicModel import BasicModel
+from models.BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
 import sys
-from complexnn import *
+from layers.keras.complexnn import *
+from models.embedding.ComplexWordEmbedding import ComplexWordEmbedding
 
 from keras.initializers import Constant
 import math
@@ -13,9 +14,7 @@ class ComplexNN(BasicModel):
     
     def initialize(self):
         self.doc = Input(shape=(self.opt.max_sequence_length,), dtype='int32')
-        
-        self.phase_embedding=phase_embedding_layer(self.opt.max_sequence_length, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable)
-        self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init)
+        self.complex_embedding_layer = ComplexWordEmbedding(self.opt)
         self.dense = Dense(self.opt.nb_classes, activation="sigmoid")        
         self.dropout = Dropout(self.opt.dropout_rate_probs)
         
@@ -32,8 +31,8 @@ class ComplexNN(BasicModel):
         return model
     
     def get_representation(self,doc):
-        self.phase_encoded = self.phase_embedding(doc)
-        self.amplitude_encoded = self.amplitude_embedding(doc)
+        self.amplitude_encoded,self.phase_encoded = self.complex_embedding_layer.get_embedding(doc)
+
         
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             self.phase_encoded = self.dropout(self.phase_encoded)

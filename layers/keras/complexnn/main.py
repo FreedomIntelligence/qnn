@@ -2,7 +2,7 @@ import sys
 import os
 import numpy as np
 import codecs
-sys.path.append('complexnn')
+sys.path.append('layers.keras.complexnn')
 
 from keras.models import Model, Input, model_from_json
 from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking

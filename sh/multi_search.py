@@ -11,7 +11,7 @@ import os,time,random
 import numpy as np
 import codecs
 import pandas as pd
-sys.path.append('complexnn')
+sys.path.append('layers.keras.complexnn')
 from keras.models import Model, Input, model_from_json, load_model
 from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten, Dropout
 from embedding import phase_embedding_layer, amplitude_embedding_layer

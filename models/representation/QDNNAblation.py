@@ -3,12 +3,12 @@
 
 # -*- coding: utf-8 -*-
 from keras.layers import Embedding, GlobalAveragePooling1D,Dense, Masking, Flatten,Dropout, Activation
-from .BasicModel import BasicModel
+from models.BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
 import sys
 from .QDNN import QDNN
-from complexnn import *
+from layers.keras.complexnn import *
 
 import math
 import numpy as np
@@ -44,7 +44,7 @@ class QDNNAblation(QDNN):
             self.projection = ComplexMeasurement(units = self.opt.measurement_size,trainable = False)
         elif self.opt.ablation == amplitude_embedding_without_training:
             print("amplitude_embedding_without_training")
-            self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = False, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
+            self.complex_embedding_layer.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = False, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
         elif self.opt.ablation == word_weight_without_training:
             print("word_weight_without_training")
             self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = False)

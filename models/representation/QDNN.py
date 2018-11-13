@@ -1,23 +1,21 @@
 # -*- coding: utf-8 -*-
 from keras.layers import Embedding, GlobalAveragePooling1D, Dense, Masking, Flatten,Dropout, Activation
-from .BasicModel import BasicModel
+from models.BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
-from complexnn import *
+from layers.keras.complexnn import *
 import math
 import numpy as np
 
 from keras import regularizers
-
+from models.embedding.ComplexWordEmbedding import ComplexWordEmbedding
 
 
 class QDNN(BasicModel):
 
     def initialize(self):
         self.doc = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
-        self.phase_embedding= phase_embedding_layer(None, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
-
-        self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), None, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
+        self.complex_embedding_layer = ComplexWordEmbedding(self.opt)
         self.l2_normalization = L2Normalization(axis = 2)
         self.l2_norm = L2Norm(axis = 2, keep_dims = False)
         self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True, input_length = None)
@@ -41,8 +39,10 @@ class QDNN(BasicModel):
         return model
     
     def get_representation(self,doc):
-        self.phase_encoded = self.phase_embedding(doc)
-        self.amplitude_encoded = self.amplitude_embedding(doc)
+        
+        self.amplitude_encoded,self.phase_encoded = self.complex_embedding_layer.get_embedding(self.inputs)
+#        self.phase_encoded = self.phase_embedding(doc)
+#        self.amplitude_encoded = self.amplitude_embedding(doc)
         self.weight = Activation('softmax')(self.l2_norm(self.amplitude_encoded))
         self.amplitude_encoded = self.l2_normalization(self.amplitude_encoded)
 #        self.weight = Activation('softmax')(self.weight_embedding(doc))

@@ -3,14 +3,16 @@ from keras.layers import Embedding, GlobalMaxPooling1D,GlobalAveragePooling1D, D
 
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
-from complexnn import *
+from layers.keras.complexnn import *
 import math
 import numpy as np
+from models.embedding.ComplexWordEmbedding import ComplexWordEmbedding
+
 
 from keras import regularizers
 import keras.backend as K
 
-from models.representation.BasicModel import BasicModel
+from models.BasicModel import BasicModel
 class LocalMixtureNN(BasicModel):
 
     def initialize(self):
@@ -23,6 +25,7 @@ class LocalMixtureNN(BasicModel):
         self.phase_embedding= phase_embedding_layer(None, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
 
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), None, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
+        self.complex_embedding_layer = ComplexWordEmbedding(self.opt)
         self.l2_normalization = L2Normalization(axis = 3)
         self.l2_norm = L2Norm(axis = 3, keep_dims = False)
         self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True, input_length = None)
@@ -49,10 +52,11 @@ class LocalMixtureNN(BasicModel):
             self.inputs = n_gram(doc)
             
             #(batch_size,  max_seq_length,n,embedding_dim)
-            self.phase_encoded = self.phase_embedding(self.inputs)
+            self.amplitude_encoded,self.phase_encoded = self.complex_embedding_layer.get_embedding(self.inputs)
+#            self.phase_encoded = self.phase_embedding(self.inputs)
 #            print(self.phase_encoded.shape)
             #(batch_size,  max_seq_length,n,embedding_dim)
-            self.amplitude_encoded = self.amplitude_embedding(self.inputs)
+#            self.amplitude_encoded = self.amplitude_embedding(self.inputs)
 #            print(self.amplitude_encoded.shape)
         
 #            self.phase_encoded = reshape((-1,self.opt.max_sequence_length,self.opt.ngram_value,self.opt.lookup_table.shape[1]))(self.phase_encoded)
@@ -146,7 +150,7 @@ if __name__ == "__main__":
 
     from keras.models import Model, Input, model_from_json, load_model
     from keras.constraints import unit_norm
-    from complexnn import *
+    from layers.keras.complexnn import *
     import math
     import numpy as np
     

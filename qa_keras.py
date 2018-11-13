@@ -24,7 +24,7 @@ from tools.logger import Logger
 logger = Logger() 
     
 from units import to_array 
-from tools.rankloss  import identity_loss,percision_bacth
+from loss.rankloss  import identity_loss,percision_bacth
 
 def batch_softmax_with_first_item(x):
     x_exp = np.exp(x)
