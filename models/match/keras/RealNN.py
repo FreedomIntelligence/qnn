@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from .BasicModel import BasicModel
+from models.BasicModel import BasicModel
 from keras.layers import Embedding, GlobalMaxPooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape, Permute,Lambda, Subtract
 from keras.models import Model, Input, model_from_json, load_model, Sequential
 from keras.constraints import unit_norm
-from complexnn import *
+from layers.keras.complexnn import *
 import math
 import numpy as np
 

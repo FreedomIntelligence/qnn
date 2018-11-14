@@ -5,7 +5,7 @@ from keras.layers import Input, Dense
 from keras.models import Model
 import codecs
 import numpy as np
-from complexnn.l2_normalization import L2normalization
+from layers.keras.complexnn.l2_normalization import L2normalization
 encoding_dim = 100
 mnist_config = False#False
 if mnist_config:

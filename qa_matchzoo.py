@@ -24,7 +24,7 @@ from tools.logger import Logger
 logger = Logger() 
 
 from models.match.keras import matchzoo as models 
-from tools.rankloss import rank_hinge_loss,rank_crossentropy_loss
+from loss.rankloss import rank_hinge_loss,rank_crossentropy_loss
 loss = rank_hinge_loss({"margin":0.1})
 loss = rank_crossentropy_loss({"neg_num":5})
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from models.match.keras.BasicModel import BasicModel
+from models.BasicModel import BasicModel
 from keras.layers import Embedding, GlobalMaxPooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape, Permute,Lambda, Subtract
 from keras.models import Model, Input, model_from_json, load_model, Sequential
 from keras.constraints import unit_norm
-from complexnn import *
+from layers.keras.complexnn import *
 import math
 import numpy as np
 
@@ -46,6 +46,7 @@ class LocalMixtureNN(BasicModel):
 #        self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))
                 
     def __init__(self,opt):
+        print(LocalMixtureNN)
         super(LocalMixtureNN, self).__init__(opt)
 
     def build(self):
@@ -82,10 +83,10 @@ if __name__ == "__main__":
     from dataset import qa
     import units
     opt = Params()
-    config_file = 'config/qalocal_point.ini'    # define dataset in the config
+    config_file = 'config/qalocal_pair_wiki.ini'    # define dataset in the config
     opt.parse_config(config_file)
     reader = qa.setup(opt)
-    self = BasicModel(opt)
+    self = LocalMixtureNN(opt)
 #    model.compile(loss = opt.loss,
 #            optimizer = units.getOptimizer(name=opt.optimizer,lr=opt.lr),
 #            metrics=['accuracy'])
