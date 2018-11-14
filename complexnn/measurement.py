@@ -81,7 +81,6 @@ class ComplexMeasurement(Layer):
 
         output = K.dot(input_real,K.transpose(kernel_r)) - K.dot(input_imag,K.transpose(kernel_i))
 
-
         return(output)
 
 
@@ -95,7 +94,7 @@ class ComplexMeasurement(Layer):
         
 #        print('Input shape of measurment layer:{}'.format(input_shape))
 #        print(output_shape)
-        return([output_shape])
+        return(tuple(output_shape))
 
 def main():
 

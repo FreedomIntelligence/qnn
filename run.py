@@ -35,7 +35,7 @@ def run(params):
         
         test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
         if params.match_type == 'pairwise':
-            model.compile(loss =identity_loss, #""
+            model.compile(loss = identity_loss, #""
                           optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
                           metrics=[precision_batch])
         elif params.match_type == 'pointwise':

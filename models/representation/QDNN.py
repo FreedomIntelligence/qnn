@@ -68,7 +68,7 @@ class QDNN(BasicModel):
         # output = Complex1DProjection(dimension = embedding_dimension)([sentence_embedding_real, sentence_embedding_imag])
         else:
             probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
-            print(probs.shape)
+#            print(probs.shape)
             if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
                 probs = self.dropout_probs(probs)
         return(probs)
