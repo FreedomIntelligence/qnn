@@ -41,7 +41,7 @@ class QDNN(BasicModel):
     
     def get_representation(self,doc):
         
-        self.amplitude_encoded,self.phase_encoded = self.complex_embedding_layer.get_embedding(self.inputs)
+        self.amplitude_encoded,self.phase_encoded = self.complex_embedding_layer.get_embedding(doc)
 #        self.phase_encoded = self.phase_embedding(doc)
 #        self.amplitude_encoded = self.amplitude_embedding(doc)
         self.weight = Activation('softmax')(self.l2_norm(self.amplitude_encoded))
