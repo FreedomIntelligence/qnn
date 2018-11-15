@@ -13,10 +13,12 @@ import numpy as np
 import preprocess.embedding
 from keras.models import Model
 from loss import *
-
+import pandas as pd
 gpu_count = len(units.get_available_gpus())
 dir_path,global_logger = units.getLogger()
-    
+
+from tools.logger import Logger
+logger = Logger()     
 
 def batch_softmax_with_first_item(x):
     x_exp = np.exp(x)
@@ -24,6 +26,7 @@ def batch_softmax_with_first_item(x):
     return x_exp / x_sum
 
 def run(params):
+    evaluation=[]
    
 #    params=dataset.classification.process_embedding(reader,params)
     if params.dataset_type == 'qa':
@@ -31,7 +34,7 @@ def run(params):
         qdnn = models.setup(params)
         model = qdnn.getModel()
         test_data = params.reader.get_test(iterable = False)
-        evaluation=[]
+        
         
         test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
         if params.match_type == 'pairwise':
@@ -53,7 +56,9 @@ def run(params):
             metric = reader.evaluate(score, mode = "test")
             evaluation.append(metric)
             print(metric)
-            K.clear_session()
+            logger.info(metric)
+        df=pd.DataFrame(evaluation,columns=["map","mrr","p1"]) 
+            
             
     elif params.dataset_type == 'classification':
         from models import representation as models   
@@ -77,9 +82,15 @@ def run(params):
         
         history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
         
-        evaluation = model.evaluate(x = val_x, y = val_y)
-        print(history)
-        print(evaluation)
+        metric = model.evaluate(x = val_x, y = val_y)
+        evaluation.append(metric)
+        logger.info(metric)
+        print(metric)
+
+        df=pd.DataFrame(evaluation,columns=["map","mrr","p1"])  
+        
+    logger.info("\n".join([params.to_string(),"score: "+str(df.max().to_dict())]))
+    K.clear_session()
 
 
 grid_parameters ={
