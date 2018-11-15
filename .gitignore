@@ -19,3 +19,4 @@ temp/*
 .spyproject/*
 best_parameters/*
 *.log
+test_preprocess/*
