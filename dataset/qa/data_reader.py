@@ -73,8 +73,8 @@ class DataReader(object):
             if do_filter == True and data_name in clean_set:
                 data=self.remove_unanswered_questions(data)
                 
-            data['question'] = data['question'].apply(lambda x : self.preprocessor.run(x))
-            data['answer'] = data['answer'].apply(lambda x : self.preprocessor.run(x))
+            data['question'] = data['question'].apply(lambda x : self.preprocessor.run(x,output_type = 'string'))
+            data['answer'] = data['answer'].apply(lambda x : self.preprocessor.run(x,output_type = 'string'))
             datas[data_name] = data
         return datas
     
