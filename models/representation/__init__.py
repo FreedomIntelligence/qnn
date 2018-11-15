@@ -14,7 +14,6 @@ def setup(opt):
         model = ComplexNN(opt)
     elif opt.network_type == "local_mixture":
         model = LocalMixtureNN(opt)
-        
     elif opt.network_type == "ablation":
         print("run ablation")
         model = QDNNAblation(opt)

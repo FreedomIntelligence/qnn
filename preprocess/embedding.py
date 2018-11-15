@@ -2,6 +2,7 @@
 import numpy as np
 import pickle
 import os
+from gensim.models.keyedvectors import KeyedVectors
 class Embedding(object):
     def __init__(self, dictionary,max_sequence_length):
         self.dictionary = dictionary
@@ -17,7 +18,7 @@ class Embedding(object):
 #        else:
 #            fname= "embedding/embedding.200.header_txt"
         if fname.endswith("bin"):
-            from gensim.models.keyedvectors import KeyedVectors
+            
             embeddings_raw = KeyedVectors.load_word2vec_format(fname, binary=True)
             embeddings={x:y for x,y in zip(embeddings_raw.vocab,embeddings_raw.vectors)}
             embedding_size=embeddings_raw.vectors.shape[1]

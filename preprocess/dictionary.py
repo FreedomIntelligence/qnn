@@ -19,4 +19,8 @@ class Dictionary(dict):
                 out.write("{}\t{}\n".format(k, self[k]))
                 
 
-    
+
+if __name__ == '__main__':
+    dic = Dictionary()
+    dic.add(100)
+    print(dic[100])
