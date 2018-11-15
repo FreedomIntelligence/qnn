@@ -19,10 +19,10 @@ class BERTEmbedding(BasicModel):
 #        self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), self.opt.max_sequence_length, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init)
 #
 #        
-        checkpoint_path="D:/dataset/bert/chinese_L-12_H-768_A-12/bert_model.ckpt" #chinese_L-12_H-768_A-12
-        config_path =   "D:/dataset/bert/chinese_L-12_H-768_A-12/bert_config.json" #chinese_L-12_H-768_A-12
+#        checkpoint_path="D:/dataset/bert/uncased_L-12_H-768_A-12/bert_model.ckpt" #chinese_L-12_H-768_A-12
+#        config_path =   "D:/dataset/bert/uncased_L-12_H-768_A-12/bert_config.json" #chinese_L-12_H-768_A-12
 #        dict_path =     "D:/dataset/bert/chinese_L-12_H-768_A-12/vocab.txt" #chinese_L-12_H-768_A-12
-        self.bertmodel = load_trained_model_from_checkpoint(config_path, checkpoint_path)
+        self.bertmodel = load_trained_model_from_checkpoint(self.config_path, self.checkpoint_path)
         self.bertmodel.trainable = False
     def __init__(self,opt):
         super(BERTEmbedding, self).__init__(opt) 

@@ -12,10 +12,10 @@ import keras.backend as K
 import numpy as np
 import preprocess.embedding
 from keras.models import Model
-<<<<<<< HEAD
+
 from loss import *
 import pandas as pd
-=======
+
 from keras.losses import *
 from loss.pairwise_loss import *
 from loss.triplet_loss import *
@@ -23,19 +23,29 @@ import loss.pairwise_loss
 import loss.triplet_loss
 import models
 
->>>>>>> cbb4d919b96456f94ecd21aec0bbb2d29297b627
 gpu_count = len(units.get_available_gpus())
 dir_path,global_logger = units.getLogger()
 
 from tools.logger import Logger
 logger = Logger()     
 
+
+
+def myzip(train_x,train_x_mask):
+    assert train_x.shape == train_x_mask.shape
+    results=[]
+    for i in range(len(train_x)):
+        results.append((train_x[i],train_x_mask[i]))
+    return results
 def batch_softmax_with_first_item(x):
     x_exp = np.exp(x)
     x_sum = np.repeat(np.expand_dims(np.sum(x_exp, axis=1),1), x.shape[1], axis=1)
     return x_exp / x_sum
 
 def run(params):
+    if params.network_type == "bert":
+        params.max_sequence_length = 512
+        reader.max_sequence_length = 512
     evaluation=[]
 #    params=dataset.classification.process_embedding(reader,params)    
     qdnn = models.setup(params)
@@ -98,15 +108,15 @@ def run(params):
         train_x, train_y = train_data
         test_x, test_y = test_data
         val_x, val_y = val_data
-        train_x = to_array(train_x,reader.max_sequence_length)
-        test_x =  to_array(test_x,reader.max_sequence_length)
-        val_x =  to_array(val_x,reader.max_sequence_length)
+        train_x, train_x_mask = to_array(train_x,reader.max_sequence_length,use_mask=True) 
+        test_x,test_x_mask =  to_array(test_x,reader.max_sequence_length,use_mask=True)
+        val_x,val_x_mask =  to_array(val_x,reader.max_sequence_length,use_mask=True)
             #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
         #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
         
-        history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
+        history = model.fit(x=[train_x,train_x_mask], y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= ([test_x,test_x_mask], test_y))
         
-        metric = model.evaluate(x = val_x, y = val_y)
+        metric = model.evaluate(x = [myzip(val_x,val_x_mask)], y = val_y)   # !!!!!! change the order to val and test
         evaluation.append(metric)
         logger.info(metric)
         print(metric)

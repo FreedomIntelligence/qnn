@@ -28,9 +28,9 @@ class BERTFastext(BasicModel):
         representation = []
         for one_type in self.opt.pooling_type.split(','):
             if self.opt.pooling_type == 'max':
-                probs = Lambda(lambada_max, output_shape=(None,768))(encoded)
+                probs = Lambda(lambada_max, output_shape=(768,))(encoded)
             elif self.opt.pooling_type == 'average':
-                probs = Lambda(lambada_mean, output_shape=(None,768))(encoded)
+                probs = Lambda(lambada_mean, output_shape=(768,))(encoded)
             elif self.opt.pooling_type == 'none':
                 probs = Flatten()(encoded)
             elif self.opt.pooling_type == 'max_col':

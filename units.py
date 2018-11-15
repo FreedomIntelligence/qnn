@@ -58,7 +58,7 @@ def getLogger():
     return log_path,logger
 
 import numpy as np
-def to_array(ll,maxlen=0):
+def to_array(ll,maxlen=0,use_mask=False):
     lens = [len(l) for l in ll]
     if maxlen ==0:
         maxlen=max(lens)
@@ -74,5 +74,6 @@ def to_array(ll,maxlen=0):
 #    print(mask)
 #    print(mask.shape)
     arr[mask] = np.concatenate(ll)
-    
+    if use_mask:
+        return arr,mask
     return arr
