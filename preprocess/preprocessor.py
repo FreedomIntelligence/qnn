@@ -34,7 +34,7 @@ class Preprocess(object):
         for sentence in sentences:
             if self.remove_punctuation:
                 sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
-            sentence = [w for w  in word_tokenize(sentence.lower())]
+            sentence = [w for w in word_tokenize(sentence.lower())]
             if self.stem:
                 sentence = [stemmer.stem(w) for w in sentence]
             if self.remove_stopwords:
