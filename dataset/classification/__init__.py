@@ -6,6 +6,7 @@ import codecs
 import numpy as np
 from keras.utils import to_categorical
 import preprocess
+from loss import triplet_loss,pairwise_loss
 def setup(opt):
     dir_path = os.path.join(opt.datasets_dir, opt.dataset_name)
     if(opt.dataset_name == 'CR'):
@@ -26,6 +27,10 @@ def setup(opt):
         reader = TRECDataReader(opt, dir_path)
     return reader
 
+if __name__ == '__main__':
+    x = [1,2]
+    getattr(pairwise_loss, 'identity_loss')(x)
+   
 #def get_sentiment_dic_training_data(reader, opt):
 #    word2id = reader.embedding_params['word2id']
 #    file_name = opt.sentiment_dic_file

@@ -64,6 +64,7 @@ class BucketIterator(object):
     def transformKeras(self,data):
         return [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
     def transformTF(self,data):
+        
         return [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
     
     def __iter__(self):

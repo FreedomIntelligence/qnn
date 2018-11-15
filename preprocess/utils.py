@@ -14,8 +14,8 @@ from nltk.stem import SnowballStemmer
 
 sys.path.append('../inputs')
 sys.path.append('../utils')
-from preparation import *
-from rank_io import *
+from preprocess.preparation import Preparation
+#from rank_io import *
 
 
 class Preprocess(object):
@@ -491,7 +491,7 @@ def _test_hist():
 if __name__ == '__main__':
     #_test_ngram()
     # test with sample data
-    basedir = '../../data/example/ranking/'
+    basedir = 'test_preprocess/'
     prepare = Preparation()
     sample_file = basedir + 'sample.txt'
     corpus, rels = prepare.run_with_one_corpus(sample_file)
@@ -503,7 +503,7 @@ if __name__ == '__main__':
 
     print ('begin preprocess...')
     # Prerpocess corpus file
-    preprocessor = Preprocess(min_freq=1)
+    preprocessor = Preprocess()
     dids, docs = preprocessor.run(basedir + 'corpus.txt')
     preprocessor.save_word_dict(basedir + 'word_dict.txt')
     preprocessor.save_words_stats(basedir + 'word_stats.txt')

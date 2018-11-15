@@ -100,7 +100,7 @@ class DataReader(object):
         
         
     def preprocess(self, data):
-        data['X'] = self.preprocessor.run_seq(data['X'])
+        data['X'] = self.preprocessor.run_seq(data['X'],output_type = 'string')
         data['y'] = data['y']
         return(data)
         
