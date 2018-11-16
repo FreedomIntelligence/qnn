@@ -4,7 +4,7 @@ from params import Params
  
 import dataset
 import units
-from units import to_array
+from units import to_array, batch_softmax_with_first_item
 #from tools.save import save_experiment
 import itertools
 import argparse
@@ -37,10 +37,11 @@ def myzip(train_x,train_x_mask):
     for i in range(len(train_x)):
         results.append((train_x[i],train_x_mask[i]))
     return results
-def batch_softmax_with_first_item(x):
-    x_exp = np.exp(x)
-    x_sum = np.repeat(np.expand_dims(np.sum(x_exp, axis=1),1), x.shape[1], axis=1)
-    return x_exp / x_sum
+
+#def batch_softmax_with_first_item(x):
+#    x_exp = np.exp(x)
+#    x_sum = np.repeat(np.expand_dims(np.sum(x_exp, axis=1),1), x.shape[1], axis=1)
+#    return x_exp / x_sum
 
 def run(params):
     if params.network_type == "bert":
