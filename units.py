@@ -58,6 +58,11 @@ def getLogger():
     return log_path,logger
 
 import numpy as np
+def batch_softmax_with_first_item(x):
+    x_exp = np.exp(x)
+    x_sum = np.repeat(np.expand_dims(np.sum(x_exp, axis=1),1), x.shape[1], axis=1)
+    return x_exp / x_sum
+
 def to_array(ll,maxlen=0):
     lens = [len(l) for l in ll]
     if maxlen ==0:

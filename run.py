@@ -4,7 +4,7 @@ from params import Params
  
 import dataset
 import units
-from units import to_array
+from units import to_array, batch_softmax_with_first_item
 #from tools.save import save_experiment
 import itertools
 import argparse
@@ -22,11 +22,6 @@ import models
 gpu_count = len(units.get_available_gpus())
 dir_path,global_logger = units.getLogger()
     
-
-def batch_softmax_with_first_item(x):
-    x_exp = np.exp(x)
-    x_sum = np.repeat(np.expand_dims(np.sum(x_exp, axis=1),1), x.shape[1], axis=1)
-    return x_exp / x_sum
 
 def run(params):
 #    params=dataset.classification.process_embedding(reader,params)
