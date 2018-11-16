@@ -50,11 +50,11 @@ class BERTFastext(BasicModel):
         return(representation)
         
     def get_BERT_model(self):
-        checkpoint_path="D:/dataset/bert/chinese_L-12_H-768_A-12/bert_model.ckpt" #chinese_L-12_H-768_A-12
-        config_path =   "D:/dataset/bert/chinese_L-12_H-768_A-12/bert_config.json" #chinese_L-12_H-768_A-12
-        dict_path =     "D:/dataset/bert/chinese_L-12_H-768_A-12/vocab.txt" #chinese_L-12_H-768_A-12
+        #checkpoint_path="D:/dataset/bert/chinese_L-12_H-768_A-12/bert_model.ckpt" #chinese_L-12_H-768_A-12
+        #config_path =   "D:/dataset/bert/chinese_L-12_H-768_A-12/bert_config.json" #chinese_L-12_H-768_A-12
+        #dict_path =     "D:/dataset/bert/chinese_L-12_H-768_A-12/vocab.txt" #chinese_L-12_H-768_A-12
      
-        return load_trained_model_from_checkpoint(config_path, checkpoint_path)
+        return load_trained_model_from_checkpoint(self.config_path, self.checkpoint_path)
 
 def lambada_mean(x):
     return K.mean(x, axis=1)
