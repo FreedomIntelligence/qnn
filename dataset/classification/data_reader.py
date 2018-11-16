@@ -22,7 +22,12 @@ class DataReader(object):
         self.datas = {'train': self.preprocess(train), 'dev': self.preprocess(dev), 'test': self.preprocess(test)}
         self.nb_classes = nb_classes
         self.max_sequence_length = self.get_max_sentence_length()
-        self.embedding = Embedding(self.get_dictionary(self.datas.values()),self.max_sequence_length)
+        
+        if "bert" in self.network_type:
+            loaded_dic = Dictionary( dict_path =self.dict_path)
+            self.embedding = Embedding(loaded_dic,self.max_sequence_length)
+        else:
+            self.embedding = Embedding(self.get_dictionary(self.datas.values()),self.max_sequence_length)
         print('loading word embedding...')
         self.embedding.get_embedding(dataset_name = self.dataset_name, fname=opt.wordvec_path)
         self.opt_callback(opt) 

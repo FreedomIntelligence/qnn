@@ -3,7 +3,7 @@ from models.representation.QDNN import QDNN
 from models.representation.ComplexNN import ComplexNN
 from models.representation.QDNNAblation import QDNNAblation
 from models.representation.LocalMixtureNN import LocalMixtureNN
-
+from models.representation.BertFasttext import BERTFastext
 def setup(opt):
     print("network type: " + opt.network_type)
     if opt.network_type == "real":
@@ -14,6 +14,8 @@ def setup(opt):
         model = ComplexNN(opt)
     elif opt.network_type == "local_mixture":
         model = LocalMixtureNN(opt)
+    elif opt.network_type == "bert":
+        model = BERTFastext(opt)
     elif opt.network_type == "ablation":
         print("run ablation")
         model = QDNNAblation(opt)
