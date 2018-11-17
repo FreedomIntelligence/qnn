@@ -5,7 +5,7 @@ from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
 import sys
 from layers.keras.complexnn import *
-from models.embedding.ComplexWordEmbedding import ComplexWordEmbedding
+from module.embedding.ComplexWordEmbedding import ComplexWordEmbedding
 
 from keras.initializers import Constant
 import math
