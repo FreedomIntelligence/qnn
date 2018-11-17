@@ -30,9 +30,9 @@ class BERTFastext(BasicModel):
         representation = []
         for one_type in self.opt.pooling_type.split(','):
             if self.opt.pooling_type == 'max':
-                probs = Lambda(lambada_max)(encoded)
+                probs = Lambda(lambda_max)(encoded)
             elif self.opt.pooling_type == 'average':
-                probs = Lambda(lambada_mean)(encoded)
+                probs = Lambda(lambda_mean)(encoded)
             elif self.opt.pooling_type == 'none':
                 probs = Flatten()(encoded)
             elif self.opt.pooling_type == 'max_col':
@@ -56,9 +56,9 @@ class BERTFastext(BasicModel):
         config_path = os.path.join(self.bert_dir,'bert_config.json')
         return load_trained_model_from_checkpoint(config_path, checkpoint_path)
 
-def lambada_mean(x):
+def lambda_mean(x):
     return K.mean(x, axis=1)
-def lambada_max(x):
+def lambda_max(x):
     return K.max(x, axis=1)
 
 
