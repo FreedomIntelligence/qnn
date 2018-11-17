@@ -26,8 +26,7 @@ class LocalMixtureNN(BasicModel):
 
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), None, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
         self.complex_embedding_layer = ComplexWordEmbedding(self.opt)
-        self.l2_normalization = L2Normalization(axis = 3)
-        self.l2_norm = L2Norm(axis = 3, keep_dims = False)
+
         self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True, input_length = None)
         self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
@@ -52,7 +51,7 @@ class LocalMixtureNN(BasicModel):
             self.inputs = n_gram(doc)
             
             #(batch_size,  max_seq_length,n,embedding_dim)
-            self.amplitude_encoded,self.phase_encoded = self.complex_embedding_layer.get_embedding(self.inputs)
+            self.amplitude_encoded,self.phase_encoded,self.weight = self.complex_embedding_layer.get_embedding(self.inputs)
 #            self.phase_encoded = self.phase_embedding(self.inputs)
 #            print(self.phase_encoded.shape)
             #(batch_size,  max_seq_length,n,embedding_dim)
@@ -63,18 +62,18 @@ class LocalMixtureNN(BasicModel):
 #            self.amplitude_encoded = reshape((-1,self.opt.max_sequence_length,self.opt.ngram_value,self.opt.lookup_table.shape[1]))(self.amplitude_encoded)
 #        self.weight = Activation('softmax')(self.weight_embedding(self.inputs))
             
-            #(batch_size,  max_seq_length,n)
-            self.weight = Activation('softmax')(self.l2_norm(self.amplitude_encoded))
-#            print(self.weight.shape)
-#            self.weight = reshape((-1,self.opt.max_sequence_length,self.opt.ngram_value,1))(self.weight)
-            self.amplitude_encoded = self.l2_normalization(self.amplitude_encoded)
-#            print(self.amplitude_encoded.shape)
+#            #(batch_size,  max_seq_length,n)
+#            self.weight = Activation('softmax')(self.l2_norm(self.amplitude_encoded))
+##            print(self.weight.shape)
+##            self.weight = reshape((-1,self.opt.max_sequence_length,self.opt.ngram_value,1))(self.weight)
+#            self.amplitude_encoded = self.l2_normalization(self.amplitude_encoded)
+##            print(self.amplitude_encoded.shape)
         
         
 #        self.weight = reshape( (-1,self.opt.max_sequence_length,self.opt.ngram_value))(self.weight)
-            if math.fabs(self.opt.dropout_rate_embedding -1) < 1e-6:
-                self.phase_encoded = self.dropout_embedding(self.phase_encoded)
-                self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)
+#            if math.fabs(self.opt.dropout_rate_embedding -1) < 1e-6:
+#                self.phase_encoded = self.dropout_embedding(self.phase_encoded)
+#                self.amplitude_encoded = self.dropout_embedding(self.amplitude_encoded)
             
             
             [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([self.phase_encoded, self.amplitude_encoded])

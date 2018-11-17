@@ -31,23 +31,15 @@ class ComplexNN(BasicModel):
         return model
     
     def get_representation(self,doc):
-        self.amplitude_encoded,self.phase_encoded = self.complex_embedding_layer.get_embedding(doc)
-
+        self.seq_embedding_real,self.seq_embedding_imag = self.complex_embedding_layer.get_embedding(doc)
+      
         
-        if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
-            self.phase_encoded = self.dropout(self.phase_encoded)
-            self.amplitude_encoded = self.dropout(self.amplitude_encoded)
-            
-        [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([ self.phase_encoded, self.amplitude_encoded])
-        if self.opt.network_type.lower() == 'complex_mixture':
-            [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights=True)([seq_embedding_real, seq_embedding_imag])
-    
-        elif self.opt.network_type.lower() == 'complex_superposition':
-            [sentence_embedding_real, sentence_embedding_imag]= ComplexSuperposition(average_weights=True)([seq_embedding_real, seq_embedding_imag])
+        if  self.opt.network_type.lower() == 'complex_superposition':
+            [sentence_embedding_real, sentence_embedding_imag]= ComplexSuperposition(average_weights=True)([self.seq_embedding_real, self.seq_embedding_imag])
     
         else:
             print('Wrong input network type -- The default mixture network is constructed.')
-            [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights=True)([seq_embedding_real, seq_embedding_imag])
+            [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights=True)([self.seq_embedding_real, self.seq_embedding_imag])
     
     
         sentence_embedding_real = Flatten()(sentence_embedding_real)

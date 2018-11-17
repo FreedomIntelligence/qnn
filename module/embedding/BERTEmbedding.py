@@ -10,7 +10,8 @@ from layers.keras.complexnn import *
 
 from keras.initializers import Constant
 import numpy as np
-class BERTEmbedding(BasicModel):
+from module.embedding import ComplexWordEmbedding
+class BERTEmbedding(ComplexWordEmbedding):
     
     def initialize(self):
        
@@ -25,10 +26,10 @@ class BERTEmbedding(BasicModel):
         self.bertmodel = load_trained_model_from_checkpoint(self.config_path, self.checkpoint_path)
         self.bertmodel.trainable = False
     def __init__(self,opt):
-        super(BERTEmbedding, self).__init__(opt) 
+        super(ComplexWordEmbedding, self).__init__(opt) 
     
-    def get_embedding(self,doc,mask):
+    def get_embedding(self,doc,mask=None,use_weight=True):
 
-            
-        return self.bertmodel([doc,mask]).output
-
+        amplitude_encoded = self.bertmodel([doc,mask]).output
+        return self.process_complex_embedding(doc,amplitude_encoded,use_weight=use_weight)   
+ 
