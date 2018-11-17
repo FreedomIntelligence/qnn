@@ -3,8 +3,8 @@ from keras.layers import Embedding, GlobalMaxPooling1D,GlobalAveragePooling1D, D
 from models.BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
-from module.embedding import RealEmbedding
-from module.encoding import Pooling
+from module.embedding.RealEmbedding import RealEmbedding
+from module.encoding.Pooling import Pooling
 import math
 class RealNN(BasicModel):
     
@@ -22,7 +22,7 @@ class RealNN(BasicModel):
         
     
     def build(self):      
-        doc = Masking(mask_value = 0)(doc)
+        doc = Masking(mask_value = 0)(self.doc)
         embed = self.real_embedding.get_embedding(doc)
         encoded = self.pooling.get_representation(embed)
         output = self.dense(encoded)

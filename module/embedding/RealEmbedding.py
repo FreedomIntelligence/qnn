@@ -19,8 +19,9 @@ class RealEmbedding(BasicModel):
                                     weights=[self.opt.lookup_table],embeddings_constraint = unit_norm(axis = 1))
         else:
             self.embedding = Embedding(trainable=self.opt.embedding_trainable, input_dim=self.opt.lookup_table.shape[0],output_dim=self.opt.lookup_table.shape[1],embeddings_constraint = unit_norm(axis = 1))
-        
-        self.dropout = Dropout(self.opt.dropout_rate_probs)
+
+        self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
+
     def __init__(self,opt):
         super(RealEmbedding, self).__init__(opt) 
             
@@ -28,7 +29,7 @@ class RealEmbedding(BasicModel):
 
         encoded = self.embedding(doc)
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
-            encoded = self.dropout(encoded)
+            encoded = self.dropout_embedding(encoded)
         
         return encoded
 
