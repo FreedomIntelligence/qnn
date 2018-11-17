@@ -45,14 +45,14 @@ with tf.Graph().as_default(): # ,tf.device("/cpu:" + str(params.gpu))
     sess.run(tf.global_variables_initializer())
     for i in range(params.epochs):  
         
-        for data in reader.getTrain(overlap_feature=False):#model=model,sess=sess,
+        for data in reader.get_train(overlap_feature=False):#model=model,sess=sess,
 #        for data in data_helper.getBatch48008(train,alphabet,args.batch_size):
             _, summary, step, loss, accuracy,score12, score13, see = model.train(sess,data)
             time_str = datetime.datetime.now().isoformat()
             print("{}: step {}, loss {:g}, acc {:g} ,positive {:g},negative {:g}".format(time_str, step, loss, accuracy,np.mean(score12),np.mean(score13)))
 #            logger.info("{}: step {}, loss {:g}, acc {:g} ,positive {:g},negative {:g}".format(time_str, step, loss, accuracy,np.mean(score12),np.mean(score13)))
 
-        test_datas = reader.getTest()
+        test_datas = reader.get_test()
         predicted_test = predict(model,sess,test_datas,reader.datas["test"])
         map_mrr_test = evaluation.evaluationBypandas(reader.datas["test"],predicted_test)
 
