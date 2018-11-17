@@ -9,7 +9,7 @@ import numpy as np
 
 from keras import regularizers
 
-from models.embedding.ComplexWordEmbedding import ComplexWordEmbedding
+from module.embedding.ComplexWordEmbedding import ComplexWordEmbedding
 
 
 class QDNN(BasicModel):

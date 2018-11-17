@@ -6,7 +6,7 @@ from keras.constraints import unit_norm
 from layers.keras.complexnn import *
 import math
 import numpy as np
-from models.embedding.ComplexWordEmbedding import ComplexWordEmbedding
+from module.embedding.ComplexWordEmbedding import ComplexWordEmbedding
 
 
 from keras import regularizers
