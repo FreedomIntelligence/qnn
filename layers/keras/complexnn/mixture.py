@@ -106,10 +106,10 @@ class ComplexMixture(Layer):
 
 
 def main():
-    input_2 = Input(shape=(3,5), dtype='float')
-    input_1 = Input(shape=(3,5), dtype='float')
-    weights = Input(shape = (3,), dtype = 'float')
-    [output_1, output_2] = ComplexMixture(average_weights = True)([input_1, input_2, weights])
+    input_2 = Input(shape=(3,5,10), dtype='float')
+    input_1 = Input(shape=(3,5,10), dtype='float')
+    weights = Input(shape = (3,5), dtype = 'float')
+    [output_1, output_2] = ComplexMixture(average_weights = False)([input_1, input_2, weights])
 
 
     model = Model([input_1, input_2, weights], [output_1, output_2])
@@ -118,9 +118,9 @@ def main():
               metrics=['accuracy'])
     model.summary()
 
-    x = np.random.random((3,3,5))
-    x_2 = np.random.random((3,3,5))
-    weights = np.random.random((3,3))
+    x = np.random.random((3,3,5,10))
+    x_2 = np.random.random((3,3,5,10))
+    weights = np.random.random((3,3,5))
     output = model.predict([x,x_2, weights])
     print(output)
 

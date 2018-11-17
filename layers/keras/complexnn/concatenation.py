@@ -48,7 +48,7 @@ class Concatenation(Layer):
         if self.axis<0:
             self.axis = self.axis + len(input_shape[0])
         new_dim = sum( [single_shape[self.axis]  for single_shape in input_shape])
-        output_shape =input_shape[0].copy()
+        output_shape =[i for i in input_shape[0]]
         output_shape[self.axis] = new_dim
 
 #        print('Input shape concatenation layer:{}'.format(input_shape))
