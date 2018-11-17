@@ -20,3 +20,5 @@ temp/*
 best_parameters/*
 *.log
 test_preprocess/*
+*.ini
+config/*

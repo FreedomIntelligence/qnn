@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 from params import Params
 #from models import representation as models
- 
+
+#
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 import dataset
 import units
 from units import to_array, batch_softmax_with_first_item
@@ -12,7 +17,7 @@ import keras.backend as K
 import numpy as np
 import preprocess.embedding
 from keras.models import Model
-
+import tensorflow as tf
 from loss import *
 import pandas as pd
 
@@ -22,14 +27,19 @@ from loss.triplet_loss import *
 import loss.pairwise_loss
 import loss.triplet_loss
 import models
+import tensorflow as tf
+#
+
 
 gpu_count = len(units.get_available_gpus())
 dir_path,global_logger = units.getLogger()
 
 from tools.logger import Logger
 logger = Logger()     
-
-
+#
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 def myzip(train_x,train_x_mask):
     assert train_x.shape == train_x_mask.shape
