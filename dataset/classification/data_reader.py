@@ -21,10 +21,11 @@ class DataReader(object):
         self.preprocessor = preprocess.setup(opt)
         self.datas = {'train': self.preprocess(train), 'dev': self.preprocess(dev), 'test': self.preprocess(test)}
         self.nb_classes = nb_classes
-        self.max_sequence_length = self.get_max_sentence_length()
+        self.get_max_sentence_length()
+        self.dict_path = os.path.join(self.bert_dir,'vocab.txt')
         
         if "bert" in self.network_type:
-            loaded_dic = Dictionary( dict_path =self.dict_path)
+            loaded_dic = Dictionary(dict_path =self.dict_path)
             self.embedding = Embedding(loaded_dic,self.max_sequence_length)
         else:
             self.embedding = Embedding(self.get_dictionary(self.datas.values()),self.max_sequence_length)
@@ -118,7 +119,7 @@ class DataReader(object):
             sample_length = len(sample.split())
             if max_sentence_length < sample_length:
                 max_sentence_length = sample_length
-        return max_sentence_length
+        self.max_sequence_length = max_sentence_length
 
     def get_word_embedding(self, path_to_vec,orthonormalized=True):
         samples = self.data['train']['X'] + self.data['dev']['X'] + \

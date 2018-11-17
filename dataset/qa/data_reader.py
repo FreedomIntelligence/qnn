@@ -33,12 +33,16 @@ class DataReader(object):
         self.dir_path = os.path.join(opt.datasets_dir, 'QA', opt.dataset_name.lower())
         self.preprocessor = preprocess.setup(opt)
         self.datas = self.load(do_filter = opt.remove_unanswered_question)
-        q_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['question'].str.split()))
-        a_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['answer'].str.split()))    
-        self.max_sequence_length = max(q_max_sent_length,a_max_sent_length)
-        if self.max_sequence_length > self.max_len:
-            self.max_sequence_length = self.max_len
+        self.get_max_sentence_length()
         self.nb_classes = 2
+        self.dict_path = os.path.join(self.bert_dir,'vocab.txt')
+        
+        if "bert" in self.network_type:
+            loaded_dic = Dictionary(dict_path =self.dict_path)
+            self.embedding = Embedding(loaded_dic,self.max_sequence_length)
+        else:
+            self.embedding = Embedding(self.get_dictionary(self.datas.values()),self.max_sequence_length)
+            
         self.embedding = Embedding(self.get_dictionary(self.datas.values()),self.max_sequence_length)
 
 #        self.q_max_sent_length = q_max_sent_length
@@ -88,7 +92,13 @@ class DataReader(object):
 #        questions_multi=counter[counter>1].index
     
         return df[df["question"].isin(questions_have_correct) ].reset_index()  #&  df["question"].isin(questions_have_correct) & df["question"].isin(questions_have_uncorrect)
-
+    
+    def get_max_sentence_length(self):
+        q_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['question'].str.split()))
+        a_max_sent_length = max(map(lambda x:len(x),self.datas["train"]['answer'].str.split()))    
+        self.max_sequence_length = max(q_max_sent_length,a_max_sent_length)
+        if self.max_sequence_length > self.max_len:
+            self.max_sequence_length = self.max_len
                 
     def get_dictionary(self,corpuses = None,dataset="",fresh=True):
         pkl_name="temp/"+self.dataset_name+".alphabet.pkl"

@@ -8,6 +8,8 @@
 #from models.match.keras.LocalMixtureNN import LocalMixtureNN
 
 def setup(opt):
+    from models.representation.BertFasttext import BERTFastext
+    
     if opt.dataset_type == 'qa':
         from models.match.keras.RealNN import RealNN
         from models.match.keras.QDNN import QDNN
@@ -21,7 +23,7 @@ def setup(opt):
         from models.representation.ComplexNN import ComplexNN
         from models.representation.QDNNAblation import QDNNAblation
         from models.representation.LocalMixtureNN import LocalMixtureNN
-        from models.representation.BertFasttext import BERTFastext
+        
     
     print("network type: " + opt.network_type)
     if opt.network_type == "real":

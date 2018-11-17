@@ -5,10 +5,11 @@ from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
 from keras_bert import load_trained_model_from_checkpoint
 import math
+import os
 class BERTFastext(BasicModel):
     
     def initialize(self):
-        
+        self.bert_dir = self.opt.bert_dir  
         self.dense = Dense(self.opt.nb_classes, activation="sigmoid")        
         self.dropout = Dropout(self.opt.dropout_rate_probs)       
      
@@ -16,7 +17,8 @@ class BERTFastext(BasicModel):
         self.bertmodel.trainable = False        
     
     def __init__(self,opt):
-        super(BERTFastext, self).__init__(opt)        
+        super(BERTFastext, self).__init__(opt)
+            
         
     
     def build(self):        
@@ -28,9 +30,9 @@ class BERTFastext(BasicModel):
         representation = []
         for one_type in self.opt.pooling_type.split(','):
             if self.opt.pooling_type == 'max':
-                probs = Lambda(lambada_max, output_shape=(768,))(encoded)
+                probs = Lambda(lambada_max)(encoded)
             elif self.opt.pooling_type == 'average':
-                probs = Lambda(lambada_mean, output_shape=(768,))(encoded)
+                probs = Lambda(lambada_mean)(encoded)
             elif self.opt.pooling_type == 'none':
                 probs = Flatten()(encoded)
             elif self.opt.pooling_type == 'max_col':
@@ -50,10 +52,8 @@ class BERTFastext(BasicModel):
         return(representation)
         
     def get_BERT_model(self):
-        checkpoint_path="D:/dataset/bert/chinese_L-12_H-768_A-12/bert_model.ckpt" #chinese_L-12_H-768_A-12
-        config_path =   "D:/dataset/bert/chinese_L-12_H-768_A-12/bert_config.json" #chinese_L-12_H-768_A-12
-        dict_path =     "D:/dataset/bert/chinese_L-12_H-768_A-12/vocab.txt" #chinese_L-12_H-768_A-12
-     
+        checkpoint_path = os.path.join(self.bert_dir,'bert_model.ckpt')
+        config_path = os.path.join(self.bert_dir,'bert_config.json')
         return load_trained_model_from_checkpoint(config_path, checkpoint_path)
 
 def lambada_mean(x):
