@@ -38,8 +38,8 @@ from tools.logger import Logger
 logger = Logger()     
 #
 import os
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+#os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+#os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 def myzip(train_x,train_x_mask):
     assert train_x.shape == train_x_mask.shape
