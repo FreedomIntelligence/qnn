@@ -37,7 +37,7 @@ class ComplexWordEmbedding(BasicModel):
             self.phase_encoded = self.dropout(phase_encoded)
             self.amplitude_encoded = self.dropout(amplitude_encoded)
             
-        [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([ phase_encoded, amplitude_encoded])
+        [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([phase_encoded, amplitude_encoded])
             
         return seq_embedding_real,seq_embedding_imag,self.weight
         
