@@ -3,9 +3,9 @@ from params import Params
 #from models import representation as models
 
 #
-import os
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+#import os
+#os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+#os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import dataset
 import units
@@ -27,7 +27,7 @@ from loss.triplet_loss import *
 import loss.pairwise_loss
 import loss.triplet_loss
 import models
-import tensorflow as tf
+#import tensorflow as tf
 #
 
 
@@ -36,10 +36,7 @@ dir_path,global_logger = units.getLogger()
 
 from tools.logger import Logger
 logger = Logger()     
-#
-import os
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 
 def myzip(train_x,train_x_mask):
     assert train_x.shape == train_x_mask.shape
@@ -54,7 +51,7 @@ def myzip(train_x,train_x_mask):
 #    return x_exp / x_sum
 
 def run(params):
-    if params.network_type == "bert":
+    if "bert" in params.network_type.lower() :
         params.max_sequence_length = 512
         reader.max_sequence_length = 512
     evaluation=[]
@@ -119,15 +116,27 @@ def run(params):
         train_x, train_y = train_data
         test_x, test_y = test_data
         val_x, val_y = val_data
-        train_x, train_x_mask = to_array(train_x,reader.max_sequence_length,use_mask=True) 
-        test_x,test_x_mask =  to_array(test_x,reader.max_sequence_length,use_mask=True)
-        val_x,val_x_mask =  to_array(val_x,reader.max_sequence_length,use_mask=True)
-            #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
-        #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
+        if "bert" in params.network_type.lower() :
+            train_x, train_x_mask = to_array(train_x,reader.max_sequence_length,use_mask=True) 
+            test_x,test_x_mask =  to_array(test_x,reader.max_sequence_length,use_mask=True)
+            val_x,val_x_mask =  to_array(val_x,reader.max_sequence_length,use_mask=True)
+                #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
+            #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
         
-        history = model.fit(x=[train_x,train_x_mask], y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= ([test_x,test_x_mask], test_y))
+            history = model.fit(x=[train_x,train_x_mask], y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= ([test_x,test_x_mask], test_y))
         
-        metric = model.evaluate(x = [myzip(val_x,val_x_mask)], y = val_y)   # !!!!!! change the order to val and test
+            metric = model.evaluate(x = [myzip(val_x,val_x_mask)], y = val_y)   # !!!!!! change the order to val and test
+        else:
+            train_x = to_array(train_x,reader.max_sequence_length,use_mask=False) 
+            test_x =  to_array(test_x,reader.max_sequence_length,use_mask=False)
+            val_x =  to_array(val_x,reader.max_sequence_length,use_mask=False)
+                #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
+            #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
+        
+            history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
+        
+            metric = model.evaluate(x = val_x, y = val_y)   # !!!!!! change the order to val and test
+            
         evaluation.append(metric)
         logger.info(metric)
         print(metric)

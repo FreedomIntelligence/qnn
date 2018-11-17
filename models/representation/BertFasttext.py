@@ -6,23 +6,31 @@ from keras.constraints import unit_norm
 from keras_bert import load_trained_model_from_checkpoint
 import math
 import os
+
+from module.embedding.BERTEmbedding import  BERTEmbedding
 class BERTFastext(BasicModel):
     
     def initialize(self):
         self.bert_dir = self.opt.bert_dir  
         self.dense = Dense(self.opt.nb_classes, activation="sigmoid")        
-        self.dropout = Dropout(self.opt.dropout_rate_probs)       
-     
-        self.bertmodel = self.get_BERT_model()
-        self.bertmodel.trainable = False        
+        
+        self.doc = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
+        self.mask = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
+        
+        self.bert_embedding = BERTEmbedding(self.opt)
+#        self.pooling = Pooling(self.opt)
     
     def __init__(self,opt):
         super(BERTFastext, self).__init__(opt)
             
         
     
-    def build(self):        
-        output = self.dense(self.get_representation(self.bertmodel.output))
+    def build(self):  
+        embed = self.bert_embedding.get_embedding(self.doc,self.mask,use_complex=False)
+        encoded = self.get_representation(embed)  #self.pooling does not work here
+        output = self.dense(encoded)
+        return Model([self.doc,self.mask], output)
+        
         return Model(self.bertmodel.input, output)
     
     def get_representation(self,encoded):       
@@ -51,23 +59,21 @@ class BERTFastext(BasicModel):
 #        representation =GlobalAveragePooling1D()(self.encoded)
         return(representation)
         
-    def get_BERT_model(self):
-        checkpoint_path = os.path.join(self.bert_dir,'bert_model.ckpt')
-        config_path = os.path.join(self.bert_dir,'bert_config.json')
-        return load_trained_model_from_checkpoint(config_path, checkpoint_path)
 
+
+import keras.backend as K 
 def lambda_mean(x):
     return K.mean(x, axis=1)
 def lambda_max(x):
     return K.max(x, axis=1)
 
 
-        
-import keras.backend as K        
-class GlobalAveragePooling1DMasked(GlobalAveragePooling1D):
-    def call(self, x, mask=None):
-        if mask != None:
-            return K.sum(x, axis=1) / K.sum(mask, axis=1)
-        else:
-            return super().call(x)
+#        
+#import keras.backend as K        
+#class GlobalAveragePooling1DMasked(GlobalAveragePooling1D):
+#    def call(self, x, mask=None):
+#        if mask != None:
+#            return K.sum(x, axis=1) / K.sum(mask, axis=1)
+#        else:
+#            return super().call(x)
 

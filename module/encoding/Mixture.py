@@ -19,12 +19,13 @@ class Mixture(BasicModel):
     def __init__(self,opt):
         super(Mixture, self).__init__(opt) 
     
-    def get_representation(self,seq_embedding_real,seq_embedding_imag,weights):
+    def get_representation(self,seq_embedding_real,seq_embedding_imag,weights,need_flatten=True):
         if weights is None:
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights=True)([seq_embedding_real, seq_embedding_imag])
         else:
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
        
-        sentence_embedding_real = Flatten()(sentence_embedding_real)
-        sentence_embedding_imag = Flatten()(sentence_embedding_imag)       
+        if need_flatten:
+            sentence_embedding_real = Flatten()(sentence_embedding_real)
+            sentence_embedding_imag = Flatten()(sentence_embedding_imag)         
         return [sentence_embedding_real, sentence_embedding_imag]

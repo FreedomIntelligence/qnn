@@ -10,7 +10,8 @@ from layers.keras.complexnn import *
 
 from keras.initializers import Constant
 import numpy as np
-from module.embedding import ComplexWordEmbedding
+from module.embedding.ComplexWordEmbedding import ComplexWordEmbedding
+import os
 class BERTEmbedding(ComplexWordEmbedding):
     
     def initialize(self):
@@ -23,13 +24,18 @@ class BERTEmbedding(ComplexWordEmbedding):
 #        checkpoint_path="D:/dataset/bert/uncased_L-12_H-768_A-12/bert_model.ckpt" #chinese_L-12_H-768_A-12
 #        config_path =   "D:/dataset/bert/uncased_L-12_H-768_A-12/bert_config.json" #chinese_L-12_H-768_A-12
 #        dict_path =     "D:/dataset/bert/chinese_L-12_H-768_A-12/vocab.txt" #chinese_L-12_H-768_A-12
-        self.bertmodel = load_trained_model_from_checkpoint(self.config_path, self.checkpoint_path)
-        self.bertmodel.trainable = False
+        checkpoint_path = os.path.join(self.opt.bert_dir,'bert_model.ckpt')
+        config_path = os.path.join(self.opt.bert_dir,'bert_config.json')
+        self.bertmodel = load_trained_model_from_checkpoint(config_path, checkpoint_path)
+#        self.bertmodel.trainable = False
     def __init__(self,opt):
         super(ComplexWordEmbedding, self).__init__(opt) 
     
-    def get_embedding(self,doc,mask,use_weight=True):
+    def get_embedding(self,doc,mask,use_complex=False):
 
-        amplitude_encoded = self.bertmodel([doc,mask]).output
-        return self.process_complex_embedding(doc,amplitude_encoded,use_weight=use_weight)   
+        amplitude_encoded = self.bertmodel([doc,mask])
+        if use_complex:
+            return self.process_complex_embedding(doc,amplitude_encoded,use_weight=True)   
+        else:
+            return amplitude_encoded
  
