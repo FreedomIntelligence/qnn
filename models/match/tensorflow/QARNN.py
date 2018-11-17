@@ -5,7 +5,7 @@ from tensorflow.contrib import rnn
 
 from tools.timer import log_time_delta
 
-from tools import blocks
+from layers.tensorflow import blocks
 # model_type :apn or qacnn
 class QARNN(object):
 
@@ -50,9 +50,9 @@ class QARNN(object):
         self.a_neg_position = tf.tile(tf.reshape(tf.range(self.a_neg_max_len),[1,self.a_neg_max_len]),[self.batch_size_tf,1],name="a_neg_position")
     def add_embeddings(self):
         print( 'add embeddings')
-        if self.embeddings is not None:
+        if self.embedding.lookup_table is not None:
             print( "load embedding")
-            W = tf.Variable(np.array(self.embeddings),name = "embedding" ,dtype="float32",trainable = self.embedding_trainable)
+            W = tf.Variable(np.array(self.embedding.lookup_table),name = "embedding" ,dtype="float32",trainable = self.embedding_trainable)
             
         else:
             print( "random embedding")

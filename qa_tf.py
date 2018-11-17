@@ -11,8 +11,8 @@ from dataset import qa
 from models.match import tensorflow as models
 from tools import evaluation
 from dataset.qa import QAHelper as helper
-from tools import Logger
-logger = Logger()
+from tools.logger import Logger
+logger = Logger() 
 
 params = Params()
 config_file = 'config/qa.ini'    # define dataset in the config
