@@ -43,6 +43,6 @@ class ComplexWordEmbedding(BasicModel):
         
     def get_embedding(self,doc,mask=None,use_weight=False):
 
-        amplitude_encoded = self.amplitude_embedding_layer(doc)
-        return process_complex_embedding(doc,amplitude_encoded,use_weight=use_weight)
+        amplitude_encoded = self.amplitude_embedding(doc)
+        return self.process_complex_embedding(doc,amplitude_encoded,use_weight=use_weight)
 

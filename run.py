@@ -61,7 +61,7 @@ def run(params):
 #    params=dataset.classification.process_embedding(reader,params)    
     qdnn = models.setup(params)
     model = qdnn.getModel()
-    
+    model.summary()
     if hasattr(loss.pairwise_loss, params.loss): 
             
         loss_func = getattr(loss.pairwise_loss, params.loss)
