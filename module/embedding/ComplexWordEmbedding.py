@@ -28,10 +28,8 @@ class ComplexWordEmbedding(BasicModel):
     def __init__(self,opt):
         super(ComplexWordEmbedding, self).__init__(opt) 
     
-    def get_amplitude_encoded(self,doc,mask=None):
-        return self.amplitude_embedding(doc)
         
-    def process_complex_embedding(self,amplitude_encoded,use_weight=False):
+    def process_complex_embedding(self,doc,amplitude_encoded,use_weight=False):
         phase_encoded = self.phase_embedding(doc)
         if use_weight:
             self.weight = Activation('softmax')(self.l2_norm(amplitude_encoded))
@@ -48,8 +46,8 @@ class ComplexWordEmbedding(BasicModel):
             
         return seq_embedding_real,seq_embedding_imag,self.weight
         
-    def get_embedding(self,doc,use_weight=False):
+    def get_embedding(self,doc,mask=None,use_weight=False):
 
         amplitude_encoded = self.get_amplitude_encoded(doc)
-        return process_complex_embedding(amplitude_encoded,use_weight=use_weight)
+        return process_complex_embedding(doc,amplitude_encoded,use_weight=use_weight)
 

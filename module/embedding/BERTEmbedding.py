@@ -28,8 +28,8 @@ class BERTEmbedding(ComplexWordEmbedding):
     def __init__(self,opt):
         super(ComplexWordEmbedding, self).__init__(opt) 
     
-    def get_embedding(self,doc,mask,use_weight=True):
+    def get_embedding(self,doc,mask=None,use_weight=True):
 
         amplitude_encoded = self.bertmodel([doc,mask]).output
-        return self.process_complex_embedding(amplitude_encoded,use_weight=use_weight)   
+        return self.process_complex_embedding(doc,amplitude_encoded,use_weight=use_weight)   
  
