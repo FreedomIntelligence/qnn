@@ -11,13 +11,17 @@ from keras import regularizers
 
 from modules.embedding.keras.ComplexWordEmbedding import ComplexWordEmbedding
 from modules.encoding.keras.Mixture import Mixture
+from modules.embedding.keras.BERTEmbedding import BERTEmbedding
 
 class QDNN(BasicModel):
 
     def initialize(self):
         self.doc = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
-        self.embedding_module = ComplexWordEmbedding(self.opt)
-        
+        if bool(self.opt.bert_enabled):
+            self.embedding_module = BERTEmbedding(self.opt)
+        else:
+            self.embedding_module = ComplexWordEmbedding(self.opt)
+            
         self.encoding_module = Mixture(self.opt)
         
         self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",
