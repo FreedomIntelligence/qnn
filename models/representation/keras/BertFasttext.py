@@ -31,7 +31,7 @@ class BERTFastext(BasicModel):
         output = self.dense(encoded)
         return Model([self.doc,self.mask], output)
         
-        return Model(self.bertmodel.input, output)
+#        return Model(self.bertmodel.input, output)
     
     def get_representation(self,doc,mask=None):       
         embed = self.bert_embedding.get_embedding(doc,mask,use_complex=False)
