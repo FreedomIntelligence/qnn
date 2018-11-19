@@ -17,11 +17,11 @@ def setup(opt):
             from models.match.keras.LocalMixtureNN import LocalMixtureNN
             
         elif opt.dataset_type == 'classification':
-            from models.representation.keras.RealNN import RealNN
-            from models.representation.keras.QDNN import QDNN
-            from models.representation.keras.ComplexNN import ComplexNN
-            from models.representation.keras.QDNNAblation import QDNNAblation
-            from models.representation.keras.LocalMixtureNN import LocalMixtureNN
+#            from models.classification.keras.RealNN import RealNN
+            from models.classification.keras.QDNN import QDNN
+#            from models.classification.keras.ComplexNN import ComplexNN
+#            from models.classification.keras.QDNNAblation import QDNNAblation
+#            from models.classification.keras.LocalMixtureNN import LocalMixtureNN
     
     elif opt.language == 'tensorflow':
         if opt.dataset_type == 'qa':
@@ -32,11 +32,11 @@ def setup(opt):
             
             
         elif opt.dataset_type == 'classification':
-            from models.representation.tensorflow.RealNN import RealNN
-            from models.representation.tensorflow.QDNN import QDNN
-            from models.representation.tensorflow.ComplexNN import ComplexNN
-            from models.representation.tensorflow.QDNNAblation import QDNNAblation
-            from models.representation.tensorflow.LocalMixtureNN import LocalMixtureNN
+            from models.classification.tensorflow.RealNN import RealNN
+            from models.classification.tensorflow.QDNN import QDNN
+            from models.classification.tensorflow.ComplexNN import ComplexNN
+            from models.classification.tensorflow.QDNNAblation import QDNNAblation
+            from models.classification.tensorflow.LocalMixtureNN import LocalMixtureNN
     
     elif opt.language == 'pytorch':
         if opt.dataset_type == 'qa':
@@ -47,11 +47,11 @@ def setup(opt):
             
             
         elif opt.dataset_type == 'classification':
-            from models.representation.pytorch.RealNN import RealNN
-            from models.representation.pytorch.QDNN import QDNN
-            from models.representation.pytorch.ComplexNN import ComplexNN
-            from models.representation.pytorch.QDNNAblation import QDNNAblation
-            from models.representation.pytorch.LocalMixtureNN import LocalMixtureNN
+            from models.classification.pytorch.RealNN import RealNN
+            from models.classification.pytorch.QDNN import QDNN
+            from models.classification.pytorch.ComplexNN import ComplexNN
+            from models.classification.pytorch.QDNNAblation import QDNNAblation
+            from models.classification.pytorch.LocalMixtureNN import LocalMixtureNN
     
     
     print("network type: " + opt.network_type)
