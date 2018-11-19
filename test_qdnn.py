@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-# -*- coding: utf-8 -*-
 from params import Params
 #from models import representation as models
 
@@ -48,15 +46,15 @@ def myzip(train_x,train_x_mask):
 
 
 def run(params):
-    if params.bert_enabled:
+    if bool(params.bert_enabled) == True:
         params.max_sequence_length = 512
+        params.reader.max_sequence_length = 512
     evaluation=[]
 #    params=dataset.classification.process_embedding(reader,params)    
     qdnn = models.setup(params)
     model = qdnn.getModel()
     model.summary()
     if hasattr(loss.pairwise_loss, params.loss): 
-            
         loss_func = getattr(loss.pairwise_loss, params.loss)
     else:
         loss_func = params.loss
@@ -66,7 +64,7 @@ def run(params):
 
 
         
-    test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
+    test_data = [to_array(i,params.max_sequence_length) for i in test_data]
     if hasattr(loss.pairwise_loss, params.metric_type):
         metric_func = getattr(loss.pairwise_loss, params.metric_type)
     else:
@@ -90,11 +88,11 @@ def run(params):
     if params.dataset_type == 'qa':
 #        from models.match import keras as models   
         for i in range(params.epochs):
-            model.fit_generator(reader.batch_gen(reader.get_train(iterable = True)),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
+            model.fit_generator(params.reader.batch_gen(reader.get_train(iterable = True)),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
             y_pred = model.predict(x = test_data) 
             score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
                 
-            metric = reader.evaluate(score, mode = "test")
+            metric = params.reader.evaluate(score, mode = "test")
             evaluation.append(metric)
             print(metric)
             logger.info(metric)
@@ -112,10 +110,10 @@ def run(params):
         train_x, train_y = train_data
         test_x, test_y = test_data
         val_x, val_y = val_data
-        if "bert" in params.network_type.lower():
-            train_x, train_x_mask = to_array(train_x,reader.max_sequence_length,use_mask=True) 
-            test_x,test_x_mask =  to_array(test_x,reader.max_sequence_length,use_mask=True)
-            val_x,val_x_mask =  to_array(val_x,reader.max_sequence_length,use_mask=True)
+        if bool(params.bert_enabled) == True:
+            train_x, train_x_mask = to_array(train_x,params.max_sequence_length,use_mask=True) 
+            test_x,test_x_mask =  to_array(test_x,params.max_sequence_length,use_mask=True)
+            val_x,val_x_mask =  to_array(val_x,params.max_sequence_length,use_mask=True)
                 #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
             #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
         
@@ -123,9 +121,9 @@ def run(params):
         
             metric = model.evaluate(x = [myzip(val_x,val_x_mask)], y = val_y)   # !!!!!! change the order to val and test
         else:
-            train_x = to_array(train_x,reader.max_sequence_length,use_mask=False) 
-            test_x =  to_array(test_x,reader.max_sequence_length,use_mask=False)
-            val_x =  to_array(val_x,reader.max_sequence_length,use_mask=False)
+            train_x = to_array(train_x,params.max_sequence_length,use_mask=False) 
+            test_x =  to_array(test_x,params.max_sequence_length,use_mask=False)
+            val_x =  to_array(val_x,params.max_sequence_length,use_mask=False)
                 #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
             #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
         
