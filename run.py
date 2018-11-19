@@ -37,9 +37,9 @@ dir_path,global_logger = units.getLogger()
 from tools.logger import Logger
 logger = Logger()     
 #
-import os
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+#import os
+#os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   
+#os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 
 def myzip(train_x,train_x_mask):
@@ -129,7 +129,7 @@ def run(params):
         
             history = model.fit(x=[train_x,train_x_mask], y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= ([test_x,test_x_mask], test_y))
         
-            metric = model.evaluate(x = [myzip(val_x,val_x_mask)], y = val_y)   # !!!!!! change the order to val and test
+            metric = model.evaluate(x = [val_x,val_x_mask], y = val_y)   # !!!!!! change the order to val and test myzip(
         else:
             train_x = to_array(train_x,reader.max_sequence_length,use_mask=False) 
             test_x =  to_array(test_x,reader.max_sequence_length,use_mask=False)
