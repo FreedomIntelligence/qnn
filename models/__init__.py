@@ -8,22 +8,51 @@
 #from models.match.keras.LocalMixtureNN import LocalMixtureNN
 
 def setup(opt):
-    from models.representation.BertFasttext import BERTFastext
     
-    if opt.dataset_type == 'qa':
-        from models.match.keras.RealNN import RealNN
-        from models.match.keras.QDNN import QDNN
-        from models.match.keras.ComplexNN import ComplexNN
-        from models.match.keras.LocalMixtureNN import LocalMixtureNN
-        
-        
-    elif opt.dataset_type == 'classification':
-        from models.representation.RealNN import RealNN
-        from models.representation.QDNN import QDNN
-        from models.representation.ComplexNN import ComplexNN
-        from models.representation.QDNNAblation import QDNNAblation
-        from models.representation.LocalMixtureNN import LocalMixtureNN
-        
+    if opt.language == 'keras':
+        if opt.dataset_type == 'qa':
+            from models.match.keras.RealNN import RealNN
+            from models.match.keras.QDNN import QDNN
+            from models.match.keras.ComplexNN import ComplexNN
+            from models.match.keras.LocalMixtureNN import LocalMixtureNN
+            
+        elif opt.dataset_type == 'classification':
+            from models.representation.keras.RealNN import RealNN
+            from models.representation.keras.QDNN import QDNN
+            from models.representation.keras.ComplexNN import ComplexNN
+            from models.representation.keras.QDNNAblation import QDNNAblation
+            from models.representation.keras.LocalMixtureNN import LocalMixtureNN
+    
+    elif opt.language == 'tensorflow':
+        if opt.dataset_type == 'qa':
+            from models.match.tensorflow.RealNN import RealNN
+            from models.match.tensorflow.QDNN import QDNN
+            from models.match.tensorflow.ComplexNN import ComplexNN
+            from models.match.tensorflow.LocalMixtureNN import LocalMixtureNN
+            
+            
+        elif opt.dataset_type == 'classification':
+            from models.representation.tensorflow.RealNN import RealNN
+            from models.representation.tensorflow.QDNN import QDNN
+            from models.representation.tensorflow.ComplexNN import ComplexNN
+            from models.representation.tensorflow.QDNNAblation import QDNNAblation
+            from models.representation.tensorflow.LocalMixtureNN import LocalMixtureNN
+    
+    elif opt.language == 'pytorch':
+        if opt.dataset_type == 'qa':
+            from models.match.pytorch.RealNN import RealNN
+            from models.match.pytorch.QDNN import QDNN
+            from models.match.pytorch.ComplexNN import ComplexNN
+            from models.match.pytorch.LocalMixtureNN import LocalMixtureNN
+            
+            
+        elif opt.dataset_type == 'classification':
+            from models.representation.pytorch.RealNN import RealNN
+            from models.representation.pytorch.QDNN import QDNN
+            from models.representation.pytorch.ComplexNN import ComplexNN
+            from models.representation.pytorch.QDNNAblation import QDNNAblation
+            from models.representation.pytorch.LocalMixtureNN import LocalMixtureNN
+    
     
     print("network type: " + opt.network_type)
     if opt.network_type == "real":
@@ -36,6 +65,7 @@ def setup(opt):
         model = LocalMixtureNN(opt)
         
     elif opt.network_type == "bert":
+        from models.representation.keras.BertFasttext import BERTFastext
         model = BERTFastext(opt)
         
     elif opt.network_type == "ablation":

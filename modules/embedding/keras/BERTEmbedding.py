@@ -10,7 +10,7 @@ from layers.keras.complexnn import *
 
 from keras.initializers import Constant
 import numpy as np
-from module.embedding.ComplexWordEmbedding import ComplexWordEmbedding
+from modules.embedding.keras.ComplexWordEmbedding import ComplexWordEmbedding
 import os
 class BERTEmbedding(ComplexWordEmbedding):
     

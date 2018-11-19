@@ -7,7 +7,7 @@ from keras_bert import load_trained_model_from_checkpoint
 import math
 import os
 
-from module.embedding.BERTEmbedding import  BERTEmbedding
+from modules.embedding.keras.BERTEmbedding import  BERTEmbedding
 class BERTFastext(BasicModel):
     
     def initialize(self):

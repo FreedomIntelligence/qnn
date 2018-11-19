@@ -9,7 +9,7 @@ import numpy as np
 
 from keras import regularizers
 import keras.backend as K
-from models.representation.LocalMixtureNN import  LocalMixtureNN as rep_model
+from models.representation.keras.LocalMixtureNN import  LocalMixtureNN as rep_model
 
 class LocalMixtureNN(BasicModel):
 

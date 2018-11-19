@@ -5,8 +5,8 @@ from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
 import sys
 from layers.keras.complexnn import *
-from module.embedding.ComplexWordEmbedding import ComplexWordEmbedding
-from module.encoding.Mixture import Mixture
+from modules.embedding.keras.ComplexWordEmbedding import ComplexWordEmbedding
+from modules.encoding.keras.Mixture import Mixture
 from keras.initializers import Constant
 import math
 import numpy as np

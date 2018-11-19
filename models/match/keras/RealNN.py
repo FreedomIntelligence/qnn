@@ -9,7 +9,7 @@ import numpy as np
 
 from keras import regularizers
 import keras.backend as K
-from models.representation.RealNN import RealNN as rep_model
+from models.representation.keras.RealNN import RealNN as rep_model
 
 class RealNN(BasicModel):
 

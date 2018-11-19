@@ -22,6 +22,7 @@ class ComplexWordEmbedding(BasicModel):
 #        self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True, input_length = None)
 #        self.weight = Activation('softmax')(self.weight_embedding(doc))
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
+        
     def __init__(self,opt):
         super(ComplexWordEmbedding, self).__init__(opt) 
     
@@ -35,6 +36,7 @@ class ComplexWordEmbedding(BasicModel):
             self.amplitude_encoded = self.l2_normalization(amplitude_encoded)  
         else:
             self.weight = None
+            
         if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
             self.phase_encoded = self.dropout_embedding(phase_encoded)
             self.amplitude_encoded = self.dropout_embedding(amplitude_encoded)
