@@ -22,10 +22,15 @@ class RealNN(BasicModel):
         
     
     def build(self):      
-        doc = Masking(mask_value = 0)(self.doc)
-        embed = self.real_embedding.get_embedding(doc)
-        encoded = self.pooling.get_representation(embed)
+        encoded = self.get_representation(self.doc)
         output = self.dense(encoded)
         return Model(self.doc, output)
+    
+    def get_representation(self,doc):
+        masked_doc = Masking(mask_value = 0)(doc)
+        embed = self.real_embedding.get_embedding(masked_doc)
+        encoded = self.pooling.get_representation(embed)
+        return encoded
+         
 
 
