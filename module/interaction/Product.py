@@ -27,15 +27,5 @@ class Product(BasicModel):
         else:
             # real product
             output = Multiply()([rep_left, rep_right])
-#            real_left = rep_left[0]
-#            imag_left = rep_left
-        #        if weights is None:
-#            [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights=True)([seq_embedding_real, seq_embedding_imag])
-#        else:
-#            [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
-#       
-#        if need_flatten:
-#            sentence_embedding_real = Flatten()(sentence_embedding_real)
-#            sentence_embedding_imag = Flatten()(sentence_embedding_imag)         
-#        return [sentence_embedding_real, sentence_embedding_imag]
+
         return output

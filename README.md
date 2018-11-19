@@ -1,3 +1,3 @@
 # qnn
 
-This is supported by Li Qiuchi (李秋池), Waby, Donghao Zhao and Amit .
+This is supported by Benyou Wang, Qiuchi Li, Donghao Zhao, Chen Zhang and Amit.

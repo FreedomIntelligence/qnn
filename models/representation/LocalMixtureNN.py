@@ -185,5 +185,4 @@ if __name__ == "__main__":
     self.dropout_probs = Dropout(self.opt.dropout_rate_probs)
     self.projection = ComplexMeasurement(units = self.opt.measurement_size)
 
-    
     doc = self.doc
