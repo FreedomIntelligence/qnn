@@ -9,7 +9,7 @@ import numpy as np
 
 from keras import regularizers
 
-from models.representation.keras import QDNN as rep_model
+from models.representation.keras.QDNN import QDNN as rep_model
 
 class QDNN(BasicModel):
 
