@@ -24,7 +24,7 @@ class DataReader(object):
         self.get_max_sentence_length()
         self.dict_path = os.path.join(self.bert_dir,'vocab.txt')
         
-        if bool(self.bert_enabled) == True:
+        if 'bert' in self.network_type:
             loaded_dic = Dictionary(dict_path =self.dict_path)
             self.embedding = Embedding(loaded_dic,self.max_sequence_length)
         else:

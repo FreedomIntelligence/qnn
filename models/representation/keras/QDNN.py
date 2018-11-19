@@ -17,7 +17,7 @@ class QDNN(BasicModel):
 
     def initialize(self):
         self.doc = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
-        if bool(self.opt.bert_enabled):
+        if 'bert' in self.opt.network_type:
             self.embedding_module = BERTEmbedding(self.opt)
         else:
             self.embedding_module = ComplexWordEmbedding(self.opt)
