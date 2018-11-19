@@ -11,7 +11,7 @@ import numpy as np
 
 from keras import regularizers
 import keras.backend as K
-from models.representation.keras.LocalMixtureNN import  LocalMixtureNN as rep_model
+
 
 class SiameseNetwork(BasicModel):
 
