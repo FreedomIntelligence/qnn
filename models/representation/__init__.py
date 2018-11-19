@@ -1,9 +1,9 @@
-from models.representation.RealNN import RealNN
-from models.representation.QDNN import QDNN
-from models.representation.ComplexNN import ComplexNN
-from models.representation.QDNNAblation import QDNNAblation
-from models.representation.LocalMixtureNN import LocalMixtureNN
-from models.representation.BertFasttext import BERTFastext
+from models.representation.keras.RealNN import RealNN
+from models.representation.keras.QDNN import QDNN
+from models.representation.keras.ComplexNN import ComplexNN
+from models.representation.keras.QDNNAblation import QDNNAblation
+from models.representation.keras.LocalMixtureNN import LocalMixtureNN
+from models.representation.keras.BertFasttext import BERTFastext
 def setup(opt):
     print("network type: " + opt.network_type)
     if opt.network_type == "real":

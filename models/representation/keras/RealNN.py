@@ -3,8 +3,8 @@ from keras.layers import Embedding, GlobalMaxPooling1D,GlobalAveragePooling1D, D
 from models.BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
-from module.embedding.RealEmbedding import RealEmbedding
-from module.encoding.Pooling import Pooling
+from modules.embedding.keras.RealEmbedding import RealEmbedding
+from modules.encoding.keras.Pooling import Pooling
 import math
 class RealNN(BasicModel):
     

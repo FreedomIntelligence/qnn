@@ -48,6 +48,7 @@ class QARNN(object):
         self.a_neg_max_len = tf.shape(self.answer_negative)[1]
         self.a_position = tf.tile(tf.reshape(tf.range(self.a_max_len),[1,self.a_max_len]),[self.batch_size_tf,1],name="a_position")
         self.a_neg_position = tf.tile(tf.reshape(tf.range(self.a_neg_max_len),[1,self.a_neg_max_len]),[self.batch_size_tf,1],name="a_neg_position")
+    
     def add_embeddings(self):
         print( 'add embeddings')
         if self.lookup_table is not None:

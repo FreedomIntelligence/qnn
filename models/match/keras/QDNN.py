@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 from models.BasicModel import BasicModel
 from keras.layers import Embedding, GlobalMaxPooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape, Permute,Lambda, Subtract
@@ -10,7 +9,7 @@ import numpy as np
 
 from keras import regularizers
 import keras.backend as K
-from models.representation.QDNN import QDNN as rep_model
+from models.representation.keras.QDNN import QDNN as rep_model
 
 class QDNN(BasicModel):
     
@@ -48,7 +47,11 @@ class QDNN(BasicModel):
             rep = []
             for doc in [self.question, self.answer]:
                 rep.append(rep_m.get_representation(doc))
+#            print(rep[0].shape)
+#            print(rep[1].shape)
+            
             output = self.distance(rep)
+#            print(output.shape)
 #            output =  Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs)(rep) 
             model = Model([self.question, self.answer], output)
         elif self.opt.match_type == 'pairwise':

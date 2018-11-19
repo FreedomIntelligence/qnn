@@ -10,7 +10,7 @@ import numpy as np
 
 from keras import regularizers
 import keras.backend as K
-from models.representation.ComplexNN import ComplexNN as rep_model
+from models.representation.keras.ComplexNN import ComplexNN as rep_model
 
 class ComplexNN(BasicModel):
     
