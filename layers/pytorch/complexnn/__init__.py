@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from layers.pytorch.complexnn.embedding import phase_embedding_layer, amplitude_embedding_layer
+from layers.pytorch.complexnn.embedding import PhaseEmbedding, AmplitudeEmbedding
 from layers.pytorch.complexnn.multiply import ComplexMultiply
 from layers.pytorch.complexnn.superposition import ComplexSuperposition
 from layers.pytorch.complexnn.dense import ComplexDense
