@@ -14,15 +14,13 @@ from modules.embedding.keras.ComplexWordEmbedding import ComplexWordEmbedding
 from modules.encoding.keras.Mixture import Mixture
 from modules.embedding.keras.BERTEmbedding import BERTEmbedding
 
+
 class QDNN(BasicModel):
 
     def initialize(self):
         self.doc = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
-        if strtobool(self.opt.bert_enabled):
-            print('here!!!')
-            self.embedding_module = BERTEmbedding(self.opt)
-        else:
-            self.embedding_module = ComplexWordEmbedding(self.opt)
+       
+        self.embedding_module = ComplexWordEmbedding(self.opt)
             
         self.encoding_module = Mixture(self.opt)
         
@@ -33,33 +31,9 @@ class QDNN(BasicModel):
     def __init__(self,opt):
         super(QDNN, self).__init__(opt)
 
-
-#    def build(self):
-#        
-#        self.seq_embedding_real, self.seq_embedding_imag, self.word_weights = self.embedding_module.get_embedding(self.doc)
-#        sentence_embedding_real, sentence_embedding_imag = self.encoding_module.get_representation(self.seq_embedding_real,self.seq_embedding_imag,self.word_weights,need_flatten=False)
-#
-#        if self.opt.network_type== "ablation" and self.opt.ablation == 1:
-#            sentence_embedding_real, sentence_embedding_imag = self.encoding_module.get_representation(self.seq_embedding_real,self.seq_embedding_imag,self.word_weights,need_flatten=False)
-#
-#            predictions = ComplexDense(units = self.opt.nb_classes, activation= "sigmoid", init_criterion = self.opt.init_mode)([sentence_embedding_real, sentence_embedding_imag])
-#            output = GetReal()(predictions)
-#
-#        else:
-##            cancel the above operation, if needed.
-##            sentence_embedding_real = Flatten()(sentence_embedding_real)
-##            sentence_embedding_imag = Flatten()(sentence_embedding_imag)
-#            sentence_embedding_real, sentence_embedding_imag = self.encoding_module.get_representation(self.seq_embedding_real,self.seq_embedding_imag,self.word_weights,need_flatten=False)
-#
-#            probs =  self.projection([sentence_embedding_real, sentence_embedding_imag])
-#            if math.fabs(self.opt.dropout_rate_probs -1) < 1e-6:
-#                probs = self.dropout_probs(probs)
-#            output = self.dense(probs)
-#        model = Model(self.doc, output)
-#        return model
     
-    def get_representation(self,doc,mask = None):
-        self.seq_embedding_real, self.seq_embedding_imag, self.word_weights = self.embedding_module.get_embedding(doc,mask,use_complex=True)
+    def get_representation(self,doc):
+        self.seq_embedding_real, self.seq_embedding_imag, self.word_weights = self.embedding_module.get_embedding(doc,use_weight=True)
         sentence_embedding_real, sentence_embedding_imag = self.encoding_module.get_representation(self.seq_embedding_real,self.seq_embedding_imag,self.word_weights,need_flatten=False)
 
         if self.opt.network_type== "ablation" and self.opt.ablation == 1:

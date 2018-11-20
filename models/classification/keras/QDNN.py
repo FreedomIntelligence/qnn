@@ -10,12 +10,16 @@ import numpy as np
 from keras import regularizers
 
 from models.representation.keras.QDNN import QDNN as rep_model
+from distutils.util import strtobool
 
 class QDNN(BasicModel):
 
     def initialize(self):
         self.doc = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
-        self.mask = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
+        if strtobool(self.opt.bert_enabled):
+            self.mask = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
+            self.doc = [self.doc,self.mask]
+#        self.mask = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
         self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))  # activation="sigmoid",
 
     def __init__(self,opt):
@@ -24,9 +28,9 @@ class QDNN(BasicModel):
 
     def build(self):
         rep_m = rep_model(self.opt)
-        representation = rep_m.get_representation(self.doc,self.mask)
+        representation = rep_m.get_representation(self.doc)
         output = self.dense(representation)
-        model = Model([self.doc,self.mask], output)
+        model = Model(self.doc, output)
         return model
     
 
