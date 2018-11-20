@@ -27,6 +27,7 @@ from loss.triplet_loss import *
 import loss.pairwise_loss
 import loss.triplet_loss
 import models
+from distutils.util import strtobool
 
 gpu_count = len(units.get_available_gpus())
 dir_path,global_logger = units.getLogger()
@@ -46,7 +47,7 @@ def myzip(train_x,train_x_mask):
 
 
 def run(params):
-    if bool(params.bert_enabled) == True:
+    if strtobool(params.bert_enabled) == True:
         params.max_sequence_length = 512
         params.reader.max_sequence_length = 512
     evaluation=[]
@@ -110,7 +111,8 @@ def run(params):
         train_x, train_y = train_data
         test_x, test_y = test_data
         val_x, val_y = val_data
-        if bool(params.bert_enabled) == True:
+        
+        if strtobool(params.bert_enabled) == True:
             train_x, train_x_mask = to_array(train_x,params.max_sequence_length,use_mask=True) 
             test_x,test_x_mask =  to_array(test_x,params.max_sequence_length,use_mask=True)
             val_x,val_x_mask =  to_array(val_x,params.max_sequence_length,use_mask=True)

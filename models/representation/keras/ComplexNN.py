@@ -37,4 +37,3 @@ class ComplexNN(BasicModel):
         sentence_embedding_real, sentence_embedding_imag = self.mixture_encoder.get_representation(self.seq_embedding_real,self.seq_embedding_imag,self.word_weights)
 
         return sentence_embedding_real, sentence_embedding_imag
-        

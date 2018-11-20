@@ -82,19 +82,19 @@ if __name__ == '__main__':
 #    encoder.fit(x=a, y=b, epochs = 10)
     
     input_img = Input(shape=(300,20,))
-    n = Dense(5)(input_img)
-    print(n.shape)
-    new_code = L2Norm(axis = 2, keep_dims =False)(n)
-    output = Dense(5)(new_code)
-    encoder = Model(input_img, output)
-    encoder.compile(loss = 'mean_squared_error',
-            optimizer = 'rmsprop',
-            metrics=['accuracy'])
+#    n = Dense(5)(input_img)
+#    print(n.shape)
+    new_code = L2Norm(axis = 2, keep_dims =False)(input_img)
+    model = Model(input_img, new_code)
+#    output = Dense(5)(new_code)
+#    encoder = Model(input_img, output)
+#    encoder.compile(loss = 'mean_squared_error',
+#            optimizer = 'rmsprop',
+#            metrics=['accuracy'])
 #    
     a = np.random.random((5,300,20))
-    b = np.random.random((5,5))
-    encoder.fit(x=a, y=b, epochs = 10)
-    print(encoder.predict(x = a))
+    print(model.predict(a))
+    print(np.linalg.norm(a,ord = 2, axis = 2))
     
 #    b = np.random.random((5,2,2))
 #    encoder.fit(x=a, y = b, epochs = 10)

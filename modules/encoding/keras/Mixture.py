@@ -28,7 +28,7 @@ class Mixture(BasicModel):
         if weights is None:
             [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights=True)([seq_embedding_real, seq_embedding_imag])
         else:
-            [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, self.weight])
+            [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture()([seq_embedding_real, seq_embedding_imag, weights])
        
         if need_flatten:
             sentence_embedding_real = Flatten()(sentence_embedding_real)

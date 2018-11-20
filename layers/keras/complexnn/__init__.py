@@ -19,6 +19,7 @@ from layers.keras.complexnn.lambda_functions import *
 from layers.keras.complexnn.cosine import Cosinse
 from layers.keras.complexnn.marginLoss import MarginLoss
 from layers.keras.complexnn.AESD import AESD
+from layers.keras.complexnn.remove_mask import RemoveMask
 #def get
 import os,sys,traceback
 def import_class(import_str):
