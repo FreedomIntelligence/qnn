@@ -9,7 +9,7 @@ class ComplexMultiply(torch.nn.Module):
     def __init__(self):
         super(ComplexMultiply, self).__init__()
 
-    def foreard(self, inputs):
+    def forward(self, inputs):
 
         if not isinstance(inputs, list):
             raise ValueError('This layer should be called '
