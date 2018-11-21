@@ -6,11 +6,11 @@ import numpy as np
 class Cosinse(torch.nn.Module):
 
     def __init__(self, dropout_keep_prob=1, dim=-1, keep_dims=True):
+        super(Cosinse, self).__init__()
         self.dim = dim
         self.keep_dims = keep_dims
         self.dropout_keep_prob = dropout_keep_prob
         self.dropout_probs = torch.nn.Dropout(p=1-dropout_keep_prob)
-        super(Cosinse, self).__init__()
 
     def forward(self, inputs):
 

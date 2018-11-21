@@ -22,7 +22,7 @@ class Product(BasicModel):
     def get_representation(self, rep_left, rep_right):
         if type(rep_left) is list: 
             # complex product
-            [output_real, output_imag] = ComplexProduct([rep_left, rep_right])
+            [output_real, output_imag] = ComplexProduct()([rep_left, rep_right])
             output = [output_real, output_imag]
         else:
             # real product

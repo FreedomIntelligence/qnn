@@ -6,10 +6,10 @@ import torch.nn.functional as F
 class L2Normalization(torch.nn.Module):
 
     def __init__(self, p=2, dim=1, eps=1e-12):
+        super(L2Normalization, self).__init__()
         self.dim = dim
         self.p = p
         self.eps = eps
-        super(L2Normalization, self).__init__()
 
     def forward(self, inputs):
         # torch.nn.functional.normalize(input, p=2, dim=1, eps=1e-12, out=None)

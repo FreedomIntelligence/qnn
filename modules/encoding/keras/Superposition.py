@@ -11,13 +11,13 @@ from keras.initializers import Constant
 import numpy as np
 import math
 
-class Mixture(BasicModel):
+class Superposition(BasicModel):
     
     def initialize(self):
         pass
         
     def __init__(self,opt):
-        super(Mixture, self).__init__(opt) 
+        super(Superposition, self).__init__(opt) 
     
     def get_representation(self,seq_embedding_real,seq_embedding_imag,weights,need_flatten =True):
         if weights is None:

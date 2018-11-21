@@ -59,8 +59,7 @@ class ComplexProduct(Layer):
         left_imag = left[1]
         
         right_real = right[0]
-        right_imag = right[1]
-        
+        right_imag = right[1]  
         
         real_part = K.dot(left_real*right_real)-K.dot(left_real*right_real)
         imag_part = K.dot(left_real*right_imag)+K.dot(left_imag*right_real)

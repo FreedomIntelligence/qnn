@@ -6,6 +6,7 @@ from layers.keras.complexnn.superposition import ComplexSuperposition
 from layers.keras.complexnn.dense import ComplexDense
 from layers.keras.complexnn.mixture import ComplexMixture
 from layers.keras.complexnn.measurement import ComplexMeasurement
+from layers.keras.complexnn.product import ComplexProduct
 from layers.keras.complexnn.concatenation import Concatenation
 from layers.keras.complexnn.index import Index
 from layers.keras.complexnn.ngram import NGram
