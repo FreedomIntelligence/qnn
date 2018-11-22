@@ -211,7 +211,7 @@ class DataReader(object):
                 return [to_array(i,self.max_sequence_length) for i in zip(*samples)]
             else:
 #                return [[i,i] for i in zip(*samples)]
-                return [[to_array(i,self.max_sequence_length),to_array(i,reader.max_sequence_length)] for i in zip(*samples)]
+                return [[to_array(i,self.max_sequence_length),to_array(i,self.max_sequence_length)] for i in zip(*samples)]
     
 
     def batch_gen(self, data_generator):
