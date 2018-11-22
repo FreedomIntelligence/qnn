@@ -203,12 +203,15 @@ class DataReader(object):
         
         samples = self.datas['test'].apply( process,axis=1)
         if iterable:
-            return BucketIterator([i for i in zip(*samples.values)],batch_size=self.batch_size,shuffle=False)
+            return BucketIterator([i for i in zip(*samples)],batch_size=self.batch_size,shuffle=False)
         else: 
             if self.match_type == 'pointwise':
-                return [i for i in zip(*samples)]
+                
+#                [to_array(i,reader.max_sequence_length) for i in test_data]
+                return [to_array(i,self.max_sequence_length) for i in zip(*samples)]
             else:
-                return [[i,i] for i in zip(*samples)]
+#                return [[i,i] for i in zip(*samples)]
+                return [[to_array(i,self.max_sequence_length),to_array(i,reader.max_sequence_length)] for i in zip(*samples)]
     
 
     def batch_gen(self, data_generator):

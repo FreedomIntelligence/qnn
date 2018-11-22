@@ -62,7 +62,7 @@ class BucketIterator(object):
         return DottableDict({"text":text,"label":label})
     
     def transformKeras(self,data):
-        return [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
+        return [to_array(i,self.max_sequence_length, use_mask = False) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
     def transformTF(self,data):
         
         return [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
@@ -78,7 +78,7 @@ class BucketIterator(object):
 
         if len(self.data)%self.batch_size!=0:
             batch_nums=1+batch_nums
-        indexes = [(i*self.batch_size,(i+1)*self.batch_size) for  i in range(batch_nums)]
+        indexes = [(i*self.batch_size,(i+1)*self.batch_size) for i in range(batch_nums)]
 
         for index in indexes:
 

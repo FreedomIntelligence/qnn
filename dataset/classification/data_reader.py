@@ -12,6 +12,7 @@ import preprocess
 from preprocess.dictionary import Dictionary
 from preprocess.bucketiterator import BucketIterator
 from preprocess.embedding import Embedding
+from units import to_array
 
 class DataReader(object):
     def __init__(self, train, dev, test, opt, nb_classes):
@@ -77,10 +78,17 @@ class DataReader(object):
         y = to_categorical(np.asarray(self.datas['train']['y']))
         
         data = (x,y)
+        if max_sequence_length == 0:
+            max_sequence_length = self.max_sequence_length
         if iterable:
             return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
         else: 
-            return data
+            if self.bert_enabled:
+                x,x_mask = to_array(x,maxlen = self.max_sequence_length, use_mask = True)
+                return [x,x_mask],y
+            else:
+                x = to_array(x,maxlen = self.max_sequence_length, use_mask = False)
+                return x,y
         
         
     def get_test(self,shuffle = True,iterable=True,max_sequence_length=0):
@@ -88,10 +96,17 @@ class DataReader(object):
         x = [self.embedding.text_to_sequence(sent) for sent in x]
         y = to_categorical(np.asarray(self.datas['test']['y']))
         data = (x,y)
+        if max_sequence_length == 0:
+            max_sequence_length = self.max_sequence_length
         if iterable:
             return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
         else: 
-            return data
+            if self.bert_enabled:
+                x,x_mask = to_array(x,maxlen = self.max_sequence_length, use_mask = True)
+                return [x,x_mask],y
+            else:
+                x = to_array(x,maxlen = self.max_sequence_length, use_mask = False)
+                return x,y
         
         
     def get_val(self,shuffle = True,iterable=True,max_sequence_length=0):
@@ -99,10 +114,17 @@ class DataReader(object):
         x = [self.embedding.text_to_sequence(sent) for sent in x]
         y = to_categorical(np.asarray(self.datas['dev']['y']))
         data = (x,y)
+        if max_sequence_length == 0:
+            max_sequence_length = self.max_sequence_length
         if iterable:
             return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
         else: 
-            return data
+            if self.bert_enabled:
+                x,x_mask = to_array(x,maxlen = self.max_sequence_length, use_mask = True)
+                return [x,x_mask],y
+            else:
+                x = to_array(x,maxlen = self.max_sequence_length, use_mask = False)
+                return x,y
         
         
     def preprocess(self, data):
@@ -115,11 +137,14 @@ class DataReader(object):
         samples = self.datas['train']['X'] + self.datas['dev']['X'] + \
                 self.datas['test']['X']
         max_sentence_length = 0
-        for sample in samples:
-            sample_length = len(sample.split())
-            if max_sentence_length < sample_length:
-                max_sentence_length = sample_length
-        self.max_sequence_length = max_sentence_length
+        if self.bert_enabled:
+            self.max_sequence_length = 512
+        else:
+            for sample in samples:
+                sample_length = len(sample.split())
+                if max_sentence_length < sample_length:
+                    max_sentence_length = sample_length
+            self.max_sequence_length = max_sentence_length
 
     def get_word_embedding(self, path_to_vec,orthonormalized=True):
         samples = self.data['train']['X'] + self.data['dev']['X'] + \
@@ -179,16 +204,9 @@ class DataReader(object):
         test_data = train_test_val['test']
         validation_data = train_test_val['dev']
 
-
-        # for x, y in batch_gen(training_data, max_sequence_length):
-        #     model.train_on_batch(x,y)
-
         train_x, train_y = data_gen(training_data, self.max_sentence_length)
         test_x, test_y = data_gen(test_data, self.max_sentence_length)
         val_x, val_y = data_gen(validation_data, self.max_sentence_length)
-        # assert len(train_x) == 67349
-        # assert len(test_x) == 1821
-        # assert len(val_x) == 872
 
         train_y = to_categorical(train_y)
         test_y = to_categorical(test_y)

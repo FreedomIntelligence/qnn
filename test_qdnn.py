@@ -60,12 +60,9 @@ def run(params):
     else:
         loss_func = params.loss
     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr)
+#    
     
-    test_data = params.reader.get_test(iterable = False)
-
-
-        
-    test_data = [to_array(i,params.max_sequence_length) for i in test_data]
+#    test_data = [to_array(i,params.max_sequence_length) for i in test_data]
     if hasattr(loss.pairwise_loss, params.metric_type):
         metric_func = getattr(loss.pairwise_loss, params.metric_type)
     else:
@@ -87,6 +84,7 @@ def run(params):
     # matrix = acc
       
     if params.dataset_type == 'qa':
+        test_data = params.reader.get_test(iterable = False)
 #        from models.match import keras as models   
         for i in range(params.epochs):
             model.fit_generator(params.reader.batch_gen(params.reader.get_train(iterable = True)),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
@@ -103,38 +101,26 @@ def run(params):
     elif params.dataset_type == 'classification':
 #        from models import representation as models   
         
+        
     #    model.summary()    
-        train_data = params.reader.get_train(iterable = False)
-        test_data = params.reader.get_test(iterable = False)
-        val_data =params.reader.get_val(iterable = False)
-    #    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
-        train_x, train_y = train_data
-        test_x, test_y = test_data
-        val_x, val_y = val_data
+#        train_data = params.reader.get_train(iterable = False)
+#        test_data = params.reader.get_test(iterable = False)
+#        val_data =params.reader.get_val(iterable = False)
+#    #    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
+#        train_x, train_y = train_data
+#        test_x, test_y = test_data
+#        val_x, val_y = val_data
+        train_x,train_y = params.reader.get_train(iterable = False)
+        test_x, test_y = params.reader.get_test(iterable = False)
+        val_x,val_y = params.reader.get_val(iterable = False)
         
-        if params.bert_enabled == True:
-            train_x, train_x_mask = to_array(train_x,params.max_sequence_length,use_mask=True) 
-            test_x,test_x_mask =  to_array(test_x,params.max_sequence_length,use_mask=True)
-            val_x,val_x_mask =  to_array(val_x,params.max_sequence_length,use_mask=True)
-                #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
-            #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
+        history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
         
-            history = model.fit(x=[train_x,train_x_mask], y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= ([test_x,test_x_mask], test_y))
+        metric = model.evaluate(x = val_x, y = val_y)   # !!!!!! change the order to val and test
         
-            metric = model.evaluate(x = [myzip(val_x,val_x_mask)], y = val_y)   # !!!!!! change the order to val and test
-        else:
-            train_x = to_array(train_x,params.max_sequence_length,use_mask=False) 
-            test_x =  to_array(test_x,params.max_sequence_length,use_mask=False)
-            val_x =  to_array(val_x,params.max_sequence_length,use_mask=False)
-                #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
-            #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
-        
-            history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
-        
-            metric = model.evaluate(x = val_x, y = val_y)   # !!!!!! change the order to val and test
-            
         evaluation.append(metric)
         logger.info(metric)
+        print(history)
         print(metric)
 
         df=pd.DataFrame(evaluation,columns=["map","mrr","p1"])  
