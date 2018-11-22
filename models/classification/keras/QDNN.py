@@ -16,7 +16,7 @@ class QDNN(BasicModel):
 
     def initialize(self):
         self.doc = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
-        if strtobool(self.opt.bert_enabled):
+        if self.opt.bert_enabled:
             self.mask = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
             self.doc = [self.doc,self.mask]
 #        self.mask = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')

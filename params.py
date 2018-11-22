@@ -12,13 +12,23 @@ class Params(object):
         config_common = config['COMMON']
         is_numberic = re.compile(r'^[-+]?[0-9.]+$')
         for key,value in config_common.items():
-            result = is_numberic.match(value)
-            if result:
-                if type(eval(value)) == int:
-                    value= int(value)
-                else :
-                    value= float(value)
-
+            if type(value) == str:
+                if value.lower() == 'true':
+                    value = True
+                elif value.lower() == 'false':
+                    value = False
+#            print(value, type(value))1
+                else:
+                    result = is_numberic.match(value)
+                    if result:
+                        if type(eval(value)) == int:
+                            value= int(value)
+                        else:
+                            value= float(value)
+#            if value.lower() == 'true':
+#                value = True
+#            if value.lower() == 'false':
+#                value = False
             self.__dict__.__setitem__(key,value)            
 
     def export_to_config(self, config_file_path):

@@ -23,6 +23,7 @@ from preprocess.dictionary import Dictionary
 from preprocess.embedding import Embedding
 from preprocess.bucketiterator import BucketIterator
 
+
 class DataReader(object):
     def __init__(self,opt):
         self.onehot = True
@@ -81,6 +82,8 @@ class DataReader(object):
             data['answer'] = data['answer'].apply(lambda x : self.preprocessor.run(x,output_type = 'string'))
             datas[data_name] = data
         return datas
+    
+    
     
     @log_time_delta
     def remove_unanswered_questions(self,df):
@@ -187,6 +190,7 @@ class DataReader(object):
                 a_index[i] = Overlap
         return a_index
             
+    
     def get_test(self,overlap_feature = False, iterable = True):
         
         if overlap_feature:
@@ -199,7 +203,7 @@ class DataReader(object):
         
         samples = self.datas['test'].apply( process,axis=1)
         if iterable:
-            return BucketIterator([i for i in zip(*samples)],batch_size=self.batch_size,shuffle=False)
+            return BucketIterator([i for i in zip(*samples.values)],batch_size=self.batch_size,shuffle=False)
         else: 
             if self.match_type == 'pointwise':
                 return [i for i in zip(*samples)]
@@ -210,14 +214,27 @@ class DataReader(object):
     def batch_gen(self, data_generator):
         if self.match_type == 'pointwise':
 #            self.unbalanced_sampling = False
-            if self.unbalanced_sampling == True:
+            if self.unbalanced_sampling:
+#                print('system goes here!!')
                 process = lambda row: [self.embedding.text_to_sequence(row["question"]),
                        self.embedding.text_to_sequence(row["answer"]), 
                        row['flag'] ]
                 samples = self.datas["train"].apply(process,axis=1)
-                for batch in BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length):
-                        if self.onehot:
+                for batch in BucketIterator([i for i in zip(*samples.values)],batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length):
+                    if self.onehot:
+                        if self.bert_enabled:
+                            
+                            q,q_mask = to_array(batch[0],self.max_sequence_length,use_mask = True)
+                            a,a_mask = to_array(batch[1],self.max_sequence_length,use_mask = True)
+                            yield [q,q_mask,a,a_mask], np.array([[0,1] if i else [1,0] for i in batch[2]])
+                        else:
                             yield batch[:2],np.array([[0,1] if i else [1,0] for i in batch[2]])
+                    else:
+                        
+                        if self.bert_enabled:
+                            q,q_mask = to_array(batch[0],self.max_sequence_length,use_mask = True)
+                            a,a_mask = to_array(batch[1],self.max_sequence_length,use_mask = True)
+                            yield [q,q_mask,a,a_mask], np.array(batch[2])
                         else:
                             yield batch[:2], np.array(batch[2])
             else:
@@ -235,7 +252,15 @@ class DataReader(object):
         if self.match_type == 'pairwise':
             while True:
                 for batch in data_generator:
-                    yield batch, batch
+                    if self.bert_enabled:
+                        
+                        q,q_mask = to_array(batch[0],self.max_sequence_length,use_mask = True)
+                        a,a_mask = to_array(batch[1],self.max_sequence_length,use_mask = True)
+                        neg_a, neg_a_mask = to_array(batch[2],self.max_sequence_length,use_mask = True)
+                        
+                        yield [q,q_mask,a,a_mask,neg_a,neg_a_mask], [q,a,neg_a]
+                    else:
+                        yield batch,batch
                     
 
         

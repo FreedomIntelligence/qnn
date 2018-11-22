@@ -27,7 +27,7 @@ from loss.triplet_loss import *
 import loss.pairwise_loss
 import loss.triplet_loss
 import models
-from distutils.util import strtobool
+#from distutils.util import strtobool
 
 gpu_count = len(units.get_available_gpus())
 dir_path,global_logger = units.getLogger()
@@ -47,7 +47,7 @@ def myzip(train_x,train_x_mask):
 
 
 def run(params):
-    if strtobool(params.bert_enabled) == True:
+    if params.bert_enabled == True:
         params.max_sequence_length = 512
         params.reader.max_sequence_length = 512
     evaluation=[]
@@ -89,7 +89,7 @@ def run(params):
     if params.dataset_type == 'qa':
 #        from models.match import keras as models   
         for i in range(params.epochs):
-            model.fit_generator(params.reader.batch_gen(reader.get_train(iterable = True)),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
+            model.fit_generator(params.reader.batch_gen(params.reader.get_train(iterable = True)),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
             y_pred = model.predict(x = test_data) 
             score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
                 
@@ -112,7 +112,7 @@ def run(params):
         test_x, test_y = test_data
         val_x, val_y = val_data
         
-        if strtobool(params.bert_enabled) == True:
+        if params.bert_enabled == True:
             train_x, train_x_mask = to_array(train_x,params.max_sequence_length,use_mask=True) 
             test_x,test_x_mask =  to_array(test_x,params.max_sequence_length,use_mask=True)
             val_x,val_x_mask =  to_array(val_x,params.max_sequence_length,use_mask=True)

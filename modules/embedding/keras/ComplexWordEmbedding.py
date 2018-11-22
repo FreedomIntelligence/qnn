@@ -14,8 +14,7 @@ import os
 
 class ComplexWordEmbedding(BasicModel):
     
-    def initialize(self):
-#        
+    def initialize(self):    
         self.amplitude_embedding = amplitude_embedding_layer(np.transpose(self.opt.lookup_table), None, trainable = self.opt.embedding_trainable, random_init = self.opt.random_init,l2_reg=self.opt.amplitude_l2)
         self.phase_embedding= phase_embedding_layer(None, self.opt.lookup_table.shape[0], self.opt.lookup_table.shape[1], trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
         
@@ -24,7 +23,7 @@ class ComplexWordEmbedding(BasicModel):
 #        self.weight_embedding = Embedding(self.opt.lookup_table.shape[0], 1, trainable = True, input_length = None)
 #        self.weight = Activation('softmax')(self.weight_embedding(doc))
         self.dropout_embedding = Dropout(self.opt.dropout_rate_embedding)
-        if strtobool(self.opt.bert_enabled):
+        if self.opt.bert_enabled:
             checkpoint_path = os.path.join(self.opt.bert_dir,'bert_model.ckpt')
             config_path = os.path.join(self.opt.bert_dir,'bert_config.json')
             self.bertmodel = load_trained_model_from_checkpoint(config_path, checkpoint_path)
@@ -35,9 +34,6 @@ class ComplexWordEmbedding(BasicModel):
     
         
     def process_complex_embedding(self,phase_encoded,amplitude_encoded,use_weight=False):
-        
-#        phase_encoded = self.phase_embedding(doc)
-        print(amplitude_encoded.shape)
         if use_weight:
             self.weight = Activation('softmax')(self.l2_norm(amplitude_encoded))
 #            print(self.weight.shape)
@@ -53,11 +49,10 @@ class ComplexWordEmbedding(BasicModel):
             self.amplitude_encoded = self.dropout_embedding(amplitude_encoded)
             
         [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([phase_encoded, amplitude_encoded])
-            
         return seq_embedding_real,seq_embedding_imag,self.weight
         
     def get_embedding(self,doc,use_weight=False):
-        if strtobool(self.opt.bert_enabled):
+        if self.opt.bert_enabled:
             amplitude_encoded = self.bertmodel([doc[0], doc[1]])
             amplitude_encoded = self.remove_mask(amplitude_encoded)
             self.phase_embedding = phase_embedding_layer(None, int(amplitude_encoded.shape[1]), int(amplitude_encoded.shape[2]), trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)

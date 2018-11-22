@@ -72,9 +72,6 @@ def run(params):
     optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr)
     
     test_data = params.reader.get_test(iterable = False)
-
-
-        
     test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
     if hasattr(loss.pairwise_loss, params.metric_type):
         metric_func = getattr(loss.pairwise_loss, params.metric_type)
@@ -135,7 +132,7 @@ def run(params):
             train_x = to_array(train_x,reader.max_sequence_length,use_mask=False) 
             test_x =  to_array(test_x,reader.max_sequence_length,use_mask=False)
             val_x =  to_array(val_x,reader.max_sequence_length,use_mask=False)
-                #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
+            #pretrain_x, pretrain_y = dataset.get_sentiment_dic_training_data(reader,params)
             #model.fit(x=pretrain_x, y = pretrain_y, batch_size = params.batch_size, epochs= 3,validation_data= (test_x, test_y))
         
             history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
