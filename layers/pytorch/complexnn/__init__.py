@@ -5,6 +5,7 @@ from layers.pytorch.complexnn.multiply import ComplexMultiply
 from layers.pytorch.complexnn.superposition import ComplexSuperposition
 from layers.pytorch.complexnn.dense import ComplexDense
 from layers.pytorch.complexnn.mixture import ComplexMixture
+from layers.pytorch.complexnn.product import ComplexProduct
 from layers.pytorch.complexnn.measurement import ComplexMeasurement
 from layers.pytorch.complexnn.concatenation import Concatenation
 from layers.pytorch.complexnn.index import Index

@@ -9,7 +9,7 @@ class ComplexMultiply(torch.nn.Module):
     def __init__(self):
         super(ComplexMultiply, self).__init__()
 
-    def call(self, inputs):
+    def forward(self, inputs):
 
         if not isinstance(inputs, list):
             raise ValueError('This layer should be called '
@@ -27,12 +27,12 @@ class ComplexMultiply(torch.nn.Module):
         embedding_dim = amplitude.size(-1)
         
         if len(amplitude.size()) == len(phase.size())+1: # Assigning each dimension with same phase
-            cos = torch.unsqueeze(K.cos(phase), dim=-1)
-            sin = torch.unsqueeze(K.sin(phase), dim=-1)
+            cos = torch.unsqueeze(torch.cos(phase), dim=-1)
+            sin = torch.unsqueeze(torch.sin(phase), dim=-1)
             
         elif len(amplitude.shape) == len(phase.shape): #Each dimension has different phases
-            cos = K.cos(phase)
-            sin = K.sin(phase)
+            cos = torch.cos(phase)
+            sin = torch.sin(phase)
         
        
         else:

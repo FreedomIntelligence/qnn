@@ -5,9 +5,9 @@ import torch
 class L2Norm(torch.nn.Module):
 
     def __init__(self, dim=1, keep_dims=True):
+        super(L2Norm, self).__init__()
         self.dim = dim
         self.keep_dims = keep_dims
-        super(L2Norm, self).__init__()
 
     def forward(self, inputs):
 
