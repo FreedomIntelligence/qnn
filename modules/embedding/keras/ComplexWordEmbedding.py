@@ -35,7 +35,8 @@ class ComplexWordEmbedding(BasicModel):
         
     def process_complex_embedding(self,phase_encoded,amplitude_encoded,use_weight=False):
         if use_weight:
-            self.weight = Activation('softmax')(self.l2_norm(amplitude_encoded))
+#            self.weight = Activation('softmax')(self.l2_norm(amplitude_encoded))
+            self.weight = self.l2_norm(amplitude_encoded)
 #            print(self.weight.shape)
 #            print(self.weight.shape)
 #            self.weight = reshape((-1,self.opt.max_sequence_length,self.opt.ngram_value,1))(self.weight)
@@ -55,6 +56,8 @@ class ComplexWordEmbedding(BasicModel):
         if self.opt.bert_enabled:
             amplitude_encoded = self.bertmodel([doc[0], doc[1]])
             amplitude_encoded = self.remove_mask(amplitude_encoded)
+            print(amplitude_encoded.shape)
+            
             self.phase_embedding = phase_embedding_layer(None, int(amplitude_encoded.shape[1]), int(amplitude_encoded.shape[2]), trainable = self.opt.embedding_trainable,l2_reg=self.opt.phase_l2)
             phase_encoded = self.phase_embedding(doc[0])
 #            print(phase_encoded.shape)

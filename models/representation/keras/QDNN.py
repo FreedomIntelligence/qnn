@@ -34,6 +34,7 @@ class QDNN(BasicModel):
     
     def get_representation(self,doc):
         self.seq_embedding_real, self.seq_embedding_imag, self.word_weights = self.embedding_module.get_embedding(doc,use_weight=True)
+        self.word_weights = Activation('softmax')(self.word_weights)
         sentence_embedding_real, sentence_embedding_imag = self.encoding_module.get_representation(self.seq_embedding_real,self.seq_embedding_imag,self.word_weights,need_flatten=False)
 
         if self.opt.network_type== "ablation" and self.opt.ablation == 1:

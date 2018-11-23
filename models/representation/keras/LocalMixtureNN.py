@@ -17,6 +17,9 @@ class LocalMixtureNN(BasicModel):
 
     def initialize(self):
         self.doc = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
+        if self.opt.bert_enabled:
+            self.mask = Input(shape=(self.opt.reader.max_sequence_length,), dtype='int32')
+            self.doc = [self.doc,self.mask]
         #############################################
         #This parameter should be passed from params
 #        self.ngram = NGram(n_value = self.opt.ngram_value)
@@ -46,12 +49,17 @@ class LocalMixtureNN(BasicModel):
     def get_representation(self,doc):
         
         probs_list = []
+        seq_embedding_real,seq_embedding_imag,self.weight = self.complex_embedding_layer.get_embedding(doc,use_weight = True)
         for n_gram in self.ngram:
             #(batch_size,  max_seq_length,n)
-            self.inputs = n_gram(doc)
+            n_gram_embedding_real = n_gram(seq_embedding_real)
+            n_gram_embedding_imag = n_gram(seq_embedding_imag)
+            n_gram_weight = n_gram(self.weight)
+            n_gram_weight = Activation('softmax')(n_gram_weight)
+#            self.inputs = n_gram(doc)
 #            print(self.inputs.shape)
             #(batch_size,  max_seq_length,n,embedding_dim)
-            seq_embedding_real,seq_embedding_imag,self.weight = self.complex_embedding_layer.get_embedding(self.inputs,use_weight = True)
+            
 #            self.phase_encoded = self.phase_embedding(self.inputs)
 #            print(self.phase_encoded.shape)
             #(batch_size,  max_seq_length,n,embedding_dim)
@@ -78,14 +86,14 @@ class LocalMixtureNN(BasicModel):
             
 #            [seq_embedding_real, seq_embedding_imag] = ComplexMultiply()([self.phase_encoded, self.amplitude_encoded])
             if self.opt.network_type.lower() == 'complex_mixture':
-                [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights = False)([seq_embedding_real, seq_embedding_imag, self.weight])
+                [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights = False)([n_gram_embedding_real, n_gram_embedding_imag, n_gram_weight])
 
             elif self.opt.network_type.lower() == 'complex_superposition':
-                [sentence_embedding_real, sentence_embedding_imag]= ComplexSuperposition()([seq_embedding_real, seq_embedding_imag, self.weight])
+                [sentence_embedding_real, sentence_embedding_imag]= ComplexSuperposition()([n_gram_embedding_real, n_gram_embedding_imag, n_gram_weight])
 
             else:
 #                print('Wrong input network type -- The default mixture network is constructed.')
-                [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights = False)([seq_embedding_real, seq_embedding_imag, self.weight])
+                [sentence_embedding_real, sentence_embedding_imag]= ComplexMixture(average_weights = False)([n_gram_embedding_real, n_gram_embedding_imag, n_gram_weight])
         
             probs_list.append(self.projection([sentence_embedding_real, sentence_embedding_imag]))
             #        probs = Permute((2,1))(probs)

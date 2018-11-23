@@ -21,7 +21,7 @@ def setup(opt):
             from models.classification.keras.QDNN import QDNN
 #            from models.classification.keras.ComplexNN import ComplexNN
 #            from models.classification.keras.QDNNAblation import QDNNAblation
-#            from models.classification.keras.LocalMixtureNN import LocalMixtureNN
+            from models.classification.keras.LocalMixtureNN import LocalMixtureNN
     
     elif opt.language == 'tensorflow':
         if opt.dataset_type == 'qa':
