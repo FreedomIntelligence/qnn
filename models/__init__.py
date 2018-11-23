@@ -17,7 +17,7 @@ def setup(opt):
             from models.match.keras.LocalMixtureNN import LocalMixtureNN
             
         elif opt.dataset_type == 'classification':
-#            from models.classification.keras.RealNN import RealNN
+            from models.classification.keras.RealNN import RealNN
             from models.classification.keras.QDNN import QDNN
             from models.classification.keras.ComplexNN import ComplexNN
 #            from models.classification.keras.QDNNAblation import QDNNAblation
