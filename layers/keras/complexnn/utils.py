@@ -81,6 +81,7 @@ class GetReal(Layer):
 
     def compute_output_shape(self, input_shape):
         return getpart_output_shape(input_shape)
+    
 class GetImag(Layer):
     def call(self, inputs):
 
