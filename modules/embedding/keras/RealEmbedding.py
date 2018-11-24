@@ -10,6 +10,7 @@ from keras.initializers import Constant
 import numpy as np
 import math
 import os
+import keras.backend as K
 
 class RealEmbedding(BasicModel):
     
@@ -24,7 +25,8 @@ class RealEmbedding(BasicModel):
         if self.opt.bert_enabled:
             checkpoint_path = os.path.join(self.opt.bert_dir,'bert_model.ckpt')
             config_path = os.path.join(self.opt.bert_dir,'bert_config.json')
-            self.bertmodel = load_trained_model_from_checkpoint(config_path, checkpoint_path)
+            self.bertmodel = load_trained_model_from_checkpoint(config_path, checkpoint_path, training = False)
+            self.bertmodel.trainable = False
             self.remove_mask = RemoveMask()
 
     def __init__(self,opt):
@@ -32,7 +34,7 @@ class RealEmbedding(BasicModel):
             
     def get_embedding(self,doc,use_weight=False):
         if self.opt.bert_enabled:
-            encoded = self.bertmodel([doc[0], doc[1]])
+            encoded= self.bertmodel([doc[0],doc[1]])
             encoded = self.remove_mask(encoded)
         else:
             encoded = self.embedding(doc)
