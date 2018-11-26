@@ -49,3 +49,18 @@ class ComplexSuperposition(torch.nn.Module):
         output_r = torch.matmul(output_real, output_real_transpose) + torch.matmul(output_imag, output_imag_transpose) #shape: (None, 300, 300)
         output_i = torch.matmul(output_imag, output_real_transpose) - torch.matmul(output_real, output_imag_transpose) #shape: (None, 300, 300)
         return [output_r, output_i]
+
+def test():
+    sup = ComplexSuperposition()
+    a = torch.randn(4, 10, 2)
+    b = torch.randn(4, 10, 2)
+    c = torch.randn(4, 10)
+    sup_ = sup([a,b,c])
+    print(sup_[0].size())
+    if sup_[0].size(1) == a.size(2):
+        print('ComplexSuperposition Test Passed.')
+    else:
+        print('ComplexSuperposition Test Failed.')
+
+if __name__ == '__main__':
+    test()

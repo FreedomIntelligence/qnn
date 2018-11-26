@@ -31,3 +31,18 @@ class ComplexProduct(torch.nn.Module):
         imag_part = left_real * right_imag + left_imag * right_real
         
         return [real_part,imag_part]
+
+def test():
+    product = ComplexProduct()
+    a = torch.randn(4, 10)
+    b = torch.randn(4, 10)
+    c = torch.randn(4, 10)
+    d = torch.randn(4, 10)
+    product = product([[a,b],[c,d]])
+    if product[0].size(1) == a.size(1):
+        print('ComplexProduct Test Passed.')
+    else:
+        print('ComplexProduct Test Failed.')
+
+if __name__ == '__main__':
+    test()

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import torch
-import numpy as np
 
 class Concatenation(torch.nn.Module):
     def __init__(self, dim=-1):
@@ -11,3 +10,16 @@ class Concatenation(torch.nn.Module):
     def forward(self, inputs):
         output = torch.cat(inputs, dim=self.dim)
         return output
+
+def test():
+    a = torch.randn(3,4)
+    b = torch.randn(3,2)
+    concat = Concatenation(-1)
+    c = concat([a, b])
+    if c.size(-1) == 6:
+        print('Concantenation Test Passed.')
+    else:
+        print('Concantenation Test Failed.')
+
+if __name__ == '__main__':
+    test()
