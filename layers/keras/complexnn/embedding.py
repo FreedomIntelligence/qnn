@@ -61,7 +61,7 @@ def main():
     phase_embedding = phase_embedding_layer(max_sequence_length, lookup_table.shape[0],100)
 
     amplitude_embedding = amplitude_embedding_layer(np.transpose(lookup_table), max_sequence_length)
-
+    
     # [embed_seq_real, embed_seq_imag] = ComplexMultiply()([phase_embedding, amplitude_embedding])
     output = phase_embedding(sequence_input)
     model = Model(sequence_input, output)

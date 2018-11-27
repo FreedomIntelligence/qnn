@@ -31,6 +31,8 @@ class ComplexMeasurement(Layer):
              raise ValueError('This layer should be called '
                              'on a list of 2 inputs.'
                               'Got ' + str(len(input_shape)) + ' inputs.')
+             
+
         self.dim = input_shape[0][-1]
         self.kernel = self.add_weight(name='kernel',
                                       shape=(self.units, self.dim,2),
@@ -98,8 +100,8 @@ class ComplexMeasurement(Layer):
 
 def main():
 
-    input_1 = Input(shape=(4,5,5), dtype='float')
-    input_2 = Input(shape=(4,5,5), dtype='float')
+    input_1 = Input(shape=(5,5), dtype='float')
+    input_2 = Input(shape=(5,5), dtype='float')
     output = ComplexMeasurement(3)([input_1,input_2])
 
 
@@ -110,17 +112,18 @@ def main():
     model.summary()
 
     weights = model.get_weights()
-    x_1 = np.random.random((5,4,5,5))
-    x_2 = np.random.random((5,4,5,5))
+    x_1 = np.random.random((4,5,5))
+    x_2 = np.random.random((4,5,5))
     output = model.predict([x_1,x_2])
-    for i in range(5):
-        xy = x_1[i] + 1j * x_2[i]
-        for j in range(3):
-
-            m= weights[0][j,:,0] + 1j *weights[0][j,:,1]
-#            print(np.matmul(xy[0] ,np.outer(m,m)))
-#            result = np.absolute(np.trace(np.matmul(xy ,np.outer(m,m))))
-            print(np.trace(np.matmul(xy[0] ,np.outer(m,m))))
+    print(output)
+#    for i in range(5):
+#        xy = x_1[i] + 1j * x_2[i]
+#        for j in range(3):
+#
+#            m= weights[0][j,:,0] + 1j *weights[0][j,:,1]
+##            print(np.matmul(xy[0] ,np.outer(m,m)))
+##            result = np.absolute(np.trace(np.matmul(xy ,np.outer(m,m))))
+#            print(np.trace(np.matmul(xy[0] ,np.outer(m,m))))
 
 
 
