@@ -16,3 +16,17 @@ class L2Normalization(torch.nn.Module):
         # v = \frac{v}{\max(\lVert v \rVert_p, \epsilon)}.
         output = F.normalize(inputs, p=self.p, dim=self.dim, eps=self.eps)
         return output
+
+def test():
+    l2_normalization = L2Normalization()
+    a = torch.randn(3,4)
+    a_normalization = l2_normalization(a)
+    print(a)
+    print(a_normalization)
+    if a_normalization.size() == a.size():
+        print('L2Normalization Test Passed.')
+    else:
+        print('L2Normalization Test Failed.')
+
+if __name__ == '__main__':
+    test()

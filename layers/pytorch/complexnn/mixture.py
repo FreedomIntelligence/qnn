@@ -47,3 +47,18 @@ class ComplexMixture(torch.nn.Module):
             output_i = torch.sum(output_imag, dim=1)  #shape: (None, 300, 300)
 
         return [output_r, output_i]
+
+def test():
+    mixture = ComplexMixture()
+    a = torch.randn(3, 4, 10)
+    b = torch.randn(3, 4, 10)
+    c = torch.randn(3, 4, 1)
+    mix = mixture([a, b, c])
+    print(mix)
+    if mix[0].dim() == 3:
+        print('ComplexMixture Test Passed.')
+    else:
+        print('ComplexMixture Test Failed.')
+
+if __name__ == '__main__':
+    test()

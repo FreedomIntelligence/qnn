@@ -6,10 +6,11 @@ import torch.nn.functional as F
 import math
 
 class ComplexDense(torch.nn.Module):
-    def __init__(self, in_features, out_features, bias=True):
+    def __init__(self, in_features, out_features, activation=None, bias=True):
         super(ComplexDense, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
+        self.activation = activation
         self.real_weight = Parameter(torch.Tensor(out_features, in_features))
         self.imag_weight = Parameter(torch.Tensor(out_features, in_features))
         if bias:
@@ -34,27 +35,40 @@ class ComplexDense(torch.nn.Module):
 
         cat_weights_4_real = torch.cat(
             [self.real_weight.t(), -self.imag_weight.t()],
-            dim=-1
+            dim=1
         )
 
         cat_weights_4_imag = torch.cat(
             [self.imag_weight.t(), self.real_weight.t()],
-            dim=-1
+            dim=1
         )
         cat_weights_4_complex = torch.cat(
             [cat_weights_4_real, cat_weights_4_imag],
             dim=0
         )
 
-        output = torch.matmal(inputs, cat_kernels_4_complex)
+        output = torch.matmul(inputs, cat_weights_4_complex)
         # print(output.shape)
-        if self.use_bias:
+        if self.bias is not None:
             output = output + self.bias
         if self.activation is not None:
             output = self.activation(output)
-        return output
+        return [output[:,:self.out_features], output[:,self.out_features:]]
 
     def extra_repr(self):
         return 'in_features={}, out_features={}, bias={}'.format(
             self.in_features, self.out_features, self.bias is not None
         )
+
+def test():
+    dense = ComplexDense(4, 5)
+    a = torch.randn(3, 4)
+    b = torch.randn(3, 4)
+    out = dense([a, b])
+    if out[0].size(1) == 5 and out[1].size(1) == 5:
+        print('ComplexDense Test Passed.')
+    else:
+        print('ComplexDense Test Failed.')
+
+if __name__ == '__main__':
+    test()

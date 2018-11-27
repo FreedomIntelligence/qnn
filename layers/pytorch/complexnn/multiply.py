@@ -4,8 +4,6 @@ import torch
 import torch.nn.functional as F
 
 class ComplexMultiply(torch.nn.Module):
-    # Input is [phase_embedding, amplitude_embedding]
-    # Output is [sentence_embedding_real, sentence_embedding_imag]
     def __init__(self):
         super(ComplexMultiply, self).__init__()
 
@@ -20,17 +18,14 @@ class ComplexMultiply(torch.nn.Module):
                             'on a list of 2 inputs.'
                             'Got ' + str(len(inputs)) + ' inputs.')
 
-        phase = inputs[0]
-        amplitude = inputs[1]
-
-
-        embedding_dim = amplitude.size(-1)
+        phase = inputs[1]
+        amplitude = inputs[0]
         
-        if len(amplitude.size()) == len(phase.size())+1: # Assigning each dimension with same phase
+        if amplitude.dim() == phase.dim()+1: # Assigning each dimension with same phase
             cos = torch.unsqueeze(torch.cos(phase), dim=-1)
             sin = torch.unsqueeze(torch.sin(phase), dim=-1)
             
-        elif len(amplitude.shape) == len(phase.shape): #Each dimension has different phases
+        elif amplitude.dim() == phase.dim(): #Each dimension has different phases
             cos = torch.cos(phase)
             sin = torch.sin(phase)
         
@@ -42,3 +37,17 @@ class ComplexMultiply(torch.nn.Module):
         imag_part = sin*amplitude
 
         return [real_part, imag_part]
+
+def test():
+    multiply = ComplexMultiply()
+    a = torch.randn(3, 4, 10)
+    b = torch.randn(3, 4)
+    mul = multiply([a, b])
+    print(mul)
+    if mul[0].dim() == 3:
+        print('ComplexMultiply Test Passed.')
+    else:
+        print('ComplexMultiply Test Failed.')
+
+if __name__ == '__main__':
+    test()
