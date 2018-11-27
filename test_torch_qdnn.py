@@ -186,8 +186,7 @@ if __name__=="__main__":
     N, D_in, H, D_out = 32, 100, 50, 10
     x = Variable(torch.randn(N, D_in))  # dim: 32 x 100
 
-    # Construct our model by instantiating the class defined above
-    model = TwoLayerNet(D_in, H, D_out)
+    # Construct our model by instantiating the class defined abov
     losses = []
     loss_function = nn.MSELoss()
 

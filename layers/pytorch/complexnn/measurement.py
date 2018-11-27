@@ -42,67 +42,47 @@ class ComplexMeasurement(torch.nn.Module):
         #kernel_real.shape = (self.units, embedding_dimension)
         #kernel_imag.shape = (self.units, embedding_dimension)
         
-        input_real = inputs[0].double()
-        input_imag = inputs[1].double() 
+        input_real = inputs[0]
+        input_imag = inputs[1] 
         
         #input_real.shape = (batch_size,embedding_dimension,embedding_dimension)
         #input_imag.shape = (batch_size,embedding_dimension,embedding_dimension)
         
         projector_real = torch.bmm(kernel_real.view(self.units, embedding_dimension,1), kernel_real.view(self.units, 1,embedding_dimension)) \
             + torch.bmm(kernel_imag.view(self.units, embedding_dimension,1), kernel_imag.view(self.units, 1,embedding_dimension))
+            
         projector_imag = torch.bmm(kernel_imag.view(self.units, embedding_dimension,1), kernel_real.view(self.units, 1,embedding_dimension)) \
-            - torch.bmm(kernel_real.view(self.units, embedding_dimension,1), kernel_imag.view(self.units, 1,embedding_dimension))
+            -torch.bmm(kernel_real.view(self.units, embedding_dimension,1), kernel_imag.view(self.units, 1,embedding_dimension))
         
-        projector_real = projector_real.double()
-        projector_imag = projector_imag.double()
+        projector_real = projector_real
+        projector_imag = projector_imag
         #projector_real.shape = (self.units,embedding_dimension,embedding_dimension)
         #projector_imag.shape = (self.units,embedding_dimension,embedding_dimension)
-        output_real = torch.mm(input_real.view(batch_size, embedding_dimension*embedding_dimension), projector_real.view(embedding_dimension*embedding_dimension,self.units))
-        - torch.mm(input_imag.view( batch_size, embedding_dimension*embedding_dimension), projector_imag.view(embedding_dimension*embedding_dimension,self.units))
+        output_real = torch.mm(input_real.view(batch_size, embedding_dimension*embedding_dimension), projector_real.view(self.units,embedding_dimension*embedding_dimension).permute(1,0))\
+        - torch.mm(input_imag.view( batch_size, embedding_dimension*embedding_dimension), projector_imag.view(self.units,embedding_dimension*embedding_dimension).permute(1,0))
         
-        output_imag = torch.add(torch.mm(input_real.view(batch_size, embedding_dimension*embedding_dimension), projector_imag.view(embedding_dimension*embedding_dimension,self.units))
-        ,torch.mm(input_imag.view( batch_size, embedding_dimension*embedding_dimension), projector_real.view(embedding_dimension*embedding_dimension,self.units)))
+        output_imag = torch.mm(input_real.view(batch_size, embedding_dimension*embedding_dimension), projector_imag.view(self.units,embedding_dimension*embedding_dimension).permute(1,0))\
+        + torch.mm(input_imag.view(batch_size, embedding_dimension*embedding_dimension), projector_real.view(self.units,embedding_dimension*embedding_dimension).permute(1,0))
         
        
         output = output_real+output_imag
-        return output
+        return output_real, output_imag
     
 if __name__ == '__main__':
 
+        
+    from qutip import rand_dm  
+    reals, images = [] ,[]
+    model = ComplexMeasurement(3)
+    for i in range(4):
+        m = rand_dm(5)
+        images.append( m.data.toarray().imag)
+        reals.append( m.data.toarray().real)
     
-    model= ComplexMeasurement(3)
-    
-    model_2 = ComplexMeasurement2(3)
-    x_1 = np.random.random((4,5,5))
-    norm_2 = np.linalg.norm(x_1, axis = (1,2))
-    for i in range(x_1.shape[0]):
-        x_1[i] = x_1[i] / norm_2[i]
-    # for i in range(complex_array.shape[0]):
-    #     complex_array[i] = complex_array[i]/norm_2[i]
-    # # complex_array()= complex_array / norm_2
-    x_2 = np.random.random((4,5,5))
-    norm_2 = np.linalg.norm(x_2, axis = (1,2))
-    for i in range(x_2.shape[0]):
-        x_2[i] = x_2[i] / norm_2[i]
-    
-    
-    
-    input_1 = Input(shape=(5,5), dtype='float')
-    input_2 = Input(shape=(5,5), dtype='float')
-    output = ComplexMeasurement2(3)([input_1,input_2])
+    x= torch.from_numpy(np.array(reals,dtype="float32"))
+    y = torch.from_numpy(np.array(images,dtype="float32"))
 
-
-    model_2 = Model([input_1,input_2], output)
-    model_2.compile(loss='binary_crossentropy',
-              optimizer='sgd',
-              metrics=['accuracy'])
-    model_2.summary()
-    
-    
-    output = model_2.predict([x_1,x_2])
-    input_1 = torch.from_numpy(x_1)
-    input_2 = torch.from_numpy(x_2)
-    y_pred = model([input_1,input_2])
+    y_pred = model([x,y])
 #    input_2 = Input(shape=(4,5,5), dtype='float')
 #    output = ComplexMeasurement(3)([input_1,input_2])
 #

@@ -60,7 +60,7 @@ class ComplexMixture(Layer):
         ###
         output_real = K.batch_dot(input_real_transpose,input_real, axes = [ndims-1,ndims])+ K.batch_dot(input_imag_transpose, input_imag,axes = [ndims-1,ndims])  #shape: (None, 60, 300, 300)
 
-        output_imag = K.batch_dot(input_real_transpose, input_imag,axes = [ndims-1,ndims])-K.batch_dot(input_imag_transpose,input_real, axes = [ndims-1,ndims])  #shape: (None, 60, 300, 300)
+        output_imag = K.batch_dot(input_real_transpose, input_imag, axes = [ndims-1,ndims])-K.batch_dot(input_imag_transpose,input_real, axes = [ndims-1,ndims])  #shape: (None, 60, 300, 300)
 
 
         # output_real = K.permute_dimensions(output_real, (0,2,3,1))
