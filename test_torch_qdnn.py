@@ -50,9 +50,9 @@ def myzip(train_x,train_x_mask):
 
 
 def run(params):
-    if params.bert_enabled == True:
-        params.max_sequence_length = 512
-        params.reader.max_sequence_length = 512
+#    if params.bert_enabled == True:
+#        params.max_sequence_length = 512
+#        params.reader.max_sequence_length = 512
     evaluation=[]
 #    params=dataset.classification.process_embedding(reader,params)    
     qdnn = models.setup(params)
@@ -136,92 +136,73 @@ def run(params):
 if __name__=="__main__":
 
 
-    class QDNN(nn.Module):
-        def __init__(self, embedding_matrix, num_measurements):
-            """
-            max_sequence_len: input sentence length
-            embedding_dim: input dimension
-            num_measurements: number of measurement units, also the output dimension
 
-            """
-            super(QDNN, self).__init__()
-            self.max_sequence_len = embedding_matrix.shape[0]
-            self.embedding_dim = embedding_matrix.shape[1]
-            self.phase_embedding_layer = PhaseEmbedding(self.max_sequence_len, self.embedding_dim)
-            self.amplitude_embedding_layer = AmplitudeEmbedding(embedding_matrix, random_init = False)
-            self.l2_norm = L2Norm(axis = -1, keep_dims = False)
-            self.l2_normalization = L2Normalization(axis = -1)
-            self.activation = Activation('softmax')(self.word_weights)
-            self.complex_multiply = ComplexMultiply()
-            self.mixture = ComplexMixture(use_weights = True)
-            self.measurement = ComplexMeasurement(units = num_measurements)
-#            self.output = ComplexMeasurement(units = self.opt.measurement_size)([self.sentence_embedding_real, self.sentence_embedding_imag])
-        def forward(self, input_seq):
-            """
-            In the forward function we accept a Variable of input data and we must 
-            return a Variable of output data. We can use Modules defined in the 
-            constructor as well as arbitrary operators on Variables.
-            """
-            phase_embedding = self.phase_embedding_layer(input_seq)
-            amplitude_embedding = self.amplitude_embedding_layer(input_seq)
-            weights = self.l2_norm(amplitude_embedding)
-            amplitude_embedding = self.l2_normalization(amplitude_embedding)
-            weights = self.activation(weights)
-            [seq_embedding_real, seq_embedding_imag] = self.complex_multiply(phase_embedding, amplitude_embedding)
-            [sentence_embedding_real, sentence_embedding_imag] = self.mixture([seq_embedding_real, seq_embedding_imag],weight)
-            output = self.measurement([sentence_embedding_real, sentence_embedding_imag])
-            
-            return output
- # import argparse
-#    parser = argparse.ArgumentParser(description='running the complex embedding network')
-#    parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=gpu_count)
-#    parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
-#    args = parser.parse_args()      
-#    params = Params()
-#    config_file = 'config/config_qdnn.ini'    # define dataset in the config
-#    params.parse_config(config_file)    
+        
+#    embedding_matrix = torch.randn(512, 1000)
+#    num_measurements = 10
+#    model = QDNN(embedding_matrix, num_measurements)
 #    
-#    reader = dataset.setup(params)y_pred
-#    params.reader = reader
-    N, D_in, H, D_out = 32, 100, 50, 10
-    x = Variable(torch.randn(N, D_in))  # dim: 32 x 100
+#    input_seq = torch.randint(0,1000, (5,20,)).long()
+#    y_pred = model(input_seq)
+    
+    
+    parser = argparse.ArgumentParser(description='running the complex embedding network')
+    parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=gpu_count)
+    parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
+    args = parser.parse_args()      
+    params = Params()
+    config_file = 'config/config_qdnn.ini'    # define dataset in the config
+    params.parse_config(config_file)    
+    
+    reader = dataset.setup(params)
+    params.reader = reader
+    
+    
 
-    # Construct our model by instantiating the class defined abov
-    losses = []
-    loss_function = nn.MSELoss()
+    
+    
+ # import argparse
 
-    # Forward pass: Compute predicted y by passing x to the model
-#    y_pred = model(x)   # dim: 32 x 10
-    # pick an SGD optimizer
-    optimizer = torch.optim.SGD(model.parameters(), lr = 0.01, momentum=0.9)
-#    total_loss = 0
-    for epoch in range(100):
-       
     
-        # Step 1. Prepare the inputs to be passed to the model (i.e, turn the words
-        # into integer indices and wrap them in tensors)
-        x_input = torch.tensor(torch.randn(N, D_in),dtype = torch.float)
-    
-        # Step 2. Recall that torch *accumulates* gradients. Before passing in a
-        # new instance, you need to zero out the gradients from the old
-        # instance
-        model.zero_grad()
-    
-        # Step 3. Run the forward pass, getting log probabilities over next
-        # words
-        y_pred = model(x_input)
-    
-        # Step 4. Compute your loss function. (Again, Torch wants the target
-        # word wrapped in a tensor)
-        loss = loss_function(y_pred, torch.tensor(torch.randn(N,D_out), dtype=torch.float))
-    
-        # Step 5. Do the backward pass and update the gradient
-        loss.backward()
-        optimizer.step()
-
-    # Get the Python number from a 1-element Tensor by calling tensor.item()
-        total_loss = loss.item()
-        losses.append(total_loss)
-    print(losses)  # The loss decreased every iteration over the training data!
-#    run(params)
+#    N, D_in, H, D_out = 32, 100, 50, 10
+#    x = Variable(torch.randn(N, D_in))  # dim: 32 x 100
+#
+#    # Construct our model by instantiating the class defined abov
+#    losses = []
+#    loss_function = nn.MSELoss()
+#
+#    # Forward pass: Compute predicted y by passing x to the model
+##    y_pred = model(x)   # dim: 32 x 10
+#    # pick an SGD optimizer
+#    optimizer = torch.optim.SGD(model.parameters(), lr = 0.01, momentum=0.9)
+##    total_loss = 0
+#    for epoch in range(100):
+#       
+#    
+#        # Step 1. Prepare the inputs to be passed to the model (i.e, turn the words
+#        # into integer indices and wrap them in tensors)
+#        x_input = torch.tensor(torch.randn(N, D_in),dtype = torch.float)
+#    
+#        # Step 2. Recall that torch *accumulates* gradients. Before passing in a
+#        # new instance, you need to zero out the gradients from the old
+#        # instance
+#        model.zero_grad()
+#    
+#        # Step 3. Run the forward pass, getting log probabilities over next
+#        # words
+#        y_pred = model(x_input)
+#    
+#        # Step 4. Compute your loss function. (Again, Torch wants the target
+#        # word wrapped in a tensor)
+#        loss = loss_function(y_pred, torch.tensor(torch.randn(N,D_out), dtype=torch.float))
+#    
+#        # Step 5. Do the backward pass and update the gradient
+#        loss.backward()
+#        optimizer.step()
+#
+#    # Get the Python number from a 1-element Tensor by calling tensor.item()
+#        total_loss = loss.item()
+#        losses.append(total_loss)
+#    print(losses)  # The loss decreased every iteration over the training data!
+##    run(params)
 

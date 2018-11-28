@@ -15,14 +15,14 @@ def AmplitudeEmbedding(embedding_matrix, random_init=True):
         # Normal(0, 1)
         return torch.nn.Embedding(vocabulary_size,
                         embedding_dim,
-                        max_norm=1,
-                        norm_type=2,
+#                        max_norm=1,
+#                        norm_type=2,
                         padding_idx=0)
     else:
         return torch.nn.Embedding(vocabulary_size,
                         embedding_dim,
-                        max_norm=1,
-                        norm_type=2,
+#                        max_norm=1,
+#                        norm_type=2,
                         padding_idx=0,
                         _weight=torch.tensor(np.transpose(embedding_matrix), dtype=torch.float))
 

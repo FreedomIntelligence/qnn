@@ -65,8 +65,8 @@ class ComplexMeasurement(torch.nn.Module):
         + torch.mm(input_imag.view(batch_size, embedding_dimension*embedding_dimension), projector_real.view(self.units,embedding_dimension*embedding_dimension).permute(1,0))
         
        
-        output = output_real+output_imag
-        return output_real, output_imag
+        output = output_real
+        return output_real
     
 if __name__ == '__main__':
 

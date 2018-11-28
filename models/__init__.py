@@ -47,11 +47,11 @@ def setup(opt):
             
             
         elif opt.dataset_type == 'classification':
-            from models.classification.pytorch.RealNN import RealNN
+#            from models.classification.pytorch.RealNN import RealNN
             from models.classification.pytorch.QDNN import QDNN
-            from models.classification.pytorch.ComplexNN import ComplexNN
-            from models.classification.pytorch.QDNNAblation import QDNNAblation
-            from models.classification.pytorch.LocalMixtureNN import LocalMixtureNN
+#            from models.classification.pytorch.ComplexNN import ComplexNN
+#            from models.classification.pytorch.QDNNAblation import QDNNAblation
+#            from models.classification.pytorch.LocalMixtureNN import LocalMixtureNN
     
     
     print("network type: " + opt.network_type)
