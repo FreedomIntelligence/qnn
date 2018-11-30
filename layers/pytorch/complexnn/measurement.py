@@ -4,6 +4,7 @@ import torch
 import torch.nn.functional as F
 import torch.nn
 
+
 class ComplexMeasurement(torch.nn.Module):
     def __init__(self, embed_dim, units=5):
         super(ComplexMeasurement, self).__init__()
@@ -40,11 +41,10 @@ class ComplexMeasurement(torch.nn.Module):
         output_real = torch.mm(input_real.view(batch_size, self.embed_dim*self.embed_dim), projector_real.view(self.units,self.embed_dim*self.embed_dim).t())\
         - torch.mm(input_imag.view( batch_size, self.embed_dim*self.embed_dim), projector_imag.view(self.units,self.embed_dim*self.embed_dim).t())
         
-        output_imag = torch.mm(input_real.view(batch_size, self.embed_dim*self.embed_dim), projector_imag.view(self.units,self.embed_dim*self.embed_dim).t())\
-        + torch.mm(input_imag.view(batch_size, self.embed_dim*self.embed_dim), projector_real.view(self.units,self.embed_dim*self.embed_dim).t())
-        
-    
-        return [output_real, output_imag]
+#        output_imag = torch.mm(input_real.view(batch_size, self.embed_dim*self.embed_dim), projector_imag.view(self.units,self.embed_dim*self.embed_dim).t())\
+#        + torch.mm(input_imag.view(batch_size, self.embed_dim*self.embed_dim), projector_real.view(self.units,self.embed_dim*self.embed_dim).t())
+          
+        return output_real
     
 if __name__ == '__main__':
     model = ComplexMeasurement(6, units=3)

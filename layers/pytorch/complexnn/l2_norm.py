@@ -4,10 +4,10 @@ import torch
 
 class L2Norm(torch.nn.Module):
 
-    def __init__(self, dim=1, keepdim=True):
+    def __init__(self, dim=1, keep_dims=True):
         super(L2Norm, self).__init__()
         self.dim = dim
-        self.keepdim = keepdim
+        self.keepdim = keep_dims
 
     def forward(self, inputs):
 
