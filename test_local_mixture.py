@@ -92,7 +92,7 @@ def run(params):
             evaluation.append(metric)
             print(metric)
             logger.info(metric)
-        df=pd.DataFrame(evaluation,columns=["map","mrr","p1"]) 
+#        df=pd.DataFrame(evaluation,columns=["map","mrr","p1"]) 
 
             
     elif params.dataset_type == 'classification':
