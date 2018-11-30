@@ -1,39 +1,11 @@
 
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from params import Params
-
-import dataset
-import units
-from units import to_array, batch_softmax_with_first_item
-#from tools.save import save_experiment
-import itertools
-import argparse
-import keras.backend as K
-import numpy as np
-import preprocess.embedding
-from keras.models import Model
-import tensorflow as tf
-from loss import *
-import pandas as pd
 
 from layers.pytorch.complexnn import *
-
-from keras.losses import *
-from loss.pairwise_loss import *
-from loss.triplet_loss import *
-import loss.pairwise_loss
-import loss.triplet_loss
-import models
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd import Variable
-#from distutils.util import strtobool
-
-gpu_count = len(units.get_available_gpus())
-dir_path,global_logger = units.getLogger()
 
 from tools.logger import Logger
 logger = Logger()     
@@ -47,7 +19,7 @@ def myzip(train_x,train_x_mask):
     for i in range(len(train_x)):
         results.append((train_x[i],train_x_mask[i]))
     return results
-
+'''
 
 def run(params):
     if params.bert_enabled == True:
@@ -131,7 +103,7 @@ def run(params):
     logger.info("\n".join([params.to_string(),"score: "+str(df.max().to_dict())]))
 
     K.clear_session()
-
+'''
 
 if __name__=="__main__":
 
@@ -145,16 +117,16 @@ if __name__=="__main__":
 
             """
             super(QDNN, self).__init__()
-            self.max_sequence_len = embedding_matrix.shape[0]
+            self.vocab_dim = embedding_matrix.shape[0]
             self.embedding_dim = embedding_matrix.shape[1]
-            self.phase_embedding_layer = PhaseEmbedding(self.max_sequence_len, self.embedding_dim)
+            self.phase_embedding_layer = PhaseEmbedding(self.vocab_dim, self.embedding_dim)
             self.amplitude_embedding_layer = AmplitudeEmbedding(embedding_matrix, random_init = False)
-            self.l2_norm = L2Norm(axis = -1, keep_dims = False)
-            self.l2_normalization = L2Normalization(axis = -1)
-            self.activation = Activation('softmax')(self.word_weights)
+            self.l2_norm = L2Norm(dim= -1, keepdim = False)
+            self.l2_normalization = L2Normalization(dim = -1)
+            self.activation = F.softmax
             self.complex_multiply = ComplexMultiply()
-            self.mixture = ComplexMixture(use_weights = True)
-            self.measurement = ComplexMeasurement(units = num_measurements)
+            self.mixture = ComplexMixture(average_weights = False)
+            self.measurement = ComplexMeasurement(50, units = num_measurements)
 #            self.output = ComplexMeasurement(units = self.opt.measurement_size)([self.sentence_embedding_real, self.sentence_embedding_imag])
         def forward(self, input_seq):
             """
@@ -166,9 +138,9 @@ if __name__=="__main__":
             amplitude_embedding = self.amplitude_embedding_layer(input_seq)
             weights = self.l2_norm(amplitude_embedding)
             amplitude_embedding = self.l2_normalization(amplitude_embedding)
-            weights = self.activation(weights)
-            [seq_embedding_real, seq_embedding_imag] = self.complex_multiply(phase_embedding, amplitude_embedding)
-            [sentence_embedding_real, sentence_embedding_imag] = self.mixture([seq_embedding_real, seq_embedding_imag],weight)
+            weights = self.activation(weights, dim=-1)
+            [seq_embedding_real, seq_embedding_imag] = self.complex_multiply([phase_embedding, amplitude_embedding])
+            [sentence_embedding_real, sentence_embedding_imag] = self.mixture([seq_embedding_real, seq_embedding_imag,weights])
             output = self.measurement([sentence_embedding_real, sentence_embedding_imag])
             
             return output
@@ -184,10 +156,8 @@ if __name__=="__main__":
 #    reader = dataset.setup(params)y_pred
 #    params.reader = reader
     N, D_in, H, D_out = 32, 100, 50, 10
-    x = Variable(torch.randn(N, D_in))  # dim: 32 x 100
-
-    # Construct our model by instantiating the class defined above
-    model = TwoLayerNet(D_in, H, D_out)
+    model = QDNN(torch.randn(50, 50), 3)
+    # Construct our model by instantiating the class defined abov
     losses = []
     loss_function = nn.MSELoss()
 
@@ -196,17 +166,17 @@ if __name__=="__main__":
     # pick an SGD optimizer
     optimizer = torch.optim.SGD(model.parameters(), lr = 0.01, momentum=0.9)
 #    total_loss = 0
-    for epoch in range(100):
+    for epoch in range(1):
        
     
         # Step 1. Prepare the inputs to be passed to the model (i.e, turn the words
         # into integer indices and wrap them in tensors)
-        x_input = torch.tensor(torch.randn(N, D_in),dtype = torch.float)
+        x_input = torch.tensor([[1,2,3],[2,45,8]],dtype = torch.long)
     
         # Step 2. Recall that torch *accumulates* gradients. Before passing in a
         # new instance, you need to zero out the gradients from the old
         # instance
-        model.zero_grad()
+        optimizer.zero_grad()
     
         # Step 3. Run the forward pass, getting log probabilities over next
         # words
@@ -214,7 +184,7 @@ if __name__=="__main__":
     
         # Step 4. Compute your loss function. (Again, Torch wants the target
         # word wrapped in a tensor)
-        loss = loss_function(y_pred, torch.tensor(torch.randn(N,D_out), dtype=torch.float))
+        loss = loss_function(y_pred[0], torch.tensor(torch.randn(2,3), dtype=torch.float))
     
         # Step 5. Do the backward pass and update the gradient
         loss.backward()
