@@ -1,39 +1,11 @@
 
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from params import Params
-
-import dataset
-import units
-from units import to_array, batch_softmax_with_first_item
-#from tools.save import save_experiment
-import itertools
-import argparse
-import keras.backend as K
-import numpy as np
-import preprocess.embedding
-from keras.models import Model
-import tensorflow as tf
-from loss import *
-import pandas as pd
 
 from layers.pytorch.complexnn import *
-
-from keras.losses import *
-from loss.pairwise_loss import *
-from loss.triplet_loss import *
-import loss.pairwise_loss
-import loss.triplet_loss
-import models
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd import Variable
-#from distutils.util import strtobool
-
-gpu_count = len(units.get_available_gpus())
-dir_path,global_logger = units.getLogger()
 
 from tools.logger import Logger
 logger = Logger()     
@@ -47,7 +19,7 @@ def myzip(train_x,train_x_mask):
     for i in range(len(train_x)):
         results.append((train_x[i],train_x_mask[i]))
     return results
-
+'''
 
 def run(params):
 #    if params.bert_enabled == True:
@@ -131,12 +103,9 @@ def run(params):
     logger.info("\n".join([params.to_string(),"score: "+str(df.max().to_dict())]))
 
     K.clear_session()
-
+'''
 
 if __name__=="__main__":
-
-
-
         
 #    embedding_matrix = torch.randn(512, 1000)
 #    num_measurements = 10
@@ -146,18 +115,97 @@ if __name__=="__main__":
 #    y_pred = model(input_seq)
     
     
-    parser = argparse.ArgumentParser(description='running the complex embedding network')
-    parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=gpu_count)
-    parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
-    args = parser.parse_args()      
-    params = Params()
-    config_file = 'config/config_qdnn.ini'    # define dataset in the config
-    params.parse_config(config_file)    
+#    parser = argparse.ArgumentParser(description='running the complex embedding network')
+#    parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=gpu_count)
+#    parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
+#    args = parser.parse_args()      
+#    params = Params()
+#    config_file = 'config/config_qdnn.ini'    # define dataset in the config
+#    params.parse_config(config_file)    
+    class QDNN(nn.Module):
+        def __init__(self, embedding_matrix, num_measurements):
+            """
+            max_sequence_len: input sentence length
+            embedding_dim: input dimension
+            num_measurements: number of measurement units, also the output dimension
+
+            """
+            super(QDNN, self).__init__()
+            self.vocab_dim = embedding_matrix.shape[0]
+            self.embedding_dim = embedding_matrix.shape[1]
+            self.phase_embedding_layer = PhaseEmbedding(self.vocab_dim, self.embedding_dim)
+            self.amplitude_embedding_layer = AmplitudeEmbedding(embedding_matrix, random_init = False)
+            self.l2_norm = L2Norm(dim= -1, keep_dims = False)
+            self.l2_normalization = L2Normalization(dim = -1)
+            self.activation = F.softmax
+            self.complex_multiply = ComplexMultiply()
+            self.mixture = ComplexMixture(average_weights = False)
+            self.measurement = ComplexMeasurement(50, units = num_measurements)
+#            self.output = ComplexMeasurement(units = self.opt.measurement_size)([self.sentence_embedding_real, self.sentence_embedding_imag])
+        def forward(self, input_seq):
+            """
+            In the forward function we accept a Variable of input data and we must 
+            return a Variable of output data. We can use Modules defined in the 
+            constructor as well as arbitrary operators on Variables.
+            """
+            phase_embedding = self.phase_embedding_layer(input_seq)
+            amplitude_embedding = self.amplitude_embedding_layer(input_seq)
+            weights = self.l2_norm(amplitude_embedding)
+            amplitude_embedding = self.l2_normalization(amplitude_embedding)
+            weights = self.activation(weights, dim=-1)
+            [seq_embedding_real, seq_embedding_imag] = self.complex_multiply([phase_embedding, amplitude_embedding])
+            [sentence_embedding_real, sentence_embedding_imag] = self.mixture([seq_embedding_real, seq_embedding_imag,weights])
+            output = self.measurement([sentence_embedding_real, sentence_embedding_imag])
+            
+            return output
+ # import argparse
+#    parser = argparse.ArgumentParser(description='running the complex embedding network')
+#    parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=gpu_count)
+#    parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
+#    args = parser.parse_args()      
+#    params = Params()
+#    config_file = 'config/config_qdnn.ini'    # define dataset in the config
+#    params.parse_config(config_file)    
+#    
+#    reader = dataset.setup(params)y_pred
+#    params.reader = reader
+    N, D_in, H, D_out = 32, 100, 50, 10
+    model = QDNN(torch.randn(50, 50), 3)
+    # Construct our model by instantiating the class defined abov
+    losses = []
+    loss_function = nn.MSELoss()
+
+    # Forward pass: Compute predicted y by passing x to the model
+#    y_pred = model(x)   # dim: 32 x 10
+    # pick an SGD optimizer
+    optimizer = torch.optim.SGD(model.parameters(), lr = 0.01, momentum=0.9)
+#    total_loss = 0
+    for epoch in range(1):
+       
     
-    reader = dataset.setup(params)
-    params.reader = reader
+        # Step 1. Prepare the inputs to be passed to the model (i.e, turn the words
+        # into integer indices and wrap them in tensors)
+        x_input = torch.tensor([[1,2,3],[2,45,8]],dtype = torch.long)
     
-    
+        # Step 2. Recall that torch *accumulates* gradients. Before passing in a
+        # new instance, you need to zero out the gradients from the old
+        # instance
+        optimizer.zero_grad()
+        y_pred = model(x_input)
+#>>>>>>> b71565ab6aab4ec59034f3bbc84af1d088171336
+#    
+#    reader = dataset.setup(params)
+#    params.reader = reader
+#    
+
+        # Step 4. Compute your loss function. (Again, Torch wants the target
+        # word wrapped in a tensor)
+        loss = loss_function(y_pred[0], torch.tensor(torch.randn(2,3), dtype=torch.float))  
+        loss.backward()
+        optimizer.step()
+        total_loss = loss.item()
+        losses.append(total_loss)
+    print(losses)
 
     
     

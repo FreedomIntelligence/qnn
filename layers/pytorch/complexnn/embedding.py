@@ -9,8 +9,8 @@ def PhaseEmbedding(input_dim, embedding_dim):
     return embedding_layer
 
 def AmplitudeEmbedding(embedding_matrix, random_init=True):
-    embedding_dim = embedding_matrix.shape[0]
-    vocabulary_size = embedding_matrix.shape[1]
+    embedding_dim = embedding_matrix.shape[1]
+    vocabulary_size = embedding_matrix.shape[0]
     if random_init:
         # Normal(0, 1)
         return torch.nn.Embedding(vocabulary_size,
@@ -24,7 +24,7 @@ def AmplitudeEmbedding(embedding_matrix, random_init=True):
 #                        max_norm=1,
 #                        norm_type=2,
                         padding_idx=0,
-                        _weight=torch.tensor(np.transpose(embedding_matrix), dtype=torch.float))
+                        _weight=torch.tensor(embedding_matrix, dtype=torch.float))
 
 def test():
     phase_embed = PhaseEmbedding(5, 10)
