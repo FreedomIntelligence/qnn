@@ -78,9 +78,10 @@ class BucketIterator(object):
             
         batch_nums = int(len(self.data[0])/self.batch_size)
 
-        if len(self.data)%self.batch_size!=0:
-            batch_nums=1+batch_nums
+       
         indexes = [(i*self.batch_size,(i+1)*self.batch_size) for i in range(batch_nums)]
+        if len(self.data)%self.batch_size!=0:
+           indexes.append((len(self.data[0])-self.batch_size,len(self.data[0])))
 
         for index in indexes:
 
