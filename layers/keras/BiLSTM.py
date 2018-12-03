@@ -7,7 +7,7 @@ import keras
 from keras import backend as K
 from keras.engine import Layer
 from keras.engine import InputSpec
-from keras.layers import LSTM
+from keras.layers import LSTM, CuDNNLSTM
 
 
 class BiLSTM(Layer):
@@ -23,9 +23,9 @@ class BiLSTM(Layer):
         super(BiLSTM, self).build(input_shape)
 
     def call(self, input):
-        forward_lstm = LSTM(self.units, dropout=self.dropout,
+        forward_lstm = CuDNNLSTM(self.units, dropout=self.dropout,
                             return_sequences=True, return_state=True)
-        backward_lstm = LSTM(self.units, dropout=self.dropout,
+        backward_lstm = CuDNNLSTM(self.units, dropout=self.dropout,
                              return_sequences=True, return_state=True, go_backwards=True)
         fw_outputs, fw_output, fw_state = forward_lstm(input)
         bw_outputs, bw_output, b_state = backward_lstm(input)
