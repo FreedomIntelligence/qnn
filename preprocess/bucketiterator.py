@@ -18,10 +18,11 @@ from units import to_array
 from tools import evaluation
 
 class BucketIterator(object):
-    def __init__(self,data,always=False,opt=None,batch_size=2,max_sequence_length=0,shuffle=True,test=False,position=False,backend="keras"):
+    def __init__(self,data,always=False,opt=None,batch_size=2,batch_num = 0, max_sequence_length=0,shuffle=True,test=False,position=False,backend="keras"):
         self.shuffle=shuffle
         self.data=data
-        self.batch_size=batch_size
+        self.batch_size = batch_size
+        self.batch_num = batch_num
         self.test=test 
         self.backend=backend
         self.transform=self.setTransform()
@@ -63,7 +64,15 @@ class BucketIterator(object):
     
     
     def transformKeras(self,data):
-        return [to_array(i,self.max_sequence_length, use_mask = False) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
+        list_of_data = []
+        for i in data:
+            if type(i[0])!=int and type(i)!=np.ndarray:
+                list_of_data.append(to_array(i,self.max_sequence_length, use_mask = False))
+            else:
+                list_of_data.append(i)
+                    
+        return list_of_data
+#        return [to_array(i,self.max_sequence_length, use_mask = False) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
     
     def transformTF(self,data):
         
@@ -75,14 +84,16 @@ class BucketIterator(object):
             random.shuffle(c)
             self.data = [i for i in zip(*c)]
 
-            
-        batch_nums = int(len(self.data[0])/self.batch_size)
+        if self.batch_num == 0:
+            batch_num = int(len(self.data[1])/self.batch_size)
+        else:
+            batch_num = self.batch_num
 
        
-        indexes = [(i*self.batch_size,(i+1)*self.batch_size) for i in range(batch_nums)]
-        if len(self.data)%self.batch_size!=0:
-           indexes.append((len(self.data[0])-self.batch_size,len(self.data[0])))
+        indexes = [(i*self.batch_size,(i+1)*self.batch_size) for i in range(batch_num)]
+        if len(c)%self.batch_size!=0:
+           indexes.append((len(c)-self.batch_size,len(c)))
 
         for index in indexes:
-
+#            yield self.transform([item[index[0]:index[1]] for item in self.data])
             yield self.transform([item[index[0]:index[1]] for item in self.data])
