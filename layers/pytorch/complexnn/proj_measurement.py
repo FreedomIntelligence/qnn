@@ -38,6 +38,7 @@ class ComplexProjMeasurement(torch.nn.Module):
         batch_size = input_real.shape[0]
         dim = input_real.shape[1]
         output = torch.zeros(batch_size,dim)
+        
         for i in range(dim):
             v_real = kernel_real[i,:]
             v_imag = kernel_imag[i,:]

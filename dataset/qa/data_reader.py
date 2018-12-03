@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 #-*- coding:utf-8 -*-
 
 import os
@@ -22,6 +20,7 @@ from tools import evaluation
 from preprocess.dictionary import Dictionary
 from preprocess.embedding import Embedding
 from preprocess.bucketiterator import BucketIterator
+from keras.utils import to_categorical
 
 
 class DataReader(object):
@@ -122,6 +121,159 @@ class DataReader(object):
         pickle.dump(dictionary,open(pkl_name,"wb"))
         return dictionary   
     
+    def get_train_2(self,shuffle = True,iterable=True, max_sequence_length=0,overlap_feature = False,sample_per_question = False):
+        
+        x_data = []
+        num_samples = 0
+        if sample_per_question: 
+            #sampling on a per-question basis           
+            q = []
+            pos_a = []
+            neg_a = []
+            a = []
+            overlap_pos = []
+            overlap_neg = []
+            y = []
+            for question,group in self.datas["train"].groupby("question"):
+                seq_q = self.embedding.text_to_sequence(question)
+                pos_answers = group[group["flag"] == 1]["answer"]
+                neg_answers = group[group["flag"] == 0]["answer"]#.reset_index()
+                if len(pos_answers)==0 or len(neg_answers)==0:
+                    continue
+                
+                for pos in pos_answers:  
+                    
+                    seq_pos_a = self.embedding.text_to_sequence(pos)
+                    neg_index = np.random.choice(neg_answers.index)
+                    neg = neg_answers.loc[neg_index,]
+                    seq_neg_a = self.embedding.text_to_sequence(neg)
+                    if self.match_type == 'pointwise': 
+                        q = q+[seq_q,seq_q]
+                        a = a+[seq_pos_a,seq_neg_a]
+                        y = y+[1,0]
+                        num_samples = num_samples + 2
+                    else:
+                        q.append(seq_q)
+                        num_samples = num_samples + 1
+                        
+                    pos_a.append(seq_pos_a)
+                    neg_a.append(seq_neg_a)
+                    if overlap_feature:
+                        overlap_pos.append(self.overlap_index(seq_q,seq_pos_a))
+                        overlap_neg.append(self.overlap_index(seq_q,seq_neg_a))
+            
+            
+            if self.bert_enabled:
+                q,q_mask = to_array(q,maxlen = self.max_sequence_length, use_mask = True)
+                if self.match_type == 'pairwise':      
+                    pos_a,pos_a_mask = to_array(pos_a,maxlen = self.max_sequence_length, use_mask = True)
+                    neg_a,neg_a_mask = to_array(neg_a,maxlen = self.max_sequence_length, use_mask = True)
+                    x_data = [q,q_mask,pos_a,pos_a_mask,neg_a,neg_a_mask]
+                    y = [l for l in zip(*[q,pos_a,neg_a])]
+                else:
+                    y = to_categorical(np.asarray(y))
+                    a,a_mask = to_array(a,maxlen = self.max_sequence_length, use_mask = True)
+                    x_data = [q,q_mask,a,a_mask]
+            else:
+                q = to_array(q,maxlen = self.max_sequence_length, use_mask = False)
+                if self.match_type == 'pairwise':
+                    pos_a = to_array(pos_a,maxlen = self.max_sequence_length, use_mask = False)
+                    neg_a = to_array(neg_a,maxlen = self.max_sequence_length, use_mask = False)
+                    x_data = [q,pos_a, neg_a]
+                    y = [l for l in zip(*[q,pos_a,neg_a])]
+                    
+                else:
+                    y = to_categorical(np.asarray(y))
+                    a = to_array(a,maxlen = self.max_sequence_length, use_mask = False)
+                    x_data = [q,a]
+            if overlap_feature:
+                x_data = x_data + [overlap_pos,overlap_neg]
+                
+        else:         
+            num_samples = int(len(self.datas["train"]))
+            #sample on the whole data, only support pointwise match type: x=[q,pos_a],y
+            assert self.match_type == 'pointwise'
+            
+            q = self.datas["train"]["question"]
+            a = self.datas["train"]["answer"]
+            y = self.datas["train"]["flag"]
+            q = [self.embedding.text_to_sequence(sent) for sent in q]
+    #        q = to_array(q,maxlen = self.max_sequence_length, use_mask = False)
+            a = [self.embedding.text_to_sequence(sent) for sent in a]
+    #        a = to_array(a,maxlen = self.max_sequence_length, use_mask = False) 
+            y = to_categorical(np.asarray(y))
+            
+            
+            if max_sequence_length == 0:
+                max_sequence_length = self.max_sequence_length
+            if self.bert_enabled:
+                q,q_mask = to_array(q,maxlen = self.max_sequence_length, use_mask = True)
+                a,a_mask = to_array(a,maxlen = self.max_sequence_length, use_mask = True)
+                x_data = [q,q_mask,a,a_mask]
+            else:
+                q = to_array(q,maxlen = self.max_sequence_length, use_mask = False)
+                a = to_array(a,maxlen = self.max_sequence_length, use_mask = False)
+                x_data = [q,a]
+                
+            if overlap_feature:
+                overlap = [self.overlap_index(q_seq,a_seq) for q_seq, a_seq in zip(*x_data)]
+                x_data = x_data+overlap
+        
+        self.num_samples = num_samples
+       
+        if iterable:
+            x = [l for l in zip(*x_data)]
+            data = (x,y)
+            return BucketIterator(data,batch_size=self.batch_size, batch_num = int(self.num_samples/self.batch_size),shuffle=True,max_sequence_length=0) 
+        else: 
+            return x_data,y
+        
+    
+    def get_test_2(self,shuffle = True,iterable=True, max_sequence_length=0,overlap_feature = False):
+        
+        x_data = []
+        #sample on the whole data, only support pointwise match type: x=[q,pos_a],y
+        
+        q = self.datas["train"]["question"]
+        a = self.datas["train"]["answer"]
+        y = self.datas["train"]["flag"]
+        q = [self.embedding.text_to_sequence(sent) for sent in q]
+#        q = to_array(q,maxlen = self.max_sequence_length, use_mask = False)
+        a = [self.embedding.text_to_sequence(sent) for sent in a]
+#        a = to_array(a,maxlen = self.max_sequence_length, use_mask = False) 
+        y = to_categorical(np.asarray(y))
+        
+        
+        if max_sequence_length == 0:
+            max_sequence_length = self.max_sequence_length
+        if self.bert_enabled:
+            q,q_mask = to_array(q,maxlen = self.max_sequence_length, use_mask = True)
+            a,a_mask = to_array(a,maxlen = self.max_sequence_length, use_mask = True)
+            x_data = [q,q_mask,a,a_mask]
+            if self.match_type == 'pairwise':
+                x_data = x_data+[a,a_mask]
+                y = [l for l in zip(*[q,a,a])]
+            
+        else:
+            q = to_array(q,maxlen = self.max_sequence_length, use_mask = False)
+            a = to_array(a,maxlen = self.max_sequence_length, use_mask = False)
+            x_data = [q,a]
+            if self.match_type == 'pairwise':
+                x_data = x_data+[a]
+                y = [l for l in zip(*[q,a,a])]
+        if overlap_feature:
+            overlap = [self.overlap_index(q_seq,a_seq) for q_seq, a_seq in zip(*x_data)]
+            x_data = x_data+overlap
+
+        if iterable:
+            x = [l for l in zip(*x_data)]
+            data = (x,y)
+            return BucketIterator(data,batch_size=self.batch_size, batch_num = int(self.num_samples/self.batch_size),shuffle=True,max_sequence_length=0) 
+        else: 
+            return x_data,y
+        
+        
+
     
 #    @log_time_delta
     def get_train(self,shuffle = True,model= None,sess= None,overlap_feature= False,iterable=True,max_sequence_length=0):
@@ -201,7 +353,7 @@ class DataReader(object):
             process = lambda row: [self.embedding.text_to_sequence(row["question"]),
                                self.embedding.text_to_sequence(row["answer"])]
         
-        samples = self.datas['test'].apply( process,axis=1)
+        samples = self.datas['test'].apply(process,axis=1)
         if iterable:
             return BucketIterator([i for i in zip(*samples)],batch_size=self.batch_size,shuffle=False)
         else: 
