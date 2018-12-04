@@ -22,7 +22,7 @@ class Multiple_loss(Layer):
         self.mean=mean
         super(Multiple_loss, self).__init__(**kwargs)
         self.nb_classes = nb_classes
-        self.dense = Dense(self.nb_classes, activation="sigmoid")
+        self.dense = Dense(self.nb_classes, activation="softmax")
 
     def get_config(self):
         config = {'axis': self.axis, 'keep_dims': self.keep_dims}
