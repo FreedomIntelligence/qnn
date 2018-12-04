@@ -84,8 +84,11 @@ def run(params):
         test_x,test_y = params.reader.get_test_2(iterable = False)
 #        test_x,test_y = params.reader.get_test_2(iterable = False)
         for i in range(params.epochs):
-            model.fit_generator(params.reader.get_train_2(iterable = True,sample_per_question = False).__iter__(),epochs = 1,steps_per_epoch = int(reader.num_samples/reader.batch_size),verbose = True )
-            model.evaluate(x = test_x, y =test_y) 
+            model.fit_generator(params.reader.get_train_2(iterable = True,sample_per_question = False).__iter__(),epochs = 1,steps_per_epoch = int(reader.num_samples/reader.batch_size),verbose = True)
+            
+            print(model.evaluate(x = test_x, y =test_y))
+        
+        
 #        from models.match import keras as models   
 #        for i in range(params.epochs):
 ##            model.fit_generator(params.reader.batch_gen(params.reader.get_train(iterable = True)),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        

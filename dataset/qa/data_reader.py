@@ -234,9 +234,9 @@ class DataReader(object):
         x_data = []
         #sample on the whole data, only support pointwise match type: x=[q,pos_a],y
         
-        q = self.datas["train"]["question"]
-        a = self.datas["train"]["answer"]
-        y = self.datas["train"]["flag"]
+        q = self.datas["test"]["question"]
+        a = self.datas["test"]["answer"]
+        y = self.datas["test"]["flag"]
         q = [self.embedding.text_to_sequence(sent) for sent in q]
 #        q = to_array(q,maxlen = self.max_sequence_length, use_mask = False)
         a = [self.embedding.text_to_sequence(sent) for sent in a]
