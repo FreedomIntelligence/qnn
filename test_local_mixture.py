@@ -81,12 +81,15 @@ def run(params):
     # matrix = acc
       
     if params.dataset_type == 'qa':
-        test_x,test_y = params.reader.get_test_2(iterable = False)
-#        test_x,test_y = params.reader.get_test_2(iterable = False)
-        for i in range(params.epochs):
-            model.fit_generator(params.reader.get_train_2(iterable = True,sample_per_question = False).__iter__(),epochs = 1,steps_per_epoch = int(reader.num_samples/reader.batch_size),verbose = True)
-            
-            print(model.evaluate(x = test_x, y =test_y))
+        test_x,test_y = params.reader.get_test_2(iterable = False)        
+        train_x,train_y = params.reader.get_train_2(iterable = False, sampling_per_question = False)
+        model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
+        
+        
+#        for i in range(params.epochs):
+#            model.fit_generator(params.reader.get_train_2(iterable = True,sampling_per_question = False).__iter__(),epochs = 1,steps_per_epoch = int(reader.num_samples/reader.batch_size),verbose = True)
+#            
+#            print(model.evaluate(x = test_x, y =test_y))
         
         
 #        from models.match import keras as models   

@@ -121,11 +121,11 @@ class DataReader(object):
         pickle.dump(dictionary,open(pkl_name,"wb"))
         return dictionary   
     
-    def get_train_2(self,shuffle = True,iterable=True, max_sequence_length=0,overlap_feature = False,sample_per_question = False):
+    def get_train_2(self,shuffle = True,iterable=True, max_sequence_length=0,overlap_feature = False,sampling_per_question = False):
         
         x_data = []
         num_samples = 0
-        if sample_per_question: 
+        if sampling_per_question: 
             #sampling on a per-question basis           
             q = []
             pos_a = []
@@ -224,7 +224,7 @@ class DataReader(object):
         if iterable:
             x = [l for l in zip(*x_data)]
             data = (x,y)
-            return BucketIterator(data,batch_size=self.batch_size, batch_num = int(self.num_samples/self.batch_size),shuffle=True,max_sequence_length=0) 
+            return BucketIterator(data,batch_size=self.batch_size, batch_num = int(self.num_samples/self.batch_size),shuffle=True).__iter__()
         else: 
             return x_data,y
         
@@ -246,6 +246,7 @@ class DataReader(object):
         
         if max_sequence_length == 0:
             max_sequence_length = self.max_sequence_length
+            
         if self.bert_enabled:
             q,q_mask = to_array(q,maxlen = self.max_sequence_length, use_mask = True)
             a,a_mask = to_array(a,maxlen = self.max_sequence_length, use_mask = True)
@@ -268,7 +269,7 @@ class DataReader(object):
         if iterable:
             x = [l for l in zip(*x_data)]
             data = (x,y)
-            return BucketIterator(data,batch_size=self.batch_size, batch_num = int(self.num_samples/self.batch_size),shuffle=True,max_sequence_length=0) 
+            return BucketIterator(data,batch_size=self.batch_size, batch_num = int(self.num_samples/self.batch_size),shuffle=True) 
         else: 
             return x_data,y
         
