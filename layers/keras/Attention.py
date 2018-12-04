@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+# -*- coding: utf-8 -*-
 import sys; sys.path.append('.')
 import numpy as np
 from keras import backend as K
@@ -10,23 +12,22 @@ import os
 import keras.backend as K
 import math
 
-class Multiple_loss(Layer):
+class Attention(Layer):
 
     def __init__(self, delta =0.5,c=1,dropout_keep_prob = 1, mean="geometric",axis = -1, keep_dims = True,nb_classes =2, **kwargs):
         # self.output_dim = output_dim
         self.axis = axis
         self.keep_dims = keep_dims
-#        self.dropout_probs = Dropout(dropout_keep_prob)
         self.delta = delta
         self.c = c
         self.mean=mean
-        super(Multiple_loss, self).__init__(**kwargs)
-#        self.nb_classes = nb_classes
-#        self.dense = Dense(self.nb_classes, activation="softmax")
+        super(Attention, self).__init__(**kwargs)
+
+
 
     def get_config(self):
         config = {'axis': self.axis, 'keep_dims': self.keep_dims}
-        base_config = super(Multiple_loss, self).get_config()
+        base_config = super(Attention, self).get_config()
         return dict(list(base_config.items())+list(config.items()))
 
     def build(self, input_shape):
@@ -39,7 +40,7 @@ class Multiple_loss(Layer):
         #                               shape=(input_shape[1], self.output_dim),
         #                               initializer='uniform',
         #                               trainable=True)
-        super(Multiple_loss, self).build(input_shape)  # Be sure to call this somewhere!
+        super(Attention, self).build(input_shape)  # Be sure to call this somewhere!
 
     def call(self, inputs):
 
@@ -48,28 +49,28 @@ class Multiple_loss(Layer):
 #        norm1 = K.sqrt(0.00001+ K.sum(x**2, axis = self.axis, keepdims = False))
 #        norm2 = K.sqrt(0.00001+ K.sum(y**2, axis = self.axis, keepdims = False))
 #        output= K.sum(self.dropout_probs(x*y),1) / norm1 /norm2
-
-        representations = K.concatenate([x, y,x*y], axis=-1)
-        droped = self.dropout_probs(representations)
-        multipled = self.dense(droped)    
-
-
-        return multipled
+        multipled = x*y
+        weight = K.softmax(multipled,axis=-1)
+        
+        representations = K.concatenate([x, y,multipled,multipled*weight], axis=-1)
+        return representations
 
     def compute_output_shape(self, input_shape):
 #        print(input_shape)
         # print(type(input_shape[1]))
-        output_shape = []
-        if self.axis<0:
-            self.axis = len(input_shape[0])+self.axis 
-        for i in range(len(input_shape[0])):            
-            if not i == self.axis:
-                output_shape.append(input_shape[0][i])
-        if self.keep_dims:
-            output_shape.append(self.nb_classes) ############
+#        output_shape = []
+#        if self.axis<0:
+#            self.axis = len(input_shape[0])+self.axis 
+#        for i in range(len(input_shape[0])):            
+#            if not i == self.axis:
+#                output_shape.append(input_shape[0][i])
+#        if self.keep_dims:
+#            output_shape.append(self.nb_classes) ############
 #        print('Input shape of L2Norm layer:{}'.format(input_shape))
 #        print(output_shape)
-        return([tuple(output_shape)])
+        none_batch , dim = input_shape[0]
+        dim = dim * 4
+        return([tuple([none_batch,dim])])
 
 
 if __name__ == '__main__':
@@ -96,10 +97,10 @@ if __name__ == '__main__':
 #    encoder.fit(x=a, y=b, epochs = 10)
     
 
-    x =  Input(shape=(2,10))
-    y =  Input(shape=(2,10))
+    x =  Input(shape=(2,))
+    y =  Input(shape=(2,))
 
-    output = Multiple_loss()([x,y])
+    output = Attention()([x,y])
 
     encoder = Model([x,y], output)
     encoder.compile(loss = 'mean_squared_error',

@@ -86,6 +86,16 @@ def run(params):
         model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
         
         
+#        test_data = params.reader.get_test(iterable = False)
+#        y_pred = model.predict(x = test_data) 
+#        score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
+#            
+#        metric = params.reader.evaluate(score, mode = "test")
+#        evaluation.append(metric)
+#        print(metric)
+#        
+#        model.evaluate(x = test_x, y = test_y)
+        
 #        for i in range(params.epochs):
 #            model.fit_generator(params.reader.get_train_2(iterable = True,sampling_per_question = False).__iter__(),epochs = 1,steps_per_epoch = int(reader.num_samples/reader.batch_size),verbose = True)
 #            
