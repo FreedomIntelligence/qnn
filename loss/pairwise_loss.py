@@ -32,3 +32,10 @@ def categorical_hinge(y_true, y_pred):
 
 def precision_batch(y_true, y_pred):
     return K.mean(K.cast(K.equal(y_pred,0),"float32"))
+
+def point_wise_accuracy(y_true, y_pred):
+    predicted_label = K.cast(K.greater( y_pred, 0.5),"float32")
+    return K.mean(K.cast(K.equal(predicted_label,y_true),"float32"))
+
+    
+    

@@ -84,8 +84,9 @@ def write2file(datas,filename="train.QApair.TJU_IR_QA.score"):
 	return filename
 
 def accurancy(df,predicted):
-    label =  np.random.rand(len(df))>0.5
+    label =  predicted>0.5
     return sum(label==df["flag"]) * 1.0 / len(df)
+
 def evaluationbyFile(modelfile,resultfile="result.text",groundtruth=qa_path):
 	cmd="test.exe " + " ".join([groundtruth,modelfile,resultfile])
 	print( modelfile[19:-6]+":") # )
