@@ -22,7 +22,7 @@ class Multiple_loss(Layer):
         self.mean=mean
         super(Multiple_loss, self).__init__(**kwargs)
         self.nb_classes = nb_classes
-        self.dense = Dense(self.nb_classes, activation="softmax")
+#        self.dense = Dense(self.nb_classes, activation="softmax")
 
     def get_config(self):
         config = {'axis': self.axis, 'keep_dims': self.keep_dims}
@@ -48,26 +48,28 @@ class Multiple_loss(Layer):
 #        norm1 = K.sqrt(0.00001+ K.sum(x**2, axis = self.axis, keepdims = False))
 #        norm2 = K.sqrt(0.00001+ K.sum(y**2, axis = self.axis, keepdims = False))
 #        output= K.sum(self.dropout_probs(x*y),1) / norm1 /norm2
-        multipled = self.dropout_probs(x*y)
-        multipled = self.dense(multipled)    
+        multiplied = self.dropout_probs(x*y)
+        print(multiplied.shape)
+#        multipled = self.dense(multipled)    
 
 
-        return multipled
+        return multiplied
 
     def compute_output_shape(self, input_shape):
+        
 #        print(input_shape)
-        # print(type(input_shape[1]))
-        output_shape = []
-        if self.axis<0:
-            self.axis = len(input_shape[0])+self.axis 
-        for i in range(len(input_shape[0])):            
-            if not i == self.axis:
-                output_shape.append(input_shape[0][i])
-        if self.keep_dims:
-            output_shape.append(self.nb_classes) ############
-#        print('Input shape of L2Norm layer:{}'.format(input_shape))
+#        # print(type(input_shape[1]))
+#        output_shape = input_shape
+#        if self.axis<0:
+#            self.axis = len(input_shape[0])+self.axis 
+#        for i in range(len(input_shape[0])):            
+#            if not i == self.axis:
+#                output_shape.append(input_shape[0][i])
+#        if self.keep_dims:
+#            output_shape.append(1) ############
+##        print('Input shape of L2Norm layer:{}'.format(input_shape))
 #        print(output_shape)
-        return([tuple(output_shape)])
+        return(input_shape)
 
 
 if __name__ == '__main__':

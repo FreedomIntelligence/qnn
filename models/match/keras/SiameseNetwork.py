@@ -4,7 +4,6 @@ from keras.layers import Embedding, GlobalMaxPooling1D,Dense, Masking, Flatten,D
 from keras.models import Model, Input, model_from_json, load_model, Sequential
 from keras.constraints import unit_norm
 from layers.keras.complexnn import *
-import math
 import numpy as np
 
 from keras import regularizers
@@ -44,6 +43,7 @@ class SiameseNetwork(BasicModel):
             self.distance = getScore("multiple_loss.Multiple_loss",dropout_keep_prob =self.opt.dropout_rate_probs)
         
 #        self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))
+        self.dense = Dense(self.opt.nb_classes, activation='softmax')   
         
         self.representation_model = None
                 
@@ -57,6 +57,7 @@ class SiameseNetwork(BasicModel):
             for doc in [self.question, self.answer]:
                 rep.append(self.representation_model.get_representation(doc))
             output = self.distance(rep)
+            output = self.dense(output)
 #            output =  Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs)(rep) 
             if self.opt.bert_enabled:
                 model = Model([self.question[0],self.question[1],self.answer[0],self.answer[1]], output)

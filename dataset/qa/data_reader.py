@@ -229,6 +229,7 @@ class DataReader(object):
             return x_data,y
         
     
+    
     def get_test_2(self,shuffle = True,iterable=True, max_sequence_length=0,overlap_feature = False):
         
         x_data = []
@@ -237,16 +238,17 @@ class DataReader(object):
         q = self.datas["test"]["question"]
         a = self.datas["test"]["answer"]
         y = self.datas["test"]["flag"]
+        
+        if max_sequence_length == 0:
+            max_sequence_length = self.max_sequence_length
+            
+
         q = [self.embedding.text_to_sequence(sent) for sent in q]
 #        q = to_array(q,maxlen = self.max_sequence_length, use_mask = False)
         a = [self.embedding.text_to_sequence(sent) for sent in a]
 #        a = to_array(a,maxlen = self.max_sequence_length, use_mask = False) 
         y = to_categorical(np.asarray(y))
         
-        
-        if max_sequence_length == 0:
-            max_sequence_length = self.max_sequence_length
-            
         if self.bert_enabled:
             q,q_mask = to_array(q,maxlen = self.max_sequence_length, use_mask = True)
             a,a_mask = to_array(a,maxlen = self.max_sequence_length, use_mask = True)

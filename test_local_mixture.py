@@ -82,28 +82,20 @@ def run(params):
       
     if params.dataset_type == 'qa':
         test_x,test_y = params.reader.get_test_2(iterable = False)        
-        train_x,train_y = params.reader.get_train_2(iterable = False, sampling_per_question = False)
-        model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
+#        train_x,train_y = params.reader.get_train_2(iterable = False, sampling_per_question = True)
+#        model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
+#        print(model.evaluate(x = test_x, y =test_y))
         
-        
-#        for i in range(params.epochs):
-#            model.fit_generator(params.reader.get_train_2(iterable = True,sampling_per_question = False).__iter__(),epochs = 1,steps_per_epoch = int(reader.num_samples/reader.batch_size),verbose = True)
-#            
-#            print(model.evaluate(x = test_x, y =test_y))
-        
-        
-#        from models.match import keras as models   
-#        for i in range(params.epochs):
-##            model.fit_generator(params.reader.batch_gen(params.reader.get_train(iterable = True)),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
-#            model.fit_generator(params.reader.get_train_2(iterable = True),epochs = 1)
-#            y_pred = model.predict(x = test_x) 
-#            score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
-#                
-#            metric = params.reader.evaluate(score, mode = "test")
-#            evaluation.append(metric)
-#            print(metric)
-#            logger.info(metric)
-#        df=pd.DataFrame(evaluation,columns=["map","mrr","p1"]) 
+#         
+        for i in range(params.epochs):
+            model.fit_generator(params.reader.get_train_2(iterable = True,sampling_per_question = True).__iter__(),epochs = 1,steps_per_epoch = int(reader.num_samples/reader.batch_size),verbose = True)       
+            y_pred = model.predict(x = test_x) 
+            score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred        
+            metric = params.reader.evaluate(score, mode = "test")
+            evaluation.append(metric)
+            print(metric)
+            logger.info(metric)
+        df=pd.DataFrame(evaluation,columns=["map","mrr","p1"]) 
 
             
     elif params.dataset_type == 'classification':
