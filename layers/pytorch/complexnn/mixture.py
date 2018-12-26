@@ -41,9 +41,9 @@ class ComplexMixture(torch.nn.Module):
             else:
                 weight = torch.unsqueeze(inputs[2], dim=-1)
             
-            output_real = output_real * weight
+            output_real = output_real.float() * weight.float()
             output_r = torch.sum(output_real, dim=1)  #shape: (None, 300, 300)
-            output_imag = output_imag * weight
+            output_imag = output_imag.float() * weight.float()
             output_i = torch.sum(output_imag, dim=1)  #shape: (None, 300, 300)
 
         return [output_r, output_i]

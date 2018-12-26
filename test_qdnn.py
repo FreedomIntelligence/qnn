@@ -18,6 +18,8 @@ import numpy as np
 import preprocess.embedding
 from keras.models import Model
 import tensorflow as tf
+import torch
+import torch.nn as nn
 from loss import *
 import pandas as pd
 
@@ -44,6 +46,61 @@ def myzip(train_x,train_x_mask):
         results.append((train_x[i],train_x_mask[i]))
     return results
 
+
+def run_torch(params):
+    # Loss and Optimizer
+    if params.bert_enabled == True:
+        params.max_sequence_length = 512
+        params.reader.max_sequence_length = 512
+#    evaluation=[]
+#    params=dataset.classification.process_embedding(reader,params)    
+    qdnn = models.setup(params)
+    model = qdnn
+    criterion = nn.CrossEntropyLoss()    # optimizer = self.opt.optimizer(_params, lr=self.opt.learning_rate, weight_decay=self.opt.l2reg)
+    optimizer = torch.optim.RMSprop(model.parameters(), lr=0.01)
+
+
+    test_x, test_y = params.reader.get_test(iterable = False)
+    test_inputs = torch.Tensor(test_x)
+    test_targets = torch.Tensor(test_y)
+    
+    for i in range(params.epochs):
+        print('epoch: ', i)
+        for sample_batched in params.reader.get_train(iterable = True):
+            model.train()
+            optimizer.zero_grad()
+            inputs = sample_batched['X'].long()
+            targets = sample_batched['y'].long()
+            outputs = model(inputs)
+            loss = criterion(outputs, torch.max(targets, 1)[1])
+            loss.backward()
+            optimizer.step()
+
+            n_correct = (torch.argmax(outputs, -1) == torch.argmax(targets, -1)).sum().item()
+            n_total = len(outputs)
+            train_acc = n_correct / n_total
+            print('train_acc: {}'.format(train_acc))
+            
+        test_outputs = model(test_inputs)
+        n_correct = (torch.argmax(test_outputs, -1) == torch.argmax(test_targets, -1)).sum().item()
+        n_total = len(test_outputs)
+        test_acc = n_correct / n_total
+        loss = criterion(test_outputs, torch.max(test_targets, 1)[1])
+        print('test_acc: {}, loss: {}'.format(test_acc,loss.item()))
+#        test_acc, f1 = self._evaluate_acc_f1()
+#        if test_acc > max_test_acc:
+#            max_test_acc = test_acc
+#        if f1 > max_f1:
+#            max_f1 = f1
+#        print('loss: {:.4f}, acc: {:.4f}, test_acc: {:.4f}, f1: {:.4f}'.format(loss.item(), train_acc, test_acc, f1))
+        
+#        max_test_acc, max_f1 = self._train(criterion, optimizer)
+#        print('max_test_acc: {0}     max_f1: {1}'.format(max_test_acc, max_f1))
+#        max_test_acc_avg += max_test_acc
+#        max_f1_avg += max_f1
+#        print('#' * 100)
+#    print("max_test_acc_avg:", max_test_acc_avg / repeats)
+#    print("max_f1_avg:", max_f1_avg / repeats)
 
 def run(params):
     if params.bert_enabled == True:
@@ -98,31 +155,23 @@ def run(params):
 
             
     elif params.dataset_type == 'classification':
-#        from models import representation as models   
-        
-        
-    #    model.summary()    
-#        train_data = params.reader.get_train(iterable = False)
-#        test_data = params.reader.get_test(iterable = False)
-#        val_data =params.reader.get_val(iterable = False)
-#    #    (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()
-#        train_x, train_y = train_data
-#        test_x, test_y = test_data
-#        val_x, val_y = val_data
-        train_x,train_y = params.reader.get_train(iterable = False)
-        test_x, test_y = params.reader.get_test(iterable = False)
+
+#        train_x,train_y = params.reader.get_train(iterable = False)
+#        test_x, test_y = params.reader.get_test(iterable = False)
         val_x,val_y = params.reader.get_val(iterable = False)
         
-        history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
+        model.fit_generator(params.reader.get_train(iterable = True),epochs = 1, steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = False)
+        
+#        history = model.fit(x=train_x, y = train_y, batch_size = params.batch_size, epochs= params.epochs,validation_data= (test_x, test_y))
         
         metric = model.evaluate(x = val_x, y = val_y)   # !!!!!! change the order to val and test
         
         evaluation.append(metric)
         logger.info(metric)
-        print(history)
+#        print(history)
         print(metric)
 
-        df=pd.DataFrame(evaluation,columns=["map","mrr","p1"])  
+        df=pd.DataFrame(evaluation,columns=["mean_squared_error","accuracy"])  
         
     logger.info("\n".join([params.to_string(),"score: "+str(df.max().to_dict())]))
 
@@ -143,5 +192,5 @@ if __name__=="__main__":
     reader = dataset.setup(params)
     params.reader = reader
         
-    run(params)
+    run_torch(params)
 
