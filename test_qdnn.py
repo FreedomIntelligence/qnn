@@ -79,9 +79,9 @@ def run_torch(params):
             n_correct = (torch.argmax(outputs, -1) == torch.argmax(targets, -1)).sum().item()
             n_total = len(outputs)
             train_acc = n_correct / n_total
-            print('train_acc: {}'.format(train_acc))
+            print('train_acc: {}, loss: {}'.format(train_acc,loss.item()))
             
-        test_outputs = model(test_inputs)
+        test_outputs = model(test_inputs.long())
         n_correct = (torch.argmax(test_outputs, -1) == torch.argmax(test_targets, -1)).sum().item()
         n_total = len(test_outputs)
         test_acc = n_correct / n_total
