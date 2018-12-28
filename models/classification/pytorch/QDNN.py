@@ -53,7 +53,6 @@ class QDNN(torch.nn.Module):
         output = self.measurement([sentence_embedding_real, sentence_embedding_imag], measure_operator=mea_operator)
         output = torch.log10(output)
         output = self.dense(output)
-        prob = self.activation(output)
 #        output = self.measurement([sentence_embedding_real, sentence_embedding_imag])
         
-        return prob
+        return output
