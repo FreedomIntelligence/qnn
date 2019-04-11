@@ -1,0 +1,20 @@
+*.bak
+__pycache__/*
+*.pyc
+glove/*
+data/*
+eval/*
+models/__pycache__/*
+dataset/__pycache__/*
+complexnn/__pycache__/*
+*.text
+test.py
+log/*
+*.txt
+case study/*
+*.cases
+*.csv
+temp/*
+*.pkl
+.spyproject/*
+best_parameters/*
