@@ -109,13 +109,8 @@ class BucketIterator(object):
         
         return [index_by_list(feature,balance_index) if type(feature) == list  else feature[balance_index] for feature in data]
         
-        
-        
-            
-                
-        
-        
         return data
+    
     def __iter__each(self,data):
         if (self.shuffle and not self.test) or self.need_balanced:
             c = list(zip(*data))
@@ -127,8 +122,7 @@ class BucketIterator(object):
             batch_num = int(len(data[1])/self.batch_size)
         else:
             batch_num = self.batch_num
-
-       
+      
         indexes = [(i*self.batch_size,(i+1)*self.batch_size) for i in range(batch_num)]
         if len(c)%self.batch_size!=0:
            indexes.append((len(c)-self.batch_size,len(c)))
@@ -142,6 +136,8 @@ class BucketIterator(object):
         
         if self.need_balanced:
             data=self.balance(self.data)
+        else:
+            data = self.data
             
         if not self.always:
             for sample in self.__iter__each(data):

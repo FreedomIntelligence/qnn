@@ -39,8 +39,6 @@ import os
 
 
 
-
-
 def run(params):
     evaluation=[]
 #    params=dataset.classification.process_embedding(reader,params)    
@@ -82,7 +80,8 @@ def run(params):
         
 #         
         for i in range(params.epochs):
-            model.fit_generator(params.reader.get_train_2(iterable = True,sampling_per_question = True).__iter__(),epochs = 1,steps_per_epoch = int(reader.num_samples/reader.batch_size),verbose = True)       
+            model.fit_generator(params.reader.get_train_2(iterable = True,sampling_per_question = True).__iter__(),epochs = 1\
+                                ,steps_per_epoch = int(reader.num_samples/reader.batch_size),verbose = True)       
             y_pred = model.predict(x = test_x) 
             score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred        
             metric = params.reader.evaluate(score, mode = "test")
