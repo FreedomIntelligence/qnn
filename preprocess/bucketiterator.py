@@ -142,6 +142,8 @@ class BucketIterator(object):
         
         if self.need_balanced:
             data=self.balance(self.data)
+        else:
+            data =self.data
             
         if not self.always:
             for sample in self.__iter__each(data):
