@@ -3,11 +3,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd import Variable
 from layers.pytorch.complexnn import *
 
 class QDNN(nn.Module):
-#    def __init__(self, embedding_matrix, num_measurements):
     def __init__(self, opt):
         """
         max_sequence_len: input sentence length
@@ -18,9 +16,7 @@ class QDNN(nn.Module):
         super(QDNN, self).__init__()
         self.max_sequence_len = opt.max_sequence_length
         self.num_measurements = opt.measurement_size
-#        self.max_sequence_len = embedding_matrix.shape[1]
-        self.embedding_matrix = nn.Parameter(torch.tensor(opt.lookup_table).permute(1,0)).detach()
-#        self.embedding_matrix = np.transpose()
+        self.embedding_matrix = torch.tensor(opt.lookup_table).transpose(1,0)
         self.embedding_dim = self.embedding_matrix.shape[0]
         self.phase_embedding_layer = PhaseEmbedding(self.max_sequence_len, self.embedding_dim)
         print(self.embedding_matrix.shape)
@@ -30,8 +26,7 @@ class QDNN(nn.Module):
         self.activation = nn.Softmax(dim = -1)
         self.complex_multiply = ComplexMultiply()
         self.mixture = ComplexMixture(use_weights = True)
-        self.measurement = ComplexMeasurement(units = self.num_measurements)
-#            self.output = ComplexMeasurement(units = self.opt.measurement_size)([self.sentence_embedding_real, self.sentence_embedding_imag])
+        self.measurement = ComplexMeasurement(self.embed_dim, units = self.num_measurements)
     def forward(self, input_seq):
         """
         In the forward function we accept a Variable of input data and we must 

@@ -9,7 +9,7 @@ import numpy as np
 from keras import regularizers
 import keras.backend as K
 from distutils.util import strtobool
-
+from layers.keras.Attention import Attention
 
 class SiameseNetwork(BasicModel):
 
@@ -39,13 +39,13 @@ class SiameseNetwork(BasicModel):
                     ]
                     
         self.distance = distances[self.opt.distance_type]
-        if self.opt.onehot:
-            self.distance = getScore("multiple_loss.Multiple_loss",dropout_keep_prob =self.opt.dropout_rate_probs)
+
         
 #        self.dense = Dense(self.opt.nb_classes, activation=self.opt.activation, kernel_regularizer= regularizers.l2(self.opt.dense_l2))
         self.dense = Dense(self.opt.nb_classes, activation='softmax')   
         
         self.representation_model = None
+        self.dense_last =  Dense(self.opt.nb_classes, activation="softmax")
                 
     def __init__(self,opt):
         super(SiameseNetwork, self).__init__(opt)
@@ -56,8 +56,14 @@ class SiameseNetwork(BasicModel):
             rep = []
             for doc in [self.question, self.answer]:
                 rep.append(self.representation_model.get_representation(doc))
-            output = self.distance(rep)
-            output = self.dense(output)
+#<<<<<<< HEAD
+#            output = self.distance(rep)
+#            output = self.dense(output)
+#=======
+            if self.opt.onehot:
+                output = self.dense_last(Attention()(rep))
+            else:
+                output = self.distance(rep)
 #            output =  Cosinse(dropout_keep_prob=self.opt.dropout_rate_probs)(rep) 
             if self.opt.bert_enabled:
                 model = Model([self.question[0],self.question[1],self.answer[0],self.answer[1]], output)
@@ -82,3 +88,21 @@ class SiameseNetwork(BasicModel):
         else:
             raise ValueError('wrong input of matching type. Please input pairwise or pointwise.')
         return model
+    
+    
+if __name__=="__main__":
+    from models.BasicModel import BasicModel
+    import argparse
+    from params import Params
+    import models,dataset
+    parser = argparse.ArgumentParser(description='running the complex embedding network')
+    parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)
+    parser.add_argument('-gpu', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default=0)
+    args = parser.parse_args()      
+    params = Params()
+    config_file = 'config/config_local.ini'    # define dataset in the config
+    params.parse_config(config_file)   
+    reader = dataset.setup(params)
+    params.reader = reader
+    self= BasicModel(params)
+    

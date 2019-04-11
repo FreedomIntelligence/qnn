@@ -18,7 +18,7 @@ from units import to_array
 from tools import evaluation
 
 class BucketIterator(object):
-    def __init__(self,data,always=False,opt=None,batch_size=2,batch_num = 0, max_sequence_length=0,shuffle=True,test=False,position=False,backend="keras"):
+    def __init__(self,data,opt=None,batch_size=2,batch_num = 0, max_sequence_length=0,shuffle=True,test=False,position=False,backend="keras",need_balanced = False,always = False,balance_temperature=1):
         self.shuffle=shuffle
         self.data=data
         self.batch_size = batch_size
@@ -28,6 +28,9 @@ class BucketIterator(object):
         self.transform=self.setTransform()
         self.always=always
         self.max_sequence_length = max_sequence_length
+        self.need_balanced = need_balanced
+        self.balance_temperature=balance_temperature
+
         
         if opt is not None:
             self.setup(opt)
@@ -78,14 +81,50 @@ class BucketIterator(object):
         
         return [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
     
-    def __iter__(self):
-        if self.shuffle and not self.test:
-            c = list(zip(*self.data))
+    def balance(self,data):
+        
+        lenght_per_label=sum(data[-1])
+        
+        from functools import reduce
+        product = reduce((lambda x, y: x * y), lenght_per_label,1)
+        
+        importance = product/lenght_per_label
+        importance= importance /sum(importance)
+        exp = np.exp(importance * self.balance_temperature ) 
+#        exp = exp /np.sum(exp)
+#        ratio =  product/lenght_per_label
+        ratio = exp/max(exp) 
+        data_groupby_label = dict()
+        for i in range(len(data[0])):
+            label = data[-1][i].argmax()
+            data_groupby_label.setdefault(label,[])
+            data_groupby_label[label].append(i)
+        
+        balance_index = []
+        for j in range(data[-1].shape[-1]):
+            k = int(len(data_groupby_label[j]) * ratio[j])
+            balance_index.extend( random.sample(data_groupby_label[j],k))
+        
+        index_by_list = lambda L, Idx :  [L[i] for i in Idx]
+        
+        return [index_by_list(feature,balance_index) if type(feature) == list  else feature[balance_index] for feature in data]
+        
+        
+        
+            
+                
+        
+        
+        return data
+    def __iter__each(self,data):
+        if (self.shuffle and not self.test) or self.need_balanced:
+            c = list(zip(*data))
             random.shuffle(c)
-            self.data = [i for i in zip(*c)]
-
+            data = [i for i in zip(*c)]
+        
         if self.batch_num == 0:
-            batch_num = int(len(self.data[1])/self.batch_size)
+           
+            batch_num = int(len(data[1])/self.batch_size)
         else:
             batch_num = self.batch_num
 
@@ -96,4 +135,20 @@ class BucketIterator(object):
 
         for index in indexes:
 #            yield self.transform([item[index[0]:index[1]] for item in self.data])
-            yield self.transform([item[index[0]:index[1]] for item in self.data])
+            yield self.transform([item[index[0]:index[1]] for item in data])
+        
+
+    def __iter__(self):
+        
+        if self.need_balanced:
+            data=self.balance(self.data)
+            
+        if not self.always:
+            for sample in self.__iter__each(data):
+    #            yield self.transform([item[index[0]:index[1]] for item in self.data])
+                yield sample
+        else:
+            while True:
+                for sample in self.__iter__each(data):
+    #            yield self.transform([item[index[0]:index[1]] for item in self.data])
+                    yield sample

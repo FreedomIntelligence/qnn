@@ -121,7 +121,7 @@ class DataReader(object):
         pickle.dump(dictionary,open(pkl_name,"wb"))
         return dictionary   
     
-    def get_train_2(self,shuffle = True,iterable=True, max_sequence_length=0,overlap_feature = False,sampling_per_question = False):
+    def get_train_2(self,shuffle = True,iterable=True, max_sequence_length=0,overlap_feature = False,sampling_per_question = False,need_balanced=False,always = False,balance_temperature=1):
         
         x_data = []
         num_samples = 0
@@ -224,7 +224,8 @@ class DataReader(object):
         if iterable:
             x = [l for l in zip(*x_data)]
             data = (x,y)
-            return BucketIterator(data,batch_size=self.batch_size, batch_num = int(self.num_samples/self.batch_size),shuffle=True).__iter__()
+            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,need_balanced=need_balanced,always=always,balance_temperature=balance_temperature).__iter__()
+#            return BucketIterator(data,batch_size=self.batch_size, batch_num = int(self.num_samples/self.batch_size),shuffle=True,need_balanced=need_balanced,always=always).__iter__()
         else: 
             return x_data,y
         
