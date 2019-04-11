@@ -1,0 +1,1500 @@
+" the electrical state at the terminal matches the battery " " s electrical state "	terminal 1 is connected to the negative battery terminal
+there is a gap between the postive terminal 6	there is no gap between terminal 6 and the positive terminal
+it was copntained ina closed circuit	bulb a is still contained in a closed path with the battery .
+when one bulb goes out it creates a gap on the path .	each bulb is in its own path
+burnt bulbs have no voltage at one of there terminals .	a non-zero voltage means that the terminals are not connected .
+the closed path is connected to the light bulb	bulb a was still contained in the same closed path with the battery .
+because bulb a is contained within the same closed path as the battery	bulb a was still contained in the same closed path with the battery .
+because there is a gap in bulb b	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+there is a damaged bulb	terminal 6 is separated by a gap from the negative battery terminal
+the path must be closed in order for the bulb to be lit	if a bulb and a switch are in the same path the switch affects the bulb
+bulbs a and c are in separate paths .	a , b and c are in different paths
+the battery is a chemical reaction that does not rely on the circuit being complete or not .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+you have reached a point where the terminals are not connected to each other .	the terminals are not connected
+bulbs a and c are not in a closed path with bulb b	bulb b is in a separate path
+when switch z was closed bulb a was in a complete curcuit	bulb a is still contained in a closed path with the battery and switch z .
+had a closed path to the battery	bulb a was still contained in the same closed path with the battery .
+switch y is not in the path to the battery	bulb a is still in a closed path with the battery
+there was no gap between terminal 6 and the positive terminal .	there is no gap between terminal 6 and the positive terminal
+not contained in a closed path	bulb c was not in a closed path
+the battery terminals have different electrical states .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because bulb a is damaged	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+an open switch causes a gap .	the open switch creates a gap
+bulb a and bulb c affect each other .	a and c are in the same closed path
+the terminal is separated from the battery terminal	the terminals are separated by a gap
+if it disrupts the path of the bulb and the battery	when the switch and the bulb are contained in the same path
+if the switch it is in the closed path , then it affects the bulb	if a bulb and a switch are in the same path the switch affects the bulb
+the battery is connected to itself in a closed path	the battery is contained in a closed path which does not contain any other components
+switch y is not in the same path of bulb a .	bulb a is still in a closed path with the battery
+where the switch is in path determines whether it affects the bulb	if a bulb and a switch are in the same path the switch affects the bulb
+when a switch is open the circuit is no longer complete	there is an incomplete circuit
+a bulb causes a difference in electrical state	a non-zero voltage means that the terminals are not connected .
+the battery must be connected to the bulb	there is a complete circuit
+the voltage between terminal 1 and the positive terminal is 1.5 v	terminal 1 and the positive terminal are separated by the gap
+because the positive circuit has a voltage of 1.5 volts .	terminal 1 and the positive terminal are separated by the gap
+the circuit is no longer complete when the switches are open	there is an incomplete circuit
+the bulb is only connected at the negative connection .	the battery is in an open path
+" energy flows through the path so if there " " s a gap , there " " s no energy "	if a bulb and a switch are in the same path the switch affects the bulb
+there is not a terminal connected to the positive path of the battery	the battery is in an open path
+the terminal is not connected to the battery terminal	the terminals are not connected
+if the path contains is closed with a battery , the bulb will light up .	if a bulb and a switch are in the same path the switch affects the bulb
+there is no gap between the positive battery terminal and terminal 5	there is no gap between terminal 5 and the positive terminal
+it cuts the current from the battery	the path is not closed
+gap between terminal 3 and positive battery terminal	terminal 3 and the positive terminal are separated by the gap
+both bulbs a and c are contained in a closed path	a and c are in the same closed path
+bulb a and bulb c were still contained in a closed path with the battery .	bulbs a and c are still contained in closed paths with the battery
+because the gap creates a difference in electrical states	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the battery is contained in a closed path without any devices	the battery is contained in a closed path which does not contain any other components
+there is still a closed path	if bulb a burns out , bulbs b and c are still in a closed path
+the switch is in the same path as the bulb	when the switch and the bulb are contained in the same path
+the are on the same wire	a and c are in the same closed path
+bulb b does not effect the other bulbs	there is an incomplete circuit
+there is a closed path	bulbs a and b are in a closed path
+because the meter was hooked up to two sides of the battery .	terminal 1 and the positive terminal are separated by the gap
+there is no gap in the path	terminal 1 and the positive terminal are separated by the gap
+removing or damaging one bulb will not affect the other .	a and c are in different paths with the battery
+if there is a gap between the terminals , the voltage will be different .	measuring voltage indicates whether two terminals are separated by a gap .
+because the chemical reaction is not effected by a gap .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+there is not a connection between a bulb terminal and a battery terminal .	there is no gap between the terminals
+that it is connected to the negative terminal	there is no gap between the terminals
+terminal 1 is connected to the 1.5 volt battery .	terminal 1 is connected to the negative battery terminal
+makes it an open path rather then closed	there is an open path
+because a and c still have a connection to the battery	bulbs a and c are still in closed paths with the battery
+the battery is on a closed path	the battery is contained in a closed path in which there is no bulb
+it was enclosed in a complete circuit	bulb a was still contained in the same closed path with the battery .
+if it is in the same path as the bulb .	when the switch and the bulb are contained in the same path
+because of the chemical reaction in the battery	a battery uses a chemical reaction to maintain different electrical states at the terminals
+becaquse there was a gap in the connection	terminal 1 and the positive terminal are separated by the gap
+there was a negavtive gap	terminal 4 is separated by a gap from the negative battery terminal
+if the bulb is contained in a closed path with a switch	when the switch and the bulb are contained in the same path
+positive battery terminal is separated by a gap from terminal 6	there is no gap between terminal 6 and the positive terminal
+" because switch z is in bulb c " " s closed path "	there is a path containing both z and c
+bulb a and b are still contained within closed paths	bulbs a and b are in a closed path
+a battery always has voltage unless it is damaged	a battery uses a chemical reaction to maintain different electrical states at the terminals
+terminal 6 is connected to postive terminal of battery	terminals 1 and 6 are not connected
+because terminal 1 is not connected to terminal 6 .	terminals 1 and 6 are not connected
+there is no difference in electrical states .	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+because bulbs are connected to the negative terminal of the battery	terminals 1 , 2 and 3 are connected to the negative battery terminal
+the positive battery terminal is separated by a gap from terminal 1	terminal 2 is not separated from the negative battery terminal
+bulb b and c both still are on a closed path with the battery	bulbs b and c are still in closed paths with the battery
+bulb a and b are still contained in closed paths with the battery	if c burns out , then a and b are still in a closed path with the battery .
+the bulb causes a gap	measuring voltage indicates the place where the electrical state changes due to a gap .
+there is a gap between the battery terminal and the bulb terminal .	there is no gap between the terminals
+when a switch , a battery , and a bulb are in a closed circuit .	when the switch and the bulb are contained in the same path
+the terminals are not connected	terminals 1 and 6 are not connected
+circuit 2 is a short circuit	there is no closed path containing the battery
+it is not in the same path as bulb a .	bulb a is still in a closed path with the battery
+the path must contain a battery	the switch and the bulb have to be in the same path
+the blub is not contained in the same closed path as the battery	the bulb is not in the closed path containing the battery
+because it was connected to the positive terminal	terminal 1 and the positive terminal are separated by the gap
+terminal 1 and terminal 4 are connected	terminals 1 and 4 are connected
+the battery always has voltage	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the negative battery terminal and terminals 1 , 2 , and 3 are located closest to each other	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+terminal 4 is connected to bulb b	terminal 4 and the positive battery terminal are in the same electrical state
+since a a gap does not affect the voltage of a battery	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+the positive terminal is connected to the bulb	terminal 1 and the positive terminal are separated by the gap
+because 1.5 v minus 0 v equals 1.5 v	terminal 1 and the positive terminal are separated by the gap
+the switch has to be contained in the same path as the bulb and the battery	the switch and the bulb have to be in the same path
+the bulbs are conained in different paths with the battery	a and c are in different paths with the battery
+a battery and a closed circuit .	the bulb and the battery are in a closed path
+because bulb c was not still contained in a closed path with the battery	bulb c was no longer in a closed path with the battery
+there is a closed path that contains bulb and a battery	bulb a is still in a closed path with the battery
+" both ends of the battery aren " " t connected to each other . "	there is no closed path containing the battery
+there is a gap in the path	if bulb a burns out , neither b nor c is in a closed path
+because there was a closed circuit	terminal 1 and the positive terminal are separated by the gap
+if the bulb is contained within the path	the switch and the bulb have to be in the same path
+a and c both create circuts with the battery	bulbs a and c are still in closed paths with the battery
+the positive battery is separated by a gap with terminal 1 .	terminal 1 and the positive terminal are separated by the gap
+the positive terminal and terminal 1 read 1.5 v because the difference across the terminals is 1.5 v	terminal 1 and the positive terminal are separated by the gap
+terminal 4 is connected to the positive battery terminal .	terminal 5 and the positive terminal are connected
+because it is connected to a bulb that is a closed path	the battery is in an open path
+because there is a gap between terminal 1 and terminal 6 .	there is a gap between terminals 1 and 6
+terminal 1 was connected to a negative terminal 4 .	terminals 1 and 4 are connected
+because x and z could be closed and it will work .	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+the switch is in a path with the bulb	when the switch and the bulb are contained in the same path
+bulbs a and c are not on the same closed path .	a and c are not in the same path
+if bulb b is damaged it does not make a complete circut	there is an incomplete circuit
+bulb a and b are still contained within a closed path and connected to a battery	if c burns out , then a and b are still in a closed path with the battery .
+the value of measurement indicates if the bulb is burned out	measuring voltage indicates the place where the electrical state changes due to a damaged bulb .
+bulb b and c are on a closed path with the battery	no path containing both the switch x and either bulb b or bulb c
+bulb a is contained in a closed path and not affected by switch y .	switch y and bulb a are not in the same closed path
+the electrical states of two terminals when connected will determine the gaps and help to locate a burned out bulb .	measuring voltage indicates the place where the electrical state changes due to a damaged bulb .
+there was a closed path between the battery and bulb a .	bulb a was still contained in the same closed path with the battery .
+path 5 is a short circuit .	the battery is contained in a path which does not contain any other components
+the electrical state can locate the gap	measuring voltage indicates the place where the electrical state changes due to a gap .
+because bulb a is in a closed circuit with the battery and switch x	bulb a is still contained in a closed path with the battery and switch x .
+the bulbs are on the same path with the battery	a and c are in the same path
+the negative battery terminal is seperated by a gap from terminal 6 making the voltage 0	terminal 6 is separated by a gap from the negative battery terminal
+the negative battery terminal is connected to bulb terminal 1,2 and 3 only .	terminals 4 , 5 and 6 are not connected to the negative battery terminal
+that there is a gap	there is no gap between the terminals
+bulb a is contained in a closed path with the battery	bulb a is still contained in a closed path with the battery .
+a component to the battery	there is a complete circuit
+terminal 4 is connected to the positive batterty terminal	terminal 4 and the positive terminal are connected
+because bulb a and b are within the same path	each bulb is in its own path
+because it changes the path from closed to open	there is an open path
+because it was in the same circuit	switch y and bulb a are not in the same closed path
+a closed component to the battery	the bulb and the battery are in a closed path
+bulbs a and c are in separate paths .	a and c are in different paths
+terminal 2 was connected to the negative terminal	terminal 1 is connected to the negative battery terminal
+bulb a and b will stil be in a closed path with the battery	if c burns out , then a and b are still in a closed path with the battery .
+bulbs a and b are still contained in closed paths with the battery .	if c burns out then a and b are still in a closed path with the battery
+there was a closed circuit	bulb a is still contained in a closed path with the battery .
+if it is in the closed path with the battery	when the switch and the bulb are contained in the same path
+registering a voltage at a location tells you there is a gap somewhere in between the measured terminals	measuring voltage indicates the place where the electrical state changes due to a gap .
+contained in the same circuit not connected to the opposite terminal	terminals 1 and 2 are connected
+it creates a gap in the closed path	a damaged bulb creates a gap
+closed path , connected to a battery	there is a closed path containing both the bulb and a battery
+becasue it can be in another closed pathway	there is a path containing a
+because b and c were still on a closed path with the battery	bulb b and bulb c were still contained in the same closed path with the battery .
+it creates a gap , so no electricity from the battery can flow to the other bulbs .	there is an open path
+because there is a gap in the circuit .	there is a gap in the circuit
+it was not a closed path	there was no longer a closed path containing bulb c and the battery
+because the battery is connected to the bulb	the battery is in an open path
+there is a gap between the terminals	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+the battery alone is in a closed path	the battery is contained in a path which does not contain any other components
+the bulbs are contained in diffrent closed pathes .	a and c are in different paths with the battery
+bulbs b and c are contained on the same path with the battery .	b and c are in the same path with the battery
+there was closed paths between the battery	bulb a was still contained in the same closed path with the battery .
+because it had a complete circuit with no gaps to the battery	bulb a is still contained in a closed path with the battery .
+because the first 3 terminals are connected to the negative side of the battery .	terminals 1 , 2 and 3 are connected to the negative battery terminal
+bulbs b and c are on the ame path as the battery	bulbs b and c are still in closed paths with the battery
+there is a gap in the connection	there is no gap between terminal 6 and the positive terminal
+terminal has the same electrical state	terminals 1 and 2 are connected and in the same electrical state
+if the switch is in the path is can affect the light bulb	if a bulb and a switch are in the same path the switch affects the bulb
+" the electricity can " " t pass through "	terminals 4 , 5 and 6 are connected to the positive battery terminal
+because bulb a is on a different path than bulbs b and c	bulb a is still contained in a closed path with the battery .
+bulbs b and c will be on open paths with the battery	if bulb a burns out , b and c are no longer in a closed path with the battery
+bulb a was on a closed path	bulb a is still contained in a closed path with the battery .
+bulb a and bulb c are contained in a closed path with the battery .	if c burns out then a and b are still in a closed path with the battery
+because the gap will not effect the voltage .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+terminal 1 is connected to the negative terminal and terminal 6 is connected to the positive terminal	terminals 1 and 6 are not connected
+the attery is not in a closed path	the battery in 2 is not in a closed path
+because it creates a gap which in turn created an open path	the open switch creates a gap
+the negative battery terminal is separated by a gap from terminal 6 and bulb c is damaged	terminal 6 is separated by a gap from the negative battery terminal
+when it disrupts a complete path	when the switch and the bulb are contained in the same path
+there was a connection between terminal 1 and the positive terminal	terminal 1 is connected to the negative battery terminal
+terminal 1 is connetced to terminal 4	terminals 1 and 4 are connected
+there is no gap in the circuit .	bulb a is still contained in a closed path with the battery .
+there is a closed path that contains bulb a and does not contain switch y	bulb a is still in a closed path with the battery
+bulb a and bulb c are in a closed path with the battery .	bulb b and bulb c were still contained in the same closed path with the battery .
+bulbs a and b are still contained on a closed path with the battery	if c burns out then a and b are still in a closed path with the battery
+because it was not connect to the negative end of the terminal	terminal 1 is connected to the negative battery terminal
+because there was no gap from the positive terminal of the battery	terminal 1 and the positive terminal are separated by the gap
+there is a bad connection between a bulb terminal and a battery terminal .	there is no gap between the terminals
+because it still caught the current from both terminals	switch y and bulb a are not in the same closed path
+bulbs b and c are not in a closed path with bulb a	each bulb is in its own path
+damaged bulb a creates a gap in the circuit	if bulb a burns out , neither b nor c is in a closed path
+the current has shorted out the battery .	there is a short circuit
+the terminals go from not being connected to being connected to each other .	the terminals are not connected
+because terminal 1 is connected to the positive battery terminal	terminal 1 is connected to the negative battery terminal
+the battery is contaied in a closed path without another component .	the battery is contained in a path which does not contain any other components
+the battery and light bulb are not contained in a close path	the battery in 4 is not in a closed path
+because one of the bulb terminals is bad , and the other ones are good .	terminals 4 , 5 and 6 are connected to the positive battery terminal
+because it is not in the path to the battery	bulb a is still in a closed path with the battery
+bulb a , bulb b and bulb c are not contained in the same closed path .	a and c are not in the same path with the battery
+it has its own path that is connected to the battery	each bulb is in its own path
+there is a gap between terminal 6 and a positive battery terminal	there is no gap between terminal 6 and the positive terminal
+if the path is unbroken by the switch then the switch will not have an affect	if a bulb and a switch are in the same path the switch affects the bulb
+bulbs a and c are wired within a closed path	a and c are in the same closed path
+because it was still connected to the battery terminal .	bulb a is still contained in a closed path with the battery .
+there is no gap so there is no difference in voltage	there is no gap between the terminals
+there is not a closed path that contains the batteyr and bulb b and bulb c	if bulb a burns out , there is no longer a closed path containing b , c and the battery
+the voltage stays the same within the battery	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because there is a bulb in one of the paths .	there is no closed path containing the battery
+when a switch and bulb are whithin a closed path	when the switch and the bulb are contained in the same path
+there is a gap in the circut .	there is a gap in the circuit
+terminal 1 is connected to terminl 4 .	terminals 1 and 4 are connected
+the positive battery terminal is separarted by a gap from terminal 3 .	terminal 3 and the positive terminal are separated by the gap
+terminal 1 is connected to the positive terminal	terminal 1 and the positive terminal are separated by the gap
+bulbs a and c are still contained in closed paths with the battery	if c burns out , then a and b are still in a closed path with the battery .
+if a switch is connected to a bulb it will still work .	if a bulb and a switch are in the same path the switch affects the bulb
+because bulb c is not contained on the path of the other bulbs	a and b have their own path
+terminal is connected to postive terminal of the battery	terminal 6 and the positive terminal are connected
+the voltage does not change .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the two terminals of a battery will always have different electrical states due to a chemical reaction inside the battery	a battery uses a chemical reaction to maintain different electrical states at the terminals
+there are other closed paths	bulbs a and b are in a closed path
+the bulb does not effect the others	there is an incomplete circuit
+the are on the same path	a and c are in the same path
+the posiive battery terminal is separated by a gap from terminal 2	terminal 2 and the positive terminal are separated by the gap
+terminal 2 and the positive terminal had different electrical states .	terminal 2 and the positive terminal are separated by the gap
+switch z is contained in a closed path	there is a path containing both z and c
+the battery will have a different electrical state than the circuit	a battery uses a chemical reaction to maintain different electrical states at the terminals
+if one bulb is removed , the others stop working	a and c are in the same closed path
+terminals 4 , 5 , and 6 are only connected to the positive battery terminal .	terminals 4 , 5 and 6 are connected to the positive battery terminal
+positive battery is seperated by a gap from terminal 2	terminal 2 and the positive terminal are separated by the gap
+because bulb c burning out would not damage the complete circuit	if c burns out , then a and b are still in a closed path .
+because bulb a and b are still contained within a closed path with the battery	if c burns out then a and b are still in a closed path with the battery
+because there was two negative connections	terminals 1 and 2 are connected
+are all on separate paths	a and c are in different paths
+because switch y is not conatined in the closed path of bulb a and the battery .	bulb a is still in a closed path with the battery
+bulb a and bulb b and the battery are in a closed path .	if c burns out , then a and b are still in a closed path with the battery .
+i said bulbs a and c are linked to the battery !	bulbs a and c are still in closed paths with the battery
+bulb a is contained in their closed paths	if bulb a burns out , neither b nor c is in a closed path
+if the switch and the bulb are in the same path	when the switch and the bulb are contained in the same path
+the damaged bulb creates a gap in the path .	a damaged bulb creates a gap
+the bulb is not fully in the path of the circuit	the battery is contained in a path which does not contain any other components
+the positive battery terminal is connected to terminal 4 .	terminal 4 and the positive terminal are connected
+bulb a is not in the same path as bulb b and bulb c .	each bulb is in its own path
+because the circuits will be closed	bulbs b and c are still in closed paths with the battery
+there is a gap in the closed path .	if bulb a burns out , neither b nor c is in a closed path
+there is not a closed path with the battery and bulb c	there was no longer a closed path containing bulb c and the battery
+the electrical state will be non-zero	a non-zero voltage means that the terminals are not connected .
+the positive terminal and terminal 2 are seperated by a gap	terminal 2 and the positive terminal are separated by the gap
+both components need to be in closed paths .	the bulb and the battery are in a closed path
+switch x can still form a closed path	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+because bulb b is damaged and does not allow the positive battery current to reach the other side .	terminals 1 , 2 and 3 are not connected to the positive battery terminal
+terminal 6 is connected to postive end of battery and the voltage meter	terminal 6 and the positive terminal are connected
+a terminal is not connected to the positive battery terminal .	terminals 1 and 4 are connected
+positive terminal is serperated from terminal 2	terminal 2 and the positive terminal are separated by the gap
+the battery is in an open path to the bulb .	the battery is in an open path
+there will be a gap where the bulb holder is supposed to be	there is a gap in a circuit
+bulbs b and c will still be on closed paths with the battery	bulbs b and c are still in closed paths with the battery
+there is no difference in electrical states	terminals 1 and 2 are connected and in the same electrical state
+all have the same voltage reading	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+the path a bulb is on determines whether or not a switch affects a bulb	if a bulb and a switch are in the same path the switch affects the bulb
+bulb a is on its own closed path and bulbs b and c are on the same closed path	there is a path containing a and a different path containing b and c
+bulb a is connected to switch z	there is no path containing both switch y and bulb a
+terminal 6 is connected to the posititve battery terminal .	terminal 6 and the positive terminal are connected
+bulb had a short circuit	there is a complete circuit
+battery will always have voltage .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+it turns off all the bulbs .	the open switch creates a gap
+the voltage is 1.5 because thebulb terminal is connected to the battery terminal .	terminal 1 is connected to the negative battery terminal
+because a and c are still in a closed circuit	bulbs a and c are in a closed path
+there is still a closed path	bulbs a and c are in a closed path
+the positive battery terminal is not connected to the negative battery terminal .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulb c is not on the same path as bulb a or bulb b	bulb c is in a separate path
+the terminals are connedted to the negative terminal of the battery .	terminals 1 , 2 and 3 are connected to the negative battery terminal
+because those terminals are connected to the positive terminal of the battery .	terminals 4 , 5 and 6 are connected to the positive battery terminal
+a light bulb is attached to the battery .	the battery is in an open path
+switch z could be closed	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+the positive battery terminal is a closed path from terminal 4 .	terminal 4 and the positive battery terminal are in the same electrical state
+a damaged bulb disrupts the flow of the current .	a damaged bulb creates a gap
+because there is no gap between the positive and negative terminal	a battery uses a chemical reaction to maintain different electrical states at the terminals
+terminal 1 is connected to a battery	terminals 1 and 2 are in the same electrical state
+bulb a was still in a closed path	bulb a is still contained in a closed path with the battery and switch x .
+there is a gap in the connection .	there is no gap between the terminals
+there is a closed path , with no lightbulb in the path	the battery is contained in a path in which there is no bulb
+damaging bulb a creates a gap .	if bulb a burns out , neither b nor c is in a closed path
+bulb a is in the same path of bulbs b and c	if bulb a burns out , b and c are no longer in a closed path with the battery
+bulbs a and c are still contained in a closed path with the battery .	bulbs a and c are still in closed paths with the battery
+bulb b did not create a gap in the path for bulb b or c	bulbs a and c are still in closed paths
+terminal 1 is not connected to the positive battery terminal	terminal 1 and the positive terminal are not connected
+because there is a gap	terminal 1 and the positive terminal are separated by the gap
+the battery is contained in the circuit and the light bulb is not	the battery is contained in a path in which there is no bulb
+because a chemical reaction inside the battery keeps the positive and negative terminals at different electrical states at all times .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the battery is in a closed circuit	the battery is contained in a closed path in which there is no bulb
+because it stops the flow of one side of a battery from reaching the other light bulbs .	the path is not closed
+the battery uses a chemical reaction to maintain the voltage ,	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because it was contained in same path as the battery	bulb a was still contained in the same closed path with the battery .
+terminal 4 , terminal 5 , and terminal 6 are connected to the positive terminal	terminals 4 , 5 and 6 are connected to the positive battery terminal
+terminal 4 is separated by a gap from the negative terminal	terminal 4 is separated by a gap from the negative battery terminal
+bulb b and c are contained in the same path with the battery .	b and c are in the same path with the battery
+it was in a closed path with a battery	bulb a was still contained in the same closed path with the battery .
+the negative batter terminal is seperated by a gap from terminal 4	terminal 4 is separated by a gap from the negative battery terminal
+because the path between the battery and the light bulb is not closed	the path is not closed
+there is a gap between the bulb and the battery terminal .	there is no gap between the terminals
+bulb a and bulb b are containe4d in different paths with the battery .	a and c are in different paths with the battery
+that the terminals are not connected to each other .	the terminals are not connected
+because a difference in voltage is due to a gap .	a non-zero voltage means that there is a gap
+it was connected to the positive terminal .	terminal 1 and the positive terminal are separated by the gap
+the batteries terminals are not connected	circuit 4 has no closed paths
+because the path was closed	bulb a is still contained in a closed path with the battery .
+the positive battery terminal is separated by a gap	terminal 1 and the positive terminal are separated by the gap
+if a bulb is in a closed circuit with a battery and a switch the switch will affect the bulb .	when the switch and the bulb are contained in the same path
+bulb c is not in the same path of the battery .	if c burns out then a and b are still in a closed path with the battery
++ releases current - recieves it ?	terminals 4 , 5 and 6 are connected to the positive battery terminal
+because there is not a closed circuit anymore for bulb c	bulb c was no longer in a closed path with the battery
+terminal 5 is connected to teh positive battery terminal	terminal 5 and the positive terminal are connected
+electrical state is not connected to volts	a non-zero voltage means that the terminals are not connected .
+it will cut off the circuit	bulb b creates a gap
+bulbs are on different closed paths	a and c are in different paths
+the path will be closed	bulbs a and b are in a closed path
+because the path is short	the path is not closed
+both terminals were connected to the negative terminal of the battery	terminals 1 and 2 are connected and in the same electrical state
+bulb a was in a closed circuit .	bulb a is still contained in a closed path with the battery .
+the path it was on	there is a path containing both z and c
+because terminal 1 had both a positive and negative charge .	terminal 1 and the positive terminal are separated by the gap
+terminal 1 is not connected to the positive battery terminal	terminal 1 and the positive terminal are not connected
+bulb b and bulb c were still contained in a closed path with the battery	bulb b and bulb c were still contained in the same closed path with the battery .
+that the bulb terminal is only connected to one of the battery terminals	there is no gap between the terminals
+bulbs a and c were still contained on closed paths with the batery	bulbs a and c are still contained in closed paths with the battery
+terminal five is connected to the positive battery terminal .	terminal 5 and the positive terminal are connected
+the gap prevents the terminals from being closed	terminal 6 is separated by a gap from the negative battery terminal
+because there is no closed path to the battery	the path is not closed
+it can be either closed or open	if a bulb and a switch are in the same path the switch affects the bulb
+terminal 6 has gap	terminals 1 and 6 are separated by the gap
+terminal one is connected to the negative battery terminal	terminal 1 is connected to the negative battery terminal
+there is a difference of 1.5 volts between terminal 1 and the positive terminal	terminal 1 and the positive terminal are separated by the gap
+" the battery " " s voltage comes from a chemical reaction that takes place within the battery itself . "	a battery uses a chemical reaction to maintain different electrical states at the terminals
+when the switch is on a closed path with the bulb	when the switch and the bulb are contained in the same path
+removing one bulb shuts off the other .	a and c are in the same closed path
+bulb a is in a closed path with a battery	bulb a is still in a closed path with the battery
+if the bulb and the switch are contained by a closed path then the switch affects the bulb .	when the switch and the bulb are contained in the same path
+both of the terminals are connected to the negative battery terminal	terminals 1 and 2 are connected
+the bulb is not connected on both ends	the battery is contained in a path which does not contain any other components
+the battery is not contained in the closed path	there is no closed path containing the battery
+the bulb will not light	there is no gap between the terminals
+if bulb b is damaged , then the circut is no longer closed .	there is no closed path
+a battery and a bulb must be in a closed path together	the bulb and the battery are in a closed path
+a damaged bulb creates a gap in the path .	a damaged bulb creates a gap
+bulb c and switch z are in the same closed path	there is a path containing both z and c
+a switch creates a break in the closed path .	the open switch creates a gap
+because the battery has electricity and the gap does not	a battery uses a chemical reaction to maintain different electrical states at the terminals
+it must be in a closed path .	the bulb and the battery are in a closed path
+circuit 2 is not a short circuit because the battery is not connected to itself .	the battery in 2 is not in a closed path
+because if the gap is open the bulb will not go on	there is a gap in a circuit
+the path has to be closed in order for a switch to affect a bulb	if a bulb and a switch are in the same path the switch affects the bulb
+bulbs a and b are still connected to the closed circuit containing the battery	if c burns out then a and b are still in a closed path with the battery
+bulb a and c will still be contained in a closed path with the battery	bulbs a and c are still in closed paths with the battery
+removing of damaging any of the bulbs will shut off the other bulbs .	a and c are in the same closed path
+it still has a connect path between bulb a and c and the battery .	there is an incomplete circuit
+terminal is connected to the battery	terminals 1 , 2 and 3 are connected to the negative battery terminal
+i think the red x means that this is dangerous and should never happen unless something is seriously wrong .	there is a short circuit
+terminal 1is connected to terminal 4	terminals 1 and 4 are connected
+terminal one is not connected to terminal six	terminals 1 and 6 are not connected
+" if the switch is included in the bulb " " s closed path , then the switch being open will affect the bulb "	if a bulb and a switch are in the same path the switch affects the bulb
+the terminals were connected to the positive terminals of the battery	terminal 1 and the positive terminal are separated by the gap
+if it is closed and contained in the same closed path with the battery	when the switch and the bulb are contained in the same path
+its not effecting the current to switch a	there is a path containing a , c , z and x
+the path has to be closed for the bulb to light up	if a bulb and a switch are in the same path the switch affects the bulb
+the positive battery was not connected to terminal one .	terminal 1 and the positive terminal are not connected
+the circuit is not closed around the battery .	the battery in 2 is not in a closed path
+because it can go through switch z	there is a path containing a , c , z and x
+the negative battery terminal is not reaching terminal 6	terminal 6 is separated by a gap from the negative battery terminal
+terminal 6 was only connected to the positive terminal .	terminal 6 and the positive terminal are connected
+if the path is closed with the battery , the switch doesnt affect it	if a bulb and a switch are in the same path the switch affects the bulb
+it does not damage the battery	there is no closed path containing the battery
+terminal 3 and the positie terminal are not connected .	terminal 3 and the positive terminal are not connected
+because bulb c is not included in the closed path	there is a closed path with a and b that c is not in .
+positive battery terminal is separated by a gap	there is no gap between terminal 6 and the positive terminal
+terminal 1 and the positive terminal had different electrical states .	terminal 1 and the positive terminal are separated by the gap
+circuit was complete until gap	terminal 1 and the positive terminal are separated by the gap
+the gap in terminal 2 is postive	terminal 2 and the positive terminal are separated by the gap
+bulbs a and c are in separate closed paths with the battery .	a and c are in different paths with the battery
+because terminal one is connected to the positive battery terminal	terminal 1 is connected to the negative battery terminal
+bulb , battery , and switch are in closed path	when the switch and the bulb are contained in the same path
+terminals 4 , 5 , and 6 are connected to the positive battery terminal	terminals 4 , 5 and 6 are connected to the positive battery terminal
+the open switch will open the path	when the switch and the bulb are contained in the same path
+terminal 5 and the positive battery terminal are in the same state .	terminal 5 and the positive terminal are connected
+bulbs a and c are contained in different paths with the battery	a and c are in different paths with the battery
+because the battery is not in a closed path .	the battery in 4 is not in a closed path
+bulb a creates a gap	each bulb is in its own path
+terminal 6 is connected to the positive battery terminal	terminal 6 and the positive terminal are connected
+we can find the burnt out bulb by finding voltage between different terminals	measuring voltage indicates the place where the electrical state changes due to a damaged bulb .
+the gap between the damaged wires of bulb b creates a gap in the path .	bulb b creates a gap
+the terminal is not connected to the positive battery terminal .	terminal 2 and the positive terminal are not connected
+the terminals are on the same side as the negative side of the battery .	terminals 1 , 2 and 3 are connected to the negative battery terminal
+switch y does not affect bulb a	there is no path containing both switch y and bulb a
+because it was in a closed path	bulb a is still contained in a closed path with the battery .
+the positive battery terminal s separated by a gap from terminal 4	terminal 4 and the positive battery terminal are in the same electrical state
+when switch z was closed bulb a was in a complete curcuit connected to the battery	bulb a is still contained in a closed path with the battery and switch z .
+the terminal is connected to a bad bulb terminal .	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+those terminals are on the same side as the negative battery terminal	terminals 1 , 2 and 3 are connected to the negative battery terminal
+it creates a gap in the current .	the open switch creates a gap
+a terminal is connected to the positive terminal of the battery	terminal 6 and the positive terminal are connected
+there is not a complete path involving both battery terminals	there is no closed path containing the battery
+both the light bulb and battery must be in a closed path .	the bulb and the battery are in a closed path
+the two terminals are connected	terminal 6 and the positive terminal are connected
+bulb is contained in a closed path .	the battery is contained in a path which does not contain any other components
+because bulb a was still in a closed path with the battery	bulb a was still contained in the same closed path with the battery .
+the battery is not connected correctly	there is a short circuit
+because it has another closed path it can use	bulb a is still in a closed path with the battery
+damaging bulb a would disrupt the closed path with the battery .	if bulb a burns out , b and c are no longer in a closed path with the battery
+the chemical reation still exists	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulb c was off when switch z was open because bulb c was directly in an open path .	bulb c was in no closed path
+because the voltage is the difference in electrical states between two terminals	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because the broken bulb created a gap not allowing the current to flow through both .	terminals 4 , 5 and 6 are separated from the negative battery terminal by a gap
+because a and b are in series and a and c are in parallel	if c burns out , then a and b are still in a closed path .
+it receives current from switche z .	there is a path containing a , c , z and x
+the positive batter terminal does not have a gap from terminal 4	terminal 4 and the positive terminal are not separated by the gap
+there is a gap caused by bulb a	if bulb a burns out , neither b nor c is in a closed path
+bulbs a and c are not contained ina closed path	a and c are not in the same path
+bulb a come before switch y	switch y and bulb a are not in the same closed path
+bulbs b and c are contained on the same path with the battery	b and c are in the same path with the battery
+the voltage size is 0	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+same path with the battery	b and c are in the same path with the battery
+if x and z are closed then it will create a closed path	there is a path containing a , c , z and x
+because the voltage was 0 and there is a gap between 3 and 4	terminals 1 , 2 and 3 are connected to the negative battery terminal
+the terminal is connected to a negative terminal .	there is no gap between the terminals
+b and c are not in the same circuit as a .	each bulb is in its own path
+bulb b created a gap	terminal 4 and the positive battery terminal are in the same electrical state
+the battery is not connected to the bulb	the bulb is not in the closed path containing the battery
+damaged bulb a creates a gap	if bulb a burns out , neither b nor c is in a closed path
+bulbs b and c creat a gap in the path	bulb b is in a separate path
+there is a gap between terminals	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because there is a gap in the bulb	there is a gap in a circuit
+it is not in the same path with the bulb and battery	bulb a is still in a closed path with the battery
+b and c will be in their own closed paths with the battery .	bulbs b and c are still in closed paths with the battery
+it is connected to the positive terminal	terminal 1 and the positive terminal are separated by the gap
+it the switch is blocking the battery it effects it if not then it doesnt matter .	if a bulb and a switch are in the same path the switch affects the bulb
+if the switch is on and makes a gap between the bulb and the battery .	when the switch and the bulb are contained in the same path
+y is not needed for bulb a to light	bulb a is still in a closed path with the battery
+terminal 1 is connected to negative	terminals 1 and 6 are not connected
+bulbs are in different closed paths	a and c are in different paths with the battery
+" because switch y isn " " t included in bulb a " " s closed path "	switch y and bulb a are not in the same closed path
+when the switch is in the path of the bulb .	when the switch and the bulb are contained in the same path
+the positive battery terminak is separated ba a gap from terminal 4	terminal 4 and the positive battery terminal are in the same electrical state
+can complete the path by having z be closed	there is a path containing a , c , z and x
+there will be a gap a bulb a	if bulb a burns out , neither b nor c is in a closed path
+elictrical state of batter and terminal	measuring voltage indicates the place where the electrical state changes due to a gap .
+the terminal is connected to the battery terminal	terminal 1 is connected to the negative battery terminal
+it creates a gap in the circut .	the open switch creates a gap
+bulb b and c were contained in a closed path with the battery	bulb b and bulb c were still contained in the same closed path with the battery .
+the value of the measurement indicates if there is a gap	measuring voltage indicates the place where the electrical state changes due to a gap .
+the positive battery terminal is separated by a gap from terminal 2 .	terminal 3 and the positive terminal are not connected
+if the damaged bulb and the other bulb are contained within the same path	the damaged bulb and the other bulb must be contained in the same path
+because bulb b is damaged so the path has a gap	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+circuit 2 is connected to a terminal on the battery	there is no closed path containing the battery
+because it has a gap .	a damaged bulb creates a gap
+it runs on a different current	if c burns out , then a and b are still in a closed path with the battery .
+the posotive battery and terminal 1 created a circut	terminal 1 and the positive terminal are separated by the gap
+the bulbs are on separate paths	bulb b is in a separate path
+a closed circuit containing a bulb and a battery	there is a closed path containing both the bulb and a battery
+bulb a , bulb b and bulb c are contained in differnt paths .	a and c are in different paths
+it had its own path	bulb a is still contained in a closed path with the battery .
+because the bulb is connected correctly .	the battery is in an open path
+the battery is contained in a closed path	there is still a closed path
+there is a gap in the path	terminal 6 is separated by a gap from the negative battery terminal
+because there is a difference between the electrical states of the two terminals .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+there is a gap in the circuit that causes a gap between terminals 1,2 , and 3 and 4,5 , and 6	terminals 4 , 5 and 6 are separated from the negative battery terminal by a gap
+bulb b and c are still contained in a path with the battery	bulbs b and c are still in closed paths with the battery
+switch z is contained in a closed path to the battery	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+bulbs a and b will still be contained in a closed path with the battery .	if c burns out , then a and b are still in a closed path with the battery .
+there are two components in the path	the battery is in an open path
+a and b are still in a closed pathway with the battery	if c burns out then a and b are still in a closed path with the battery
+bulb a will not create a gap for bulb b and c	if bulb a burns out , bulbs b and c are still in a closed path
+" bulb a " " s path only contained switch z "	switch y and bulb a are not in the same closed path
+an incomplete circuit does not affect voltage .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the gap separates the positive battery terminal from terminal 2	terminal 2 and the positive terminal are separated by the gap
+terminal 2 has a gap	terminal 2 and the positive terminal are separated by the gap
+because of the gap that bulb b created	terminal 1 and the positive terminal are separated by the gap
+b nor c will have a contained closed paths to the battery	if bulb a burns out , b and c are no longer in a closed path with the battery
+because the battery runs in a closed circuit .	there is an incomplete circuit
+each circuit must have a connection .	there is a complete circuit
+terminal connected to positive charge	terminals 4 , 5 and 6 are connected to the positive battery terminal
+because it was not contained in the closed path .	there is no path containing both switch y and bulb a
+bulbs a and b are on a different closed path	if c is damaged , a and b are still in a closed path
+because it is not in the same path	bulb a is still in a closed path with the battery
+bulbs b and c have separate paths within the closed circuit	if bulb a burns out , b and c are no longer in a closed path with the battery
+if the path is not closed , the switch will not affect the bbulb	if a bulb and a switch are in the same path the switch affects the bulb
+there is a gap between teh positive battery terminal and terminal 4 .	terminal 4 and the positive battery terminal are in the same electrical state
+a battery is in a constant state of electricity	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because voltage is the difference between two terminals and those terminals were not connected in a closed path	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+because it is in an incomplete path	the battery is in an open path
+there is a bulb connected to the battery terminal .	there is no closed path containing the battery
+voltage is the difference between a positive and negative terminal on the battery .	terminal 1 and the positive terminal are separated by the gap
+terminal 6 is connected to a positive battery terminal	terminal 6 and the positive terminal are connected
+there is a gap between terminal 3 and the positive terminal	terminal 3 and the positive terminal are separated by the gap
+bulb c was not connected to the battery .	bulb c was no longer in a closed path with the battery
+because terminal 4 is connected to the positive terminal but not the negative terminal	terminal 4 and the positive terminal are connected
+because it still was on a closed path	bulb a is still contained in a closed path with the battery .
+the gap separates the positive battery terminal from terminal 1	terminal 1 and the positive terminal are separated by the gap
+bulbs a and c are connected to the battery on the same path	bulbs a and c are still contained in closed paths with the battery
+circuit 2 is not a short circuit because the battery is not in a closed path with itself .	the battery in 2 is not in a closed path
+terminal 1 was connected to the positive terminal	terminal 1 and the positive terminal are separated by the gap
+removing one bulb shuts off the other	a and c are in the same closed path
+damaging one turns off the other	a and c are in the same path
+bulbs a , b , and c are on parallel paths	a and c are in different paths
+" without a , there " " s no closed path "	if bulb a burns out , neither b nor c is in a closed path
+because a battery has a chemical reaction that causes a voltage	a battery uses a chemical reaction to maintain different electrical states at the terminals
+if it leaves a gap in the path with the battery	when the switch and the bulb are contained in the same path
+there is a gap between the battery terminal and the bubl terminal	the terminals are separated by a gap
+" it creates a gap that doesn " " t allow the electrical current flow to to the other bulbs . "	a damaged bulb creates a gap
+because the battery is not in a closed circuit	the battery in 2 is not in a closed path
+bulb a is contained in a complete circuit when switch x is closed .	bulb a is still contained in a closed path with the battery and switch x .
+a closed path with a battery and bulb	there is a closed path containing both the bulb and a battery
+the bulb terminal and the negative battery terminal are separated by a gap	there is no gap between the terminals
+bulb c does not create a gap	there is still a closed path
+bulb a will create a gap in the path	if bulb a burns out , b and c are no longer in a closed path with the battery
+the bulbs are on the same path	a and c are in the same path
+all components are in a closed circuit .	terminal 1 and the positive terminal are separated by the gap
+a damaged bulb creates a gap in the path	a damaged bulb creates a gap
+the gap in the circuit causes the circuit to be an open circuit	there is a gap in a circuit
+the paths of the circuit are no longer complete	there is an incomplete circuit
+the battery and bulb need to be in a closed path together .	the bulb and the battery are in a closed path
+because it is still connected to a batery	there is no closed path containing the battery
+the bulb is not contained in a closed path	the battery in 4 is not in a closed path
+an open switch contained in the path will leave a gap	when the switch and the bulb are contained in the same path
+the bulb only has one terminal connected	the battery is contained in a path which does not contain any other components
+there is a difference in electrical states .	the terminals are not connected
+because the two terminals will always have different electrical states .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the battery is in a closed path with itself .	the battery is contained in a closed path which does not contain any other components
+the positive battery terminal is connected to terminal 4 .	terminal 5 is separated by a gap from the negative battery terminal
+it creates a short circuit .	the path is not closed
+there is no path between the bulb-holders	there is an open path
+there will be a gap	if bulb a burns out , neither b nor c is in a closed path
+bulb a is within its own closed path and independent of b and c	there is a path containing a and a different path containing b and c
+bulb b and bulb c are still in closed paths .	bulbs b and c are still in closed paths with the battery
+bulb a is not in the same path as bulbs b and c .	if bulb a burns out , b and c are no longer in a closed path with the battery
+terminal one is connected to terminal 4	terminals 1 and 4 are connected
+terminal 1 , terminal 2 , and terminal 3 are connected o the negative battery	terminals 1 , 2 and 3 are connected to the negative battery terminal
+" the battery isn " " t working and is dead . "	there is a short circuit
+the bulbs will not be powered if the circuit path is incomplete .	there is an incomplete circuit
+the battery is containing a negative charge only	switch y and bulb a are not in the same closed path
+a terminal is connected to a bulb .	terminal 1 is connected to the negative battery terminal
+a is in a closed circuit when x is closed	bulb a is still contained in a closed path with the battery and switch x .
+bulb a and bulb c were still in a closed path with the battery	bulbs a and c are still contained in closed paths with the battery
+if bulb a burns out then bulbs b and c will no longer be in a closed path .	if bulb a burns out , neither b nor c is in a closed path
+terminal 5 is only connected to the positive battery terminal .	terminal 5 and the positive terminal are connected
+the gap seperates the positive and negative charges	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+bulb a is contained on a path separated from the closed paths of bulbs b and c .	a and c are in different paths with the battery
+not connected to positive battery	terminal 2 and the positive terminal are not connected
+" because the battery doesn " " t get damaged sense it is coming in full contact a one end with the bulb . "	there is no closed path containing the battery
+terminal 1 is connected to the negative battery terminal	terminal 1 is connected to the negative battery terminal
+bulb a and c are contained in different paths with the battery	a and c are in different paths with the battery
+because there is a light bulb	the battery in 2 is not in a closed path
+bulbs b and c are contiained in the the same path with the battery .	a and c are not in the same path with the battery
+each bulb contains its own closed path	bulbs a and c are still in closed paths
+the positive terminal and terminal 1 are seperated by a gap	terminal 1 and the positive terminal are separated by the gap
+b and c are both parts of complete circuts to the battery	bulbs b and c are still in closed paths with the battery
+if the damaged bulb is on the same closed path with the battery	the damaged bulb and the other bulb must be contained in the same path
+as long as x and z are closed a will light	there is a path containing a , c , z and x
+if it is a part of a circut that contains a bulb and a battery .	when the switch and the bulb are contained in the same path
+because bulb c is not in the same ppath	there is a closed path with a and b that c is not in .
+switch is closed to make a closed path	the switch and the bulb have to be in the same path
+bulb a and b are still contained in a closed path with the battery	if c burns out then a and b are still in a closed path with the battery
+because bulb a will still be contained on a closed path to the battery .	bulb a is still in a closed path with the battery
+because the voltage does not reach the bulbs .	the path is not closed
+there is a gap between the bul and battery terminal .	there is no gap between the terminals
+the circuit path a was on was still closed	bulb a is still contained in a closed path with the battery .
+the difference in electrical state	a battery uses a chemical reaction to maintain different electrical states at the terminals
+a damaged bulb does not make a connecton so the circut is not complete	there is an incomplete circuit
+if bulb b is damaged , there is no path	there is no closed path
+because bulbs b and c were still in a closed path with the battery .	bulb b and bulb c were still contained in the same closed path with the battery .
+bulbs b and c remain in a closed path with the battery	bulbs b and c are still in closed paths with the battery
+bulbs b and c are contained in the same closed path with the battery	b and c are in the same path with the battery
+a burned out bulb indicates a gap in the connection between opposite ends of the battery terminals	measuring voltage indicates the place where the electrical state changes due to a gap .
+bulb a , bulb c , and the battery are in a closed path .	if c burns out , then a and b are still in a closed path with the battery .
+c would not create a gap for a or b	if c burns out , then a and b are still in a closed path .
+if the electrical state is non-zero you can find the gap in the circuit	a non-zero voltage means that there is a gap
+a terminal is connected to the positive battery terminal	the terminals are not connected
+the terminal it is connected to is not working	there is no gap between the terminals
+there is a closed path with the battery and bulb a	bulb a is still contained in a closed path with the battery .
+if bulb b is damaged there is a gap in the circuit	there is a gap in a circuit
+because there is a gap .	terminals 1 and 2 are in the same electrical state
+the terminals are connected to each other .	terminal 6 and the positive terminal are connected
+we switched the terminals around .	terminal 1 and the positive terminal are separated by the gap
+bulb a created a gap	if bulb a burns out , neither b nor c is in a closed path
+bulbs must contain battery in the path without a gap	the damaged bulb and the other bulb must be contained in the same path
+bulb a is in a complete circuit with the battery when switch z is closed .	bulb a is still contained in a closed path with the battery and switch z .
+switch y was not on the path of bulb a .	there is no path containing both switch y and bulb a
+because neither of the components are connected to themselves .	circuit 4 has no closed paths
+the positive battery is connected to the terminal 4 .	terminal 4 and the positive terminal are connected
+if it is open and the bulb is no longer and a closed path because it is open	when the switch and the bulb are contained in the same path
+because it was on a closed path	switch y and bulb a are not in the same closed path
+a damaged bulb does not complete the circut .	there is an incomplete circuit
+the battery is not closed in a closed path .	circuit 4 has no closed paths
+it is in the same closed path .	there is an open path
+because the voltage meter was connected to a positive and negative side	terminal 1 and the positive terminal are separated by the gap
+because bulb a is not in the path of switch y	there is a path containing a , c , z and x
+bulbs a and b are not within the same path as bulb c .	bulb c is in a separate path
+there must be a closed path .	there is a closed path containing both the bulb and a battery
+in circuit 5 , the battery is in a closed path .	the battery is contained in a closed path in which there is no bulb
+it breaks the circuit flow between the battery and the bulbs	a damaged bulb creates a gap
+the path must be closed with the battery and the bulb	the switch and the bulb have to be in the same path
+bulbs b and c are not on the same line as bulb a .	if bulb a burns out , bulbs b and c are still in a closed path
+because there is a gap because bulb b is damaged	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+the negative battery terminal is seperated by a gap from terminal 6	terminal 6 is separated by a gap from the negative battery terminal
+the battery is not connected to the terminal	terminal 1 and the positive terminal are not connected
+because the battery is not damaged when lighting the bulb	there is no closed path containing the battery
+the battery still holds the electrical charge if there is an incomplete circuit .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+there is no short circuit to the battery .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because bulb a was still receiving positive and negative currents .	bulb a is still contained in a closed path with the battery .
+there is a gap between terminals 1 and 2 from the positive battery terminal	terminals 1 and 2 are connected and in the same electrical state
+because bulb b and c were still in a closed path with the battery	bulb b and bulb c were still contained in the same closed path with the battery .
+because bulb a is not in the same path as bulb b and c	if bulb a burns out , bulbs b and c are still in a closed path
+the bulb is in the path of the circuit	there is no closed path containing the battery
+bulb a and switch z are in a closed path	bulb a is still contained in a closed path with the battery and switch z .
+bulb a still has a path to the battery	if bulb a burns out , b and c are no longer in a closed path with the battery
+the circuit will become incomplete .	there is an incomplete circuit
+there is still a path for the other 2	if c burns out , then a and b are still in a closed path .
+bulb a is in a closed path with the battery	there is a path containing a and a different path containing b and c
+there is a gap in the path .	terminals 1 and 2 are in the same electrical state
+if the switch is open , the path is not closed	if a bulb and a switch are in the same path the switch affects the bulb
+closed connection between the bulb and the battery .	there is a closed path containing both the bulb and a battery
+both are on same closed paths	b and c are in the same path with the battery
+when it creates an open path	when the switch and the bulb are contained in the same path
+there will be a gap between the bulbs	there is a gap in a circuit
+it helps because you find the gap where the terminals are disconnected	measuring voltage indicates whether two terminals are separated by a gap .
+because bulb a was in a closed path	bulb a is still contained in a closed path with the battery .
+becuase the negative end of the votlage meter was connected to a positive circuit	terminal 4 and the positive battery terminal are in the same electrical state
+bulbs a and c are on a closed path with the battery	bulbs a and c are still in closed paths with the battery
+connected to the negative terminal	terminals 1 and 2 are connected
+because the battery is in the closed path but the bulb is not	the battery is contained in a closed path in which there is no bulb
+it was not in a complete circuit	bulb c was not in a closed path
+there is a gap between terminal one and two and the positive battery terminal	terminals 1 and 2 are in the same electrical state
+bulb a was on because it was contined in a closed path .	bulb a was still contained in the same closed path with the battery .
+bulb c is not in the same path of bulb a and b .	a and b have their own path
+bulb b is on a different path	bulb b is in a separate path
+terminal 6 is connected to the positive battery terminal	terminal 6 and the positive terminal are connected
+the negative battery terminal is separated by a gap from terminal 6 .	there is no gap between terminal 6 and the positive terminal
+if c is damaged , the bulb a and b ae contained in a closed path	if c is damaged , a and b are still in a closed path
+bulbs b and c are in the same closed path with the battery	b and c are in the same path with the battery
+a gap wil be created	if bulb a burns out , neither b nor c is in a closed path
+the bulb must be in a closed circuit with the battery .	there is a closed path containing both the bulb and a battery
+bulbs a , b , and c are on a path with the battery	a and c are in the same path
+the positive battery terminal and terminal 6 are connected	terminal 6 and the positive terminal are connected
+bulb a , bulb b and bulb c are in different closed paths .	a and c are in different paths
+there is a light bulb and a battery present	the battery in 2 is not in a closed path
+the positive battery terminal has no gaps from terminal 4	terminal 4 and the positive terminal are not separated by the gap
+the circuit is complete with the battery and bulb a	there is no path containing both switch y and bulb a
+bulbs b and c still are contained in closed circuits	if bulb a burns out , bulbs b and c are still in a closed path
+since there is a gap	terminals 4 , 5 and 6 are not connected to the negative battery terminal
+positive battery terminal is separated by a gap from terminal 3	terminal 3 and the positive terminal are separated by the gap
+circuit 2 is not a short circuit because is shows connection to the bulb .	the battery in 2 is not in a closed path
+there must be a closed path and a battery .	there is a closed path containing both the bulb and a battery
+because an open switch creates a gap .	the open switch creates a gap
+there is a bulb in the circuit .	there is no closed path containing the battery
+a and c are on the same closed path with the battery	a and c are in the same closed path
+bulbs a and b are still connected to the closed path containing the battery	if c burns out then a and b are still in a closed path with the battery
+bulb c and a are contained in the same path with the battery	a and c are in different paths
+the switch opens the closed circuit	there is an open path
+because each bulb has its own pathway	each bulb is in its own path
+switch y and bulb a are not in the same closed path	switch y and bulb a are not in the same closed path
+becuase the damaged bulb damages the path in which is was connecte to	a damaged bulb creates a gap
+because it can have complete circuit if zis closed and y is open	there is a path containing a , c , z and x
+terminals 1,2 , and 3 are connected to the negative terminal of the battery	terminals 1 , 2 and 3 are connected to the negative battery terminal
+because that created a gep in the circuit	a damaged bulb creates a gap
+when the switch is the in a closed path with the bulb	when the switch and the bulb are contained in the same path
+the positive battery terminal is seperated by a gap from terminal 4	terminal 4 and the positive battery terminal are in the same electrical state
+c does not effect the others , their paths are still closed	if c burns out , then a and b are still in a closed path .
+bulb a , bulb b , and bulb c are contained in different closed paths .	a and c are in different paths
+becasue the terminals 4,5 , and 6 are connected to the positive terminal of the battery	terminals 4 , 5 and 6 are connected to the positive battery terminal
+a and b are still contained in a closed path with the battery .	if c burns out , then a and b are still in a closed path with the battery .
+bulbs b and c were in a closed paty with the battery .	bulb b and bulb c were still contained in the same closed path with the battery .
+the battery is in the closed path .	the battery is contained in a path in which there is no bulb
+when one bulb goes out the rest go out .	each bulb is in its own path
+an open switch means the circuit is not a closed path .	the path is not closed
+bulb a is in the closed path	if bulb a burns out , neither b nor c is in a closed path
+for the same reason as 3	terminal 5 is separated by a gap from the negative battery terminal
+because switch y did not affect bulb and and the battery closed path	switch y and bulb a are not in the same closed path
+switch z is closed so it still creates a complete path to the battery	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+there terminals are separated by a gap when the voltage jumps from 0 to 1.5 .	the terminals are separated by a gap
+the light bulb is not in a closed path	the battery is contained in a path in which there is no bulb
+it breaks the closed circuit	the open switch creates a gap
+the negative battery terminal is seperated by a gap from terminal 1 and 2	terminals 1 and 2 are in the same electrical state
+bulb a and bulb c are contained in different paths with the battery .	a and c are in different paths with the battery
+the switch has to be within a closed path with the bulb and battery	the switch and the bulb have to be in the same path
+the battery is not in a closed bath alone	the battery in 2 is not in a closed path
+battter is contained in a closed path	there is still a closed path
+blub a and bulb c are contained in different paths with the same battery .	a and c are in different paths with the battery
+terminal 1 and 4 connected	terminals 1 and 4 are connected
+switch z can be closed instead	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+the conditions are a battery and a closed path	there is a closed path containing both the bulb and a battery
+terminal 1 and terminal 2 are on the same side .	terminals 1 and 2 are connected
+because there is a gap .	if bulb a burns out , neither b nor c is in a closed path
+each bulb affects the other bulbs	a and c are in the same path
+because switch x can be closed and y can be open and a will light	there is a path containing a
+terminal 4 has a gap .	terminal 4 and the positive battery terminal are in the same electrical state
+bulb c is not contained in a closed path with the battery .	bulb c was no longer in a closed path with the battery
+that there is no difference between the electrical states of the bulb terminal and the battery terminal	the terminals are in the same state .
+because it damages the complete circuit	if bulb a burns out , neither b nor c is in a closed path
+a short circuit has occured	there is a short circuit
+tells you that there is a gap	there is no gap between the terminals
+the bulb is not contained in the path	the bulb is not in the closed path containing the battery
+because bulb a is on a closed path with the battery	bulb a was still contained in the same closed path with the battery .
+stops the path from being closed .	there is no closed path
+a terminal is connected to the positive terminal of the battery	terminal 4 and the positive terminal are connected
+maybe because there is still one path that connects a and c through b	there is an incomplete circuit
+because the positive battery terminal and terminal 6 were connected .	terminal 6 and the positive terminal are connected
+the positive battery terminal is connected to terminal 6 .	terminal 6 and the positive terminal are connected
+the bulb is not connected to the positive connection of the battery .	there is no closed path
+the open switch was in the path .	there is a path containing both z and c
+the battery is in a circuit with a bulb .	there is no closed path containing the battery
+because bulb c created a gap so then it had both a positive and negative charge .	terminal 1 and the positive terminal are separated by the gap
+the positive terminal is connected to terminal 4 .	terminal 4 and the positive terminal are connected
+bulbs a and c were still on closed paths with the battery	bulbs a and c are still contained in closed paths with the battery
+switch y was in a dfferent path	switch y and bulb a are not in the same closed path
+if the damaged bulb is on the same closed path as the other bulb	the damaged bulb and the other bulb must be contained in the same path
+it was in the same path as switch x .	bulb a is still contained in a closed path with the battery and switch x .
+bulbs a and c are in different paths that do not contain bulb b	each bulb is in its own path
+bulb a , bulb b , and bulb c each have their own closed path with the battery .	a and c are in different paths with the battery
+if the path is open or closed	if a bulb and a switch are in the same path the switch affects the bulb
+the battery is not contained in a closed path	the battery in 4 is not in a closed path
+because switch y and z are also connected to bulb a .	there is a path containing a , c , z and x
+the switch has to be located within a closed path for the bulb to go on	if a bulb and a switch are in the same path the switch affects the bulb
+if both bulbs are contained within a closed path	the damaged bulb and the other bulb must be contained in the same path
+bulb a will burn out with bulb c	if c burns out , then a and b are still in a closed path with the battery .
+terminal 1 and 2 have the same voltage because there is a working bulb connected to the negative battery terminal .	terminals 1 and 2 are connected and in the same electrical state
+the positive battery terminal is not separated by a gap from terminal 4	terminal 4 and the positive terminal are not separated by the gap
+bulb a is in two different paths with the battery	bulb a is still in a closed path with the battery
+because terminal 1 is connected to terminal 4 .	terminals 1 and 4 are connected
+because there is a gap .	there is a gap in a circuit
+there is no gap between the positive terminal and terminal 4	terminal 4 and the positive terminal are not separated by the gap
+it is not a closed path .	the path is not closed
+that there is no difference in electrical states of the two terminals	the terminals are in the same state .
+there is still a closed path containing bulb b and c with the battery .	bulbs b and c are still in closed paths with the battery
+because it has a positive terminal	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the battery terminal is connected to terminal 6 .	terminal 6 and the positive terminal are connected
+terminal one is connected to a positive battery terminal	terminal 1 and the positive terminal are separated by the gap
+if the switch is contained in the path with the bulb , the switch affects the bulb .	if a bulb and a switch are in the same path the switch affects the bulb
+both terminals of the battery is not connected .	the battery in 2 is not in a closed path
+terminal one is not connected to the positive battery terminal	terminal 1 and the positive terminal are not connected
+a voltage reading of 0 volts indicates a gap in the circuit .	there is no gap between the terminals
+bulb a and c are contained on the same path with the battery	a and c are not in the same path with the battery
+bulb c is on a seperate pathway from a and b which are still connected to the battery .	if c burns out , then a and b are still in a closed path with the battery .
+that there is no electrical connection	there is no gap between the terminals
+the battery is in a closed path but connects with nothing else	the battery is contained in a closed path which does not contain any other components
+the terminals must have a difference in electrical states to have voltage	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the two components are seperated .	terminal 1 and the positive terminal are separated by the gap
+bulb a is conected to the battery .	bulb a was still contained in the same closed path with the battery .
+because positive charge is before gap	terminal 1 and the positive terminal are separated by the gap
+switch y is on a different path than bulb a .	switch y and bulb a are not in the same closed path
+switch y is not on the path of bulb a .	there is no path containing both switch y and bulb a
+bulb b and bulb c are in a closed path and bulb a is in a separate closed path	if c burns out , then a and b are still in a closed path .
+there is a complete circuit , with a battery and a bulb	bulb a is still contained in a closed path with the battery .
+the bulb is contained in a cloed path with the battery	the damaged bulb and the other bulb must be contained in the same path
+there is a gap between the two bulb terminals	the terminals are separated by a gap
+the positive terminal and terminal 6 are connected	terminal 6 and the positive terminal are connected
+terminal 1 is connected to the negative terminal .	terminals 1 and 2 are connected and in the same electrical state
+the bulb is contained in an closed circuit	if a bulb and a switch are in the same path the switch affects the bulb
+terminals 1 and 2 are seperated by a gap	terminals 1 and 2 are in the same electrical state
+there is a gap at terminal 1	terminal 1 is connected to the negative battery terminal
+terminal 1 is connected to the positive terminal .	terminal 1 is connected to the negative battery terminal
+battery is contained on a closed path	the battery is contained in a closed path which does not contain any other components
+bulb a creates a gap in the closed circuit	if bulb a burns out , neither b nor c is in a closed path
+it always has the same voltage due to a chemical reaction inside of it	a battery uses a chemical reaction to maintain different electrical states at the terminals
+terminals are separated by a gay between the positive and negative terminals of the battery	terminals 1 and 2 are in the same electrical state
+terminal 1 and terminal 2 are connected to the negative terminal of the battery	terminals 1 and 2 are connected and in the same electrical state
+the positive battery terminal is separated by a gap from terminal 2 .	terminal 2 and the positive terminal are separated by the gap
+because it has one regardless of the circuit	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because of the gap in bulb b	terminals 4 , 5 and 6 are separated from the negative battery terminal by a gap
+there is still a closed path that contains the battery , bulb a , and bulb b	bulbs a and b are still in closed paths with the battery
+there is a gap in the path .	terminals 1 , 2 and 3 are not separated from the negative battery terminal by a gap
+the electrical states between the terminals is the same , resulting in 0	the terminals are in the same state .
+the positive terminal is connected to terminal 6	terminal 6 and the positive terminal are connected
+the positive battery terminal is separated by a gap from terminal 1 .	terminal 2 is not separated from the negative battery terminal
+because terminal 1 is connected to the positive terminal with no gaps	terminal 1 and the positive terminal are separated by the gap
+because it would cause a gap	if bulb a burns out , neither b nor c is in a closed path
+the battery is not contained in a circut	the battery in 2 is not in a closed path
+closed paths from the battery	the bulb and the battery are in a closed path
+switch y did not effect bulb a	switch y and bulb a are not in the same closed path
+bulbs a and b will still be contained in a closed path to the battery .	bulbs a and b are still in closed paths with the battery
+the component is not enclosed within the path and the battery is	the battery is contained in a path which does not contain any other components
+there is a separation between the bulbs and the negative battery terminal	terminals 4 , 5 and 6 are separated from the negative battery terminal by a gap
+battery is not contained i a closed path .	the battery in 4 is not in a closed path
+the battery is not contained in a closed path .	the battery in 2 is not in a closed path
+when bulb b is damaged there is a disruption in the current .	there is a gap in a circuit
+voltage is the difference between a positive and negative end on the battery .	terminal 1 and the positive terminal are separated by the gap
+the terminal is still connected to an electrical state of the battery	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulbs a , b , and c are not contained in the same closed path .	a and c are not in the same path
+there is another component besides the battery in the circut .	the battery in 2 is not in a closed path
+switch y does not effect bulb a	switch y and bulb a are not in the same closed path
+bulb b and c are in a closed path	b and c are in the same path
+battery is contained in bulb	the battery is contained in a path which does not contain any other components
+the bulbs are contained in a closed path	bulbs a and c are still in closed paths
+battery is contained in path	bulb a is still contained in a closed path with the battery .
+the terminal has an electrical state between terminals	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because there was a gap in the pathway .	there is a path containing both z and c
+bulb b and bulb c are contained in different paths with the battery	b and c are in the same path with the battery
+because each bulb has its own path	a , b and c are in different paths
+the positive terminal is not seperated from the gap	terminal 4 and the positive terminal are not separated by the gap
+the battery is in a closed bath .	the battery is contained in a closed path in which there is no bulb
+" becuase bulb c is on it " " s own pathway . "	bulb c is in a separate path
+a connection to the battery	there is a complete circuit
+you needed both a battery and a blub with the same path , and the path must be closed	there is a closed path containing both the bulb and a battery
+there is a gap between terminal one and two	there is no gap between them
+if the path is not closed then a bulb will not be on	if a bulb and a switch are in the same path the switch affects the bulb
+terminal 1 was connected to the positive terminal .	terminal 1 is connected to the negative battery terminal
+there is not a gap in the connection	the terminals are not separated by a gap
+bulb c is not in the same closed path as the battery	if c burns out then a and b are still in a closed path with the battery
+because there is a gap	terminal 1 and the positive terminal are separated by the gap
+not contained insa me path	a and b have their own path
+the switch determines whether the path is open or closed .	if a bulb and a switch are in the same path the switch affects the bulb
+a switch will affect a bulb it the bulb and the switch are in the path as the battery	when the switch and the bulb are contained in the same path
+circuit 5 only has 1 terminal	the battery is contained in a path which does not contain any other components
+there is a gap in the circuit	terminals 1 and 4 are connected
+the bulb is in a closed circuit and the battery exists in that circuit	the battery in 2 is not in a closed path
+there is a gap between the postive terminal and terminal 1	terminal 1 and the positive terminal are separated by the gap
+when a bulb is damaged it creates a gap in the circuit	a damaged bulb creates a gap
+positive battery terminal is not separated by a gap from terminal 4	terminal 4 and the positive terminal are not separated by the gap
+the other bulb will not light .	the damaged bulb and the other bulb must be contained in the same path
+the positive battery is separated by a gap from terminal 3 .	terminal 2 is not separated from the negative battery terminal
+a closed circuit between a battery and bulb	the bulb and the battery are in a closed path
+because bulbs b and c are on a closed path with the battery	bulb b and bulb c were still contained in the same closed path with the battery .
+there is not gap between the terminals	terminal 1 is connected to the negative battery terminal
+because there is a positive and negative connections	terminals 1 and 6 are not connected
+because it had no gap between the terminals	bulb a is still contained in a closed path with the battery .
+bulb b and bulb c are still contained in closed paths with the battery	if bulb a burns out , b and c are no longer in a closed path with the battery
+bulb b is a gap	terminals 4 , 5 and 6 are separated from the negative battery terminal by a gap
+the battery is not closed the bulb is .	the battery in 2 is not in a closed path
+becuase it is in a closed circuit with itself and the bulb is not i the closed circuit	the battery is contained in a path in which there is no bulb
+the path has to be closed in order for the bulb to be on .	if a bulb and a switch are in the same path the switch affects the bulb
+terminal 1 is not connected to the positive terminal .	terminal 1 and the positive terminal are not connected
+a terminal is connected to the negative battery terminal	the terminals are not connected
+the positive battery terminal and terminal 1 are not connected	terminal 1 and the positive terminal are not connected
+removing bulb a will affect bulb c	a and c are in the same closed path
+there is a difference in electrical states	the terminals are separated by a gap
+because it is still in a closed circuit	bulb a was still contained in the same closed path with the battery .
+there would be a gap in the circuit	there is a gap in a circuit
+the battery uses the chemical reation to create voltage	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the switch is contained in the path	the switch and the bulb have to be in the same path
+bulb is contained in closed path	if a bulb and a switch are in the same path the switch affects the bulb
+a terminal has an electrical state where theres a chemical reaction	a battery uses a chemical reaction to maintain different electrical states at the terminals
+makes a short circuit	the path is not closed
+terminal 6 is connected to the difference	terminal 6 and the positive terminal are connected
+the positive battery terminal is separated by a gap from terminal 4	terminal 4 and the positive battery terminal are in the same electrical state
+a switch contained in a closed path with a bulb and a battery will affect the bulb .	if a bulb and a switch are in the same path the switch affects the bulb
+because the positive terminal is separated by a gap from terminal 3	terminal 3 and the positive terminal are separated by the gap
+it is not in the same path .	bulb a is still in a closed path with the battery
+damaged bulb creates a gap .	a damaged bulb creates a gap
+the voltage is nearest the burnt out bulb	measuring voltage indicates the place where the electrical state changes due to a damaged bulb .
+if z is closed , a is still part of a complete circut .	bulb a is still in a closed path with the battery
+it is not in a closed path	the battery in 2 is not in a closed path
+it allows you to measure electrical states between terminals	measuring voltage indicates the place where the electrical state changes due to a gap .
+there is no path through the connection of bulb b .	there is an incomplete circuit
+the positive terminal is connected to terminal 6	terminal 6 and the positive terminal are connected
+" if the terminals at both ends of the bulb are the same , then it " " s damaged . "	a non-zero voltage means that the terminals are not connected .
+circuit 5 is in a closed path .	the battery is contained in a closed path in which there is no bulb
+b and c were still contained in a closed circuit with the battery	bulb b and bulb c were still contained in the same closed path with the battery .
+it will help find where the gap in the circuit is .	measuring voltage indicates whether two terminals are separated by a gap .
+if bulb a burns out if affects bulbs b and c .	a and c are in the same closed path
+the bulb is not contained within the path	the battery is contained in a path which does not contain any other components
+there is no relationship between path bulb a and c	a and c are in different paths
+when the switch is opened	when the switch and the bulb are contained in the same path
+" the battery terminals don " " t connect without any devices "	the battery is in an open path
+terminal is connected to postive end of battery	terminals 4 , 5 and 6 are connected to the positive battery terminal
+a battery will always have a voltage because the electrical states of the positive and negative terminals are always different .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulb b and bulb c are contain in the same closed path .	b and c are in the same path with the battery
+because it opens the circuit , therefore the circuit is not closed	the path is not closed
+because the battery is in a closed path .	the battery is contained in a closed path in which there is no bulb
+the battery is connected to only one side of the bulb and is only running electricity back to the battery .	the battery is in an open path
+because neither components are in closed paths .	circuit 4 has no closed paths
+switch x does not effect bulbs b and c	there is a path with b and c that does not include x
+if there is an open switch in the path , the bulb will not be on .	if a bulb and a switch are in the same path the switch affects the bulb
+bulb a will no longer be completing the circuts .	if bulb a burns out , neither b nor c is in a closed path
+switch y is in a different path than bulb a	switch y and bulb a are not in the same closed path
+there is no path through bulb b .	there is an incomplete circuit
+close the path and match the terminals	there is a closed path containing both the bulb and a battery
+still have connection to battery	if c burns out , then a and b are still in a closed path with the battery .
+terminal 6 is connected to the positive terminal of the battery	terminals 1 and 6 are not connected
+it was a closed path	bulb a was still contained in the same closed path with the battery .
+because bulb a was contained in a closed path with the battery .	bulb a was still contained in the same closed path with the battery .
+there is a difference between terminal 2	terminal 2 and the positive terminal are separated by the gap
+bulb c creates a gap	if c burns out , then a and b are still in a closed path with the battery .
+terminal 4 , terminal 5 , and terminal 6 are connected to the positive battery terminal	terminals 4 , 5 and 6 are connected to the positive battery terminal
+" there are closed paths that don " " t include bulb a "	each bulb is in its own path
+because there is a closed circuit after bulb b	terminals 4 , 5 and 6 are connected to the positive battery terminal
+bulb c and the battery are not contained in a closed pathway	bulb c was no longer in a closed path with the battery
+circuit 4 is contained in an open path	the battery is in an open path
+that the circuit is bad .	there is a short circuit
+the path was closed and connected to the battery	bulb a is still contained in a closed path with the battery .
+" the terminal " " s electrical state is not effected by the incomplete circuit . "	a battery uses a chemical reaction to maintain different electrical states at the terminals
+positive battery seperated by gap from terminal 1	terminal 3 and the positive terminal are not connected
+because the path has to be open	if a bulb and a switch are in the same path the switch affects the bulb
+a and b are still contained in a closed path with the battery .	if c burns out then a and b are still in a closed path with the battery
+because there was a gap in the terminals	there is no path containing both switch y and bulb a
+the positive battery terminal is seperated by a gap from termnial one .	terminal 2 and the positive terminal are separated by the gap
+bulb c does not create a gap in the path for bulb b and a	if c is damaged , a and b are still in a closed path
+if the other bulb is no longer contained in a closed path with the battery	the damaged bulb and the other bulb must be contained in the same path
+there is a gap after bulb b	terminal 1 and the positive terminal are separated by the gap
+both are on the same side of the circuit	terminals 1 , 2 and 3 are connected to the negative battery terminal
+the terminal are seperated by a gap when the bulb goes out	there is no gap between the terminals
+the voltage of a battery does not depend on the components in a curcuit .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+there is no gap between the positive battery terminal and terminal 6	terminal 6 and the positive terminal are not separated by the gap
+the battery is contained in a closed path .	the battery is contained in a closed path in which there is no bulb
+the battery has its own chemical reaction	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because terminal 1 had no gap .	terminal 1 and the positive terminal are separated by the gap
+bulb a and c are on a different path with the battery	a and c are not in the same path with the battery
+it stops the flow of electricity .	there is an open path
+because it blocks the charge of the circuit .	there is an incomplete circuit
+it is a open circuit	terminal 4 and the positive battery terminal are in the same electrical state
+it was in a closed path	bulb a is still contained in a closed path with the battery .
+because terminal 1 and the neavtive terminal are seperated .	terminal 1 and the positive terminal are separated by the gap
+the positve battery terminal is separated by a gap at terminal 1	terminal 1 and the positive terminal are separated by the gap
+terminal 1 is connected to the negative terminal .	terminal 1 is connected to the negative battery terminal
+the battery is in a closed path , not connected to the light bulb .	the battery is contained in a path in which there is no bulb
+switch z is contained on a closed path	there is a path containing a , c , z and x
+the voltage has the same electrical state between any two terminals .	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+you can locate the gap in a connection	measuring voltage indicates whether two terminals are separated by a gap .
+the battery in circuit 5 is contained in a closed path .	the battery is contained in a path in which there is no bulb
+it makes the circuit incomplete .	there is an incomplete circuit
+because there is no gap at terminal 1	terminal 1 is connected to the negative battery terminal
+because voltage is the difference in electrical states between two terminals .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulb a and b will still be in a contained path .	if c burns out , then a and b are still in a closed path .
+terminal 1 and terminal 6 are seperated by a gap	terminals 1 and 6 are separated by the gap
+if the switch and bulb are contained in the same path , the switch will affect the bulb .	when the switch and the bulb are contained in the same path
+because bulbs a and c are contained in different paths with the battery	a and c are in different paths with the battery
+the batter is in a closed path without any other components .	the battery is contained in a closed path which does not contain any other components
+switch z is contained in a closed path	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+yes bulb a was on	bulb a was still contained in the same closed path with the battery .
+switch z contains a closed path with the battery	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+bulb a and bulb c are contained in different paths with the bttery .	a and c are in different paths with the battery
+because the batter termnal was not separted by a gap from terminal .	terminal 4 and the positive terminal are not separated by the gap
+if the path is open the bulb will be off	if a bulb and a switch are in the same path the switch affects the bulb
+it will locate the gap .	a non-zero voltage means that the terminals are not connected .
+bulb terminals 3 and 4	terminal 1 and the positive terminal are separated by the gap
+the terminals are not connected to each other	terminal 1 and the positive terminal are not connected
+beacuse it was in a closed path with the battery	bulb a was still contained in the same closed path with the battery .
+a gap causes a chemical reaction	a non-zero voltage means that the terminals are not connected .
+switch y is not in the same path as bulb a .	bulb a is still in a closed path with the battery
+bulb a is contain in a closed path	bulb a was still contained in the same closed path with the battery .
+" there isn " " t a closed path of the battery "	there is no closed path containing the battery
+switch z is contained in a closed path with bulb a and the battery	there is a path containing a , c , z and the battery
+because bulb a is in a closed path , and bulb c is in a closed path .	bulbs a and c are still in closed paths
+bulb a and c are contained in different paths with the battery .	a and c are in different paths with the battery
+switch y is not on the same path to battery	bulb a is still in a closed path with the battery
+a and b are off	there is an incomplete circuit
+if switches x and z are closed it will complete the closed circuit for bulb a	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+because bulb a can go through the other path	bulb a is still in a closed path with the battery
+allows you to identify any gaps	measuring voltage indicates whether two terminals are separated by a gap .
+bulb a was in a closed path with a battery .	bulb a is still contained in a closed path with the battery .
+an open switch stops the energy flow	the path is not closed
+when it creates a gap in a certain path	when the switch and the bulb are contained in the same path
+bulbs b and c were contained in a closed path with the battery .	bulb b and bulb c were still contained in the same closed path with the battery .
+bulbs a and c affect each other .	a and c are in the same path
+there is a closed path to the battery	bulbs a and c are still contained in closed paths with the battery
+because there is a gap in the connection between terminal 1 and terminal 6	there is a gap between terminals 1 and 6
+it checks the electrical state between two terminals .	measuring voltage indicates the place where the electrical state changes due to a gap .
+because the electricity will not flow through the wires if the circuit path is incomplete .	there is an incomplete circuit
+because it was connected to the positive side .	terminal 1 and the positive terminal are separated by the gap
+the battery is not in a closed circuit	the battery in 4 is not in a closed path
+a is in the same path as c	if c burns out , then a and b are still in a closed path .
+find where there are different electrical states	measuring voltage indicates the place where the electrical state changes due to a gap .
+the switch and the bulb are contained in the same path	if bulb a burns out , bulbs b and c are still in a closed path
+there was a closed path not effected by the switch	there is no path containing both switch y and bulb a
+bulbs a and b will still be contained in a closed path with the battery	if c burns out , then a and b are still in a closed path with the battery .
+there is a gap in the path	terminals 1 and 4 are connected
+the switch being open or closed determines if the path is closed or not	if a bulb and a switch are in the same path the switch affects the bulb
+the positive battery terminal and terminal 4 are on the same side of the damaged bulb	terminal 4 and the positive terminal are not separated by the gap
+because the electrical states between the two battery terminals will be different no matter what	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the the bulb terminal disconnected from the battery terminal	the terminals are not connected
+because it opens the connection	the open switch creates a gap
+terminal 1 is seperated from the positive terminal	terminal 1 and the positive terminal are separated by the gap
+because the paths were still in a closed circuit with the battery terminal	bulbs a and c are still contained in closed paths with the battery
+because bulb a is in a closed path with the battery .	bulb a is still in a closed path with the battery
+" because it isn " " t contained in a closed path . "	the battery in 4 is not in a closed path
+because the damaged bulb a creates a gap in the path	if bulb a burns out , neither b nor c is in a closed path
+there is a gap in terminal 1	terminals 1 and 2 are in the same electrical state
+a terminal is cnnected to the positive terminal	the terminals are not connected
+because of the gap in bulb b	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+connected to the negative terminal	terminals 1 , 2 and 3 are connected to the negative battery terminal
+the positive battery terminal is connected to terminal 6	terminal 6 and the positive terminal are connected
+because of the gap in bulb b .	terminals 4 , 5 and 6 are not connected to the negative battery terminal
+when the switch is closed	when the switch and the bulb are contained in the same path
+because bulbs a and c were in a separate closed path	bulbs a and c are still in closed paths
+bulb a , bulb b , and bulb c are contained in differentclosed paths .	a and c are in different paths with the battery
+the path contains the light bulb and the path is not closed .	there is no closed path
+bulb b and bulb c are contained within a closed path	b and c are in the same path with the battery
+because the battery and the bulb are not in a closed path .	the battery in 4 is not in a closed path
+if the damaged lightbulb is contained in the closed circuit	the damaged bulb and the other bulb must be contained in the same path
+terminal is connected to terminal 6	terminals 1 and 6 are not connected
+the battery is not contained in a closed path	the battery in 4 is not in a closed path
+it must be connected to the battery .	there is a closed path containing both the bulb and a battery
+bulbs a and c are not contained in the same closed path .	a and c are not in the same path
+measuring voltage between the positive battery terminal and the bulb terminal determines the gap in the connection .	measuring voltage indicates whether two terminals are separated by a gap .
+burned out bulb b will cause a gap in the closed path .	bulb b creates a gap
+because terminal 4 is connected to the negative terminal	terminal 4 and the positive battery terminal are in the same electrical state
+the other terminals are only connected to the positive battery terminal .	terminals 4 , 5 and 6 are connected to the positive battery terminal
+switch x is contained in the same path as bulb a .	bulb a is still contained in a closed path with the battery and switch x .
+the bulb and the battery are connected	the battery is in an open path
+an incomplete circuit would not effect the the electrical state between the terminals .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+becuase bulb c will be taken off the closed path when switch opens	bulb c was no longer in a closed path with the battery
+because it broke the circuit	there are no closed paths
+terminal is connected to the negative battery	terminals 1 and 2 are connected
+bulb a and bulb c are in the same path .	a and c are in the same path
+because x and z could be closed and bulb a will work .	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+there is a path way connecting to a bulb and battery	the battery is in an open path
+because the switch was connected to the closed circuit	there is no path containing both switch y and bulb a
+bulb a and bulb c are not contained in the same closed path	a and c are not in the same path
+the positive battery terminal is seperated from the negative battery terminal	there is no gap between the terminals
+a terminal is connected to differenet states	there is no gap between the terminals
+it creates a gap in the circuit	a damaged bulb creates a gap
+because terminal one and the positive battery terminal are on a closed path	terminal 1 is connected to the negative battery terminal
+it was contained within a closed path	bulb a was still contained in the same closed path with the battery .
+there is still a voltage is the different terminals	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the voltage is the difference between the electrical state of the terminals .	terminal 1 and the positive terminal are separated by the gap
+terminal 1 was connected to a positive terminal 6 .	terminals 1 and 6 are separated by the gap
+you can find which bulb is burned out	measuring voltage indicates the place where the electrical state changes due to a damaged bulb .
+there is not difference in eletcrical states	terminals 1 and 2 are connected and in the same electrical state
+because there is no gap between terminal 4 and the positive terminal	there is no gap between terminal 4 and the positive terminal
+there is a closed path , with switch z , that contains bulb a and the battery	there is a path containing a , c , z and the battery
+circuit 4 is not a short circuit because the battery is not contained in a closed path .	the battery in 4 is not in a closed path
+bulb a was in a complete circuit	bulb a is still contained in a closed path with the battery .
+there was no closed path with the battery	bulb c was no longer in a closed path with the battery
+for the same reason as 1	terminal 3 and the positive terminal are not connected
+the positive battery terminal was not separted by a gap from terminal 6	terminal 6 and the positive terminal are not separated by the gap
+if bulb b is damaged , the path will have a gap	bulb b creates a gap
+there is a gap between the negative battery terminal and terminal 4 .	terminal 4 is separated by a gap from the negative battery terminal
+the only component in the closed path is the battery .	there is no closed path containing the battery
+bulbs a and c are contained in closed paths	bulbs a and c are still in closed paths
+circuit 4 does not have a closed path	circuit 4 has no closed paths
+gap in circuit at bulb b causes the voltage reading to be 0	terminal 4 is separated by a gap from the negative battery terminal
+a is in the same path	if bulb a burns out , neither b nor c is in a closed path
+because terminal 1 and 6 are connceted to the battery .	terminals 1 and 6 are separated by the gap
+" because the electricity can " " t pass through "	the path is not closed
+a gap in the circuit does not affect the voltage of the battery .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because a battery will always have a voltage even if it is 0	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the positive terminal and negative terminal are not connected	a battery uses a chemical reaction to maintain different electrical states at the terminals
+terminal 6 is connected to the positive terminal of the battery	terminal 6 and the positive terminal are connected
+the battery was contained in a circut	bulb a is still contained in a closed path with the battery .
+because that created a closed circuit	bulb a was still contained in the same closed path with the battery .
+a battery and a closed path	there is a closed path containing both the bulb and a battery
+bulbs will be affected by switches that are in the path	if a bulb and a switch are in the same path the switch affects the bulb
+it will turn it off	when the switch and the bulb are contained in the same path
+because the bulb is not longer in a closed circuit	there is an incomplete circuit
+the battery is not connected in the closesd path	the battery in 2 is not in a closed path
+and the circut is closed	a and c are in the same closed path
+if a path is connected to an oen switch , the bulb will be off .	if a bulb and a switch are in the same path the switch affects the bulb
+it must be in a closed circuit .	the bulb and the battery are in a closed path
+bulbs b and a are still contained on a closed path with the battery	if c burns out then a and b are still in a closed path with the battery
+bulbs a , b , and c are all on the same path	a and c are in the same path
+there is no closed path that contains the battery , bulb b , and bulb c	if bulb a burns out , there is no longer a closed path containing b , c and the battery
+all the bulbs are on parralel paths	a and c are in different paths
+terminal 6 is conncted to the positive terminal	terminal 6 and the positive terminal are connected
+if switch x is open	when the switch and the bulb are contained in the same path
+the terminals are connected to the opposite side of the battery	the terminals are separated by a gap
+because if there is a voltage that means there is a gap	measuring voltage indicates the place where the electrical state changes due to a gap .
+the bulb is not conatined in a closed path	the bulb is not in the closed path containing the battery
+because there is a gap between the positive battery terminal and terminal 1 .	terminal 1 and the positive terminal are separated by the gap
+bulb a is in the same path of switch x .	bulb a is still contained in a closed path with the battery and switch x .
+terminal 4 is connected to the positve battery terminal and terminal 4 is not seperated by a gap	terminal 4 and the positive terminal are connected
+1 2 and 3 are connected t neative	terminals 1 , 2 and 3 are connected to the negative battery terminal
+because there was closed paths from the battery to the bulb	bulb a is still contained in a closed path with the battery .
+there is a gap in the circuit	there is a gap in a circuit
+bulb a and b are still contained in a closed path with the battery .	if c burns out then a and b are still in a closed path with the battery
+terminal one is connected to the negative	terminals 1 and 2 are connected
+terminal 5 is connected to the postitive battery terminal	terminal 5 and the positive terminal are connected
+because bulb c doesnt effect the other closed paths	if c is damaged , a and b are still in a closed path
+the positive battery terminal is separated by a gap from terminal 1 .	terminal 3 and the positive terminal are separated by the gap
+because bulb a was in a closed circuit with the battery	bulb a is still contained in a closed path with the battery .
+the path must be closed and contain the battery	the switch and the bulb have to be in the same path
+circuit 2 is connected to the battery	there is no closed path containing the battery
+seperate paths connected to the battery	if bulb a burns out , b and c are no longer in a closed path with the battery
+the path does not close	the battery is in an open path
+bulbs a and c will still be on their own completed circuts .	bulbs a and c are in a closed path
+bulb b and bulb c were in a closed circuit with the battery	bulb b and bulb c were still contained in the same closed path with the battery .
+terminal 1 is connected to the negative battery terminal	terminal 1 is connected to the negative battery terminal
+bulb b and bulb c are still on closed paths with the battery .	bulbs a and b are still in closed paths with the battery
+a terminal is not connected to the positive battery terminal .	terminals 1 and 2 are connected
+" because by measuring voltage , you find the gap where there " " s a difference in electrical states . "	measuring voltage indicates the place where the electrical state changes due to a gap .
+the positive terminal is not seperated by a gap from terminal 4	terminal 4 and the positive terminal are not separated by the gap
+the gap causes a difference in electrical states .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulb b is not in the same path with bulbs a and c .	bulb b is in a separate path
+the switch is contained in a closed path	when the switch and the bulb are contained in the same path
+the bulb is not contained in a closed path .	the battery is contained in a path which does not contain any other components
+there is still a closed path that contains the battery and bulb a and bulb c	bulbs a and c are still contained in closed paths with the battery
+the path only determines if a bulb is off when the switch is open	if a bulb and a switch are in the same path the switch affects the bulb
+because you can find the difference in the voltage by measuring the gap	measuring voltage indicates the place where the electrical state changes due to a gap .
+when it creates a gap .	when the switch and the bulb are contained in the same path
+terminal 6 is connected to the positive battery terminal	terminals 1 and 6 are not connected
+a battery uses a chemical reaction to maintain different electrical states between two terminals	a non-zero voltage means that the terminals are not connected .
+if the path is directly connected to the battery , then the switch affects a bulb .	if a bulb and a switch are in the same path the switch affects the bulb
+because switch z can be closed	there is a path containing a , c , z and x
+terminal 1 and terminal 2 possess no difference	terminals 1 and 2 are connected and in the same electrical state
+there are other closed path without bulb b	bulbs a and c are in a closed path
+because the positive batter terminal and terminal 6 were connected .	terminal 6 and the positive terminal are connected
+bulb c was not contained in a closed path with the battery	bulb c was no longer in a closed path with the battery
+bulbs must be in a closed path with the battery in order to work	if a bulb and a switch are in the same path the switch affects the bulb
+bulb a and switch x are in the same closed path	bulb a is still contained in a closed path with the battery and switch x .
+b and c are in a closed path with the battery	if bulb a burns out , bulbs b and c are still in a closed path
+there was no gap in the circut	terminal 1 and the positive terminal are separated by the gap
+because if bulb b is damaged , then there is no path through the bulb , creating an incomplete circuit	there is an incomplete circuit
+bulbs b and c are on the same path as the battery	b and c are in the same path with the battery
+the terminal is connected to a positive circuit .	terminal 1 is connected to the negative battery terminal
+the positive battery terminal is connected to terminal 6	terminal 6 and the positive terminal are connected
+bulb b and c are contained in the same closed path .	b and c are in the same path
+" well , it will have a voltage of zero , if that " " s what you are asking . "	a battery uses a chemical reaction to maintain different electrical states at the terminals
+it only has 1 connection .	the battery is in an open path
+bulbs are contained in an open path .	the bulb is not in the closed path containing the battery
+the battery is in the closed path	the bulb and the battery are in a closed path
+the electrical state difference tells you where the gap is .	measuring voltage indicates the place where the electrical state changes due to a gap .
+terminal 1 is connected to terminal 6	terminals 1 and 6 are separated by the gap
+the bulb could be lit by having switch x and switch z closed .	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+because the terminals are not connected	a battery uses a chemical reaction to maintain different electrical states at the terminals
+becuase the other terminals are connected to the positive battery terminal	terminals 4 , 5 and 6 are connected to the positive battery terminal
+because terminal 1 is not seperated by any gaps	terminal 1 is connected to the negative battery terminal
+terminal 1 is not connected to terminal 6	terminals 1 and 6 are not connected
+terminal 4 and the positive battery terminal are in the same state .	terminal 4 and the positive terminal are connected
+bulb c will create a gap in the path	each bulb is in its own path
+there will be a gap in the circuit .	there is a gap in the circuit
+because it creates a gap bewtween the battery and the other paths	if bulb a burns out , bulbs b and c are still in a closed path
+" if the switch causes a gap in a closed path , the bulb won " " t turn on "	when the switch and the bulb are contained in the same path
+switch x is in the closed path with bulb a	bulb a is still contained in a closed path with the battery and switch x .
+there is another path through switch z	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+contained within the same closed path	a and c are in the same closed path
+there will be a gap at one point in time and there will be a voltage decrease so you know .	a non-zero voltage means that the terminals are separated by a gap .
+bulbs a and b are contained in closed paths with the battery	if c burns out , then a and b are still in a closed path with the battery .
+an open switch impacts a circuit because it causes the path to be closed , therefore the connection cannot be made .	the path is not closed
+if buld b is damaged that will create a gap .	bulb b creates a gap
+bulb b and bulb c are contained in the same path with the battery	b and c are in the same path with the battery
+because there is a gap due to a damaged bulb .	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+a chemical reaction inside the battery makes the electrical states of the positive and negative terminals different at all times .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the positive terminal is not seperated by a gap .	terminal 1 is connected to the negative battery terminal
+1 2 and 3 are on thnegative side	terminals 1 , 2 and 3 are connected to the negative battery terminal
+because there was no separation in the positive battery terminal and terminal 1 .	terminal 1 is connected to the negative battery terminal
+it has its own closed path	bulb a was still contained in the same closed path with the battery .
+different paths with the battery	b and c are in the same path with the battery
+c is not within the same path as b	each bulb is in its own path
+the is an open path	the battery is in an open path
+terminal 6 is directly connected to the positive terminal .	terminal 6 and the positive terminal are connected
+bulbs a , b and c are on different paths	a and c are in different paths
+if bulb c burns out a and b will both create circuts with the battery	bulbs a and b are still in closed paths with the battery
+when the switch is connected between the bulb and the battery	when the switch and the bulb are contained in the same path
+battery is in a holder	there is a complete circuit
+its connected to the positive terminal	terminal 1 is connected to the negative battery terminal
+the voltage of a battery is the result of chemical reactions within the battery	a battery uses a chemical reaction to maintain different electrical states at the terminals
+electrical states between connected terminals will differ than those that are separated by a gap .	measuring voltage indicates the place where the electrical state changes due to a gap .
+because it creates a gap , so the circuit becomes incomplete	a damaged bulb creates a gap
+bulb b is in a independent path	bulb b is in a separate path
+becuase it can follow that path that switch z is on	there is a path containing a , c , z and x
+the closed path contains bulb a , bulb b , bulb c , and a battery .	a and c are in the same closed path
+the ppositive battery terminal is connected in terminal 6 .	terminal 6 and the positive terminal are connected
+there will be a gap between the positive battery terminal and the bulb terminal	a non-zero voltage means that the terminals are not connected .
+there was a gap between the positive battery terminal and terminal 1 .	terminals 1 and 2 are in the same electrical state
+because a bulb creates electricity .	there is an open path
+there will be a gap at bulb b , thus affecting the rest of the circuit	bulb b creates a gap
+there is always voltage even if there is a gap	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the a bulb is dead .	terminals 4 , 5 and 6 are connected to the positive battery terminal
+bulb c was in an incomplete path	bulb c was not in a closed path
+because switch y does not affect the circuit that bulb a is on	switch y and bulb a are not in the same closed path
+terminal 1 is connected to terminal 2	terminals 1 and 4 are connected
+because bulb a is connected to switch x and the battery is in a closed path	bulb a was still contained in the same closed path with the battery .
+a terminal is connected to a bulb .	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+because bulb a is connected to another path .	bulb a is still in a closed path with the battery
+" the electrical state difference between the battery " " s two terminals "	a battery uses a chemical reaction to maintain different electrical states at the terminals
+only one terminal is involved in the circuit .	the battery in 2 is not in a closed path
+has to do something with a gap	terminal 2 and the positive terminal are separated by the gap
+because of the chemical in the battery	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulb a is not in the same pathway as bulbs b and c .	each bulb is in its own path
+because the path connecting the bulbs will be damaged	there is a gap in a circuit
+because the battery has its own electrical state within given by the lead	a battery uses a chemical reaction to maintain different electrical states at the terminals
+again , bulbs a and b will be contained on a closed path	if c burns out , then a and b are still in a closed path .
+a gap chause different electrical states with different voltages	measuring voltage indicates the place where the electrical state changes due to a gap .
+because it was contained in a closed bath with the battery .	bulb a was still contained in the same closed path with the battery .
+the path has a gap , so the circuit is incomplete	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+complete path including a battery and a bulb	there is a closed path containing both the bulb and a battery
+because it buld a was in a closed path with a battery .	bulb a is still contained in a closed path with the battery .
+the path has to be closed	if a bulb and a switch are in the same path the switch affects the bulb
+it contains a bulb and does not complete a full circuit to the battery	the battery in 2 is not in a closed path
+the terminal is connected to the negative terminal of the battery	terminal 1 is connected to the negative battery terminal
+because it is not on the same path	if bulb a burns out , bulbs b and c are still in a closed path
+a battery should connect to a bulb in a closed path .	the bulb and the battery are in a closed path
+a terminal is not connected to the positive battery terminal .	terminal 1 and the positive terminal are not connected
+bulb a has its own closed path with the battery , bulbs b and c do not	there is a path containing a and a different path containing b and c
+terminal 1 and the positive terminal are connected .	terminal 1 and the positive terminal are separated by the gap
+because there is no gap between the terminals	terminal 1 is not separated from the negative battery terminal
+terminal 1 and 2 are connected to the negtive terminal of the battery	terminals 1 and 2 are connected
+there is always a difference in voltage between two battery terminals .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because the current can not reach the bulb if the circuit is open .	there is an open path
+a batter uses a chemical reaction to create voltage	a battery uses a chemical reaction to maintain different electrical states at the terminals
+there was a gap in the circuit that c was on	bulb c was not in a closed path
+terminal 5 is connected to the postive battery terminal	terminal 5 and the positive terminal are connected
+when the switch is in the same papth as the bulb .	when the switch and the bulb are contained in the same path
+that the bulb terminal and battery terminal are on the same side of a disconnected circut	the terminals are in the same state .
+it tells you that it is connected to a positive battery terminal .	there is no gap between the terminals
+incorrect , or not a correct way to wire	there is a short circuit
+there are 2 paths in this diagram	there is a path containing a and a different path containing b and c
+circuit has nothing to do with the batteries voltage	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulb a was still contained in a closed path with the battery .	bulb a was still contained in the same closed path with the battery .
+it created a circut with the battery	bulb a is still contained in a closed path with the battery .
+there has to be a closed circuit battery .	the bulb and the battery are in a closed path
+bulb c is not contained in a closed path	the damaged bulb and the other bulb must be contained in the same path
+because the bulb does not have a closed path .	the bulb is not in the closed path containing the battery
+becuase breaking one bulb then affects the ability of the others to light up .	a and c are in the same closed path
+because terminal 1 is directly connected to terminal 4	terminals 1 and 4 are connected
+the battery will always have a voltage .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+both bulbs a and c still have a closed path	bulbs a and c are still in closed paths
+because terminal 1 is connected to the negative terminal which has a 1.5 volt difference with the positive terminal	terminal 1 is connected to the negative battery terminal
+a and b are on a closed path with the battery	if c burns out then a and b are still in a closed path with the battery
+the battery connects to the bulb	the battery is in an open path
+voltage is the difference between a positive and negative end on a battery .	terminal 1 is connected to the negative battery terminal
+the terminals are seperated from the positive terminal	terminals 1 and 2 are in the same electrical state
+bulb a and bulb c are not on the same path as bulb b	a , b and c are in different paths
+the terminals are separated from the positive battery terminal by a gap	terminals 1 and 2 are in the same electrical state
+bulb a affects bulb c	a and c are in the same closed path
+bulb a was in a closed path with the battery .	bulb a is still contained in a closed path with the battery .
+the positive battery terminal and terminal 5 are connected	terminal 5 and the positive terminal are connected
+its not recieving from either the negative or positive terminal	there is no gap between the terminals
+by measuring you can find the gap which will show you which bulb is burned out	measuring voltage indicates whether two terminals are separated by a gap .
+a damaged bulb causes a gap at the blub	a damaged bulb creates a gap
+terminal 4 is connected to the positive battery terminal .	terminal 4 and the positive terminal are connected
+if a bulb and a switch are contained in the same closed path , the switch affects the bulb .	when the switch and the bulb are contained in the same path
+the bulb is contained in the bath	the damaged bulb and the other bulb must be contained in the same path
+bulb c is in its own pathway	bulb c is in a separate path
+bulb b , and c are still ina contained path .	if bulb a burns out , b and c are no longer in a closed path with the battery
+bulb a and c still had a closed path with the battery .	bulbs a and c are still contained in closed paths with the battery
+the battery always has a voltage because there is a positive terminal and there is a negative terminal .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the positive terminal has 1.5 v	terminal 1 and the positive terminal are separated by the gap
+because switch x is open .	there is a path containing a , c , z and x
+you can see where the gap is	measuring voltage indicates the place where the electrical state changes due to a gap .
+the bulb is in a closed circuit	the battery is in an open path
+not seperated by a gap	terminal 6 and the positive terminal are not separated by the gap
+a terminal is not connected to the negative battery terminal .	terminals 1 and 6 are not connected
+1 is connected to terminal 2 .	terminals 1 and 4 are connected
+bulbs a , b , and c are all in the same path .	a and c are in the same path
+the terminals are connected to each other	terminals 1 and 2 are in the same electrical state
+if the path contains the switch , the bulb is affected .	if a bulb and a switch are in the same path the switch affects the bulb
+if b burns out there will still be closed paths for the other 2	bulbs a and c are in a closed path
+because voltage measures the difference between two points	terminal 1 and the positive terminal are separated by the gap
+because there is a gap .	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+bulb a is on a closed path with the battery	there is a path containing a and a different path containing b and c
+the battery and the bulb must be in a closed path together .	the bulb and the battery are in a closed path
+there is a closed path	if c burns out , then a and b are still in a closed path .
+the difference between the electrical states is 1.5 volts	terminal 1 and the positive terminal are separated by the gap
+the bulb takes away the path .	there is an open path
+when it is in the same path as the battery	when the switch and the bulb are contained in the same path
+there is no gap between the posittive terminal and terminal 1	terminal 1 is connected to the negative battery terminal
+there is no gap between the positive battery terminal and terminal 4	there is no gap between terminal 5 and the positive terminal
+bulb b and bulb c are still contained in a closed path with the battery	if bulb a burns out , b and c are no longer in a closed path with the battery
+it determines whether or not the light bulbs will turn on .	if a bulb and a switch are in the same path the switch affects the bulb
+bulb c was in an open path ,	bulb c was not in a closed path
+both bulbs b and c are in the same path as bulb a	if bulb a burns out , neither b nor c is in a closed path
+there is no difference between the two terminals .	the terminals are in the same state .
+bulb a and switch y are not in the same path .	switch y and bulb a are not in the same closed path
+bulb a is not on the same path that bulb b and bulb c are .	there is a path containing a and a different path containing b and c
+it is being attatched to the wrong side .	there is no gap between the terminals
+because 1.5 v is the difference between the positive terminal and terminal 1	terminal 1 and the positive terminal are separated by the gap
+a red x means the battery is in a short circuit .	there is a short circuit
+if the switch is open in a path with the battery and bulb .	when the switch and the bulb are contained in the same path
+bulbs b and are not in a closed path with bulb a	if bulb a burns out , neither b nor c is in a closed path
+bulb a and bulb b are still in a closed path with the battery .	bulbs a and b are still in closed paths with the battery
+bulbs a and c are not in the same closed path as bulb b	bulb b is in a separate path
+if any bulb is out , it affects the whole system and everything is blocked from the battery .	each bulb is in its own path
+because the terminals are in the same state	terminal 1 is connected to the negative battery terminal
+because it was contained in the battery that has a closed path	bulb a was still contained in the same closed path with the battery .
+because bulbs a and b are still contained in a closed path with the battery .	if c burns out then a and b are still in a closed path with the battery
+4 , 5 , and 6 are connected to the positive side	terminals 4 , 5 and 6 are connected to the positive battery terminal
+if bulb b is damaged a gap is created .	bulb b creates a gap
+it is an open path .	there is a short circuit
+because the the circuit is complete .	the path is not closed
+for the same reason as 3	terminal 6 and the positive terminal are not separated by the gap
+because it was connected to the positive terminal .	terminal 1 and the positive terminal are separated by the gap
+because bulbs a and b have their own closed paths	bulbs a and b are in a closed path
+the path will have a gap	each bulb is in its own path
+because their is a gap between a and c now .	there is an incomplete circuit
+terminal 1 and terminal 4 are the same	terminals 1 and 4 are connected and in the same electrical state
+the red x means that the circuit is not safe .	there is a short circuit
+the battery connects with bulb a and b	bulbs a and b are still in closed paths with the battery
+circuit 2 is not a short circuit because it is not a closed circuit .	the battery in 2 is not in a closed path
+when switch is open it creates a gap in the path .	if a bulb and a switch are in the same path the switch affects the bulb
+there is still a closed path that contains the battery , bulb b , and bulb c .	bulbs b and c are still in closed paths with the battery
+damaged bulb b creates a gap	bulb b creates a gap
+because it can travel by bulb c	there is a path containing a , c , z and x
+there is still a closed path to the battery for bulbs b and c	bulbs b and c are still in closed paths with the battery
+4 5 and 6 are not connected to negative battery terminal	terminals 4 , 5 and 6 are not connected to the negative battery terminal
+it breaks the closed path .	the open switch creates a gap
+if it is on a series with other bulbs	the damaged bulb and the other bulb must be contained in the same path
+bulbs are on the same closed path	a and c are in the same closed path
+b and c will no longer be contained in a closed path to the battery .	if bulb a burns out , b and c are no longer in a closed path with the battery
+bulbs b anc c are on the same closed path with the battery but seperate from bulb a	there is a path containing a and a different path containing b and c
+" because it didn " " t cause a gap . "	each bulb is in its own path
+the terminal is connected to the battery	terminal 1 is connected to the negative battery terminal
+turning off one bulb will not turn off another bulb	a and c are in different paths
+terminal 5 is connected to postive terminal of the battery	terminal 5 and the positive terminal are connected
+if the switch is contained in the same path with the bulb	when the switch and the bulb are contained in the same path
+the positive battery terminal is separated by a gap from terminal 4 .	there is no gap between terminals 1 and 4
+bulb a is contained in a closed path with the battery .	bulb a is still contained in a closed path with the battery .
+the other terminals are connected to the positive terminal .	terminals 4 , 5 and 6 are connected to the positive battery terminal
+because there is no closed path	the path is not closed
+the open switch makes the circuit incomplete .	there is an incomplete circuit
+because it creates a gap in the circuit .	a damaged bulb creates a gap
+because bulbs a and c are on different closed paths with the battery	bulbs a and c are still contained in closed paths with the battery
+a is on a cloosed battery	bulb a is still contained in a closed path with the battery .
+the light bulb must be connected to both sides of the battery and there must be a closed circuit .	there is a complete circuit
+terminal 5 is connected to the positive battery terminal .	terminal 5 and the positive terminal are connected
+because it decides whether the bulb will be lit or not	the path is not closed
+if a switch is open , the circut is no longer closed .	the path is not closed
+bulb b and c are still in a closed path with the battery .	bulbs b and c are still in closed paths with the battery
+the terminal is not connected to the positive battery terminal	terminal 1 and the positive terminal are not connected
+bulb b did not create a gap in the path for bulb a and c	bulbs a and c are still in closed paths
+the battery is connected to a bulb	the battery is in an open path
+the positive battery terminal and terminal 4 are connected	terminal 4 and the positive terminal are connected
+because there was no difference	terminals 1 and 2 are connected and in the same electrical state
+bulb b and bulb c are contained in different path with the battery	b and c are in the same path with the battery
+there was a gap between the positive battery terminal and terminal 2 .	terminals 1 and 2 are in the same electrical state
+the closed path still existed for bulb a even though switch y was open	bulb a is still contained in a closed path with the battery .
+positive is seperated from negative !	terminal 3 and the positive terminal are not connected
+because it is not in the same path .	there is a path containing a
+there is no electrical states	there is no gap between the terminals
+bulb a was still in a closed path with the battery	bulb a was still contained in the same closed path with the battery .
+because it opens the circuit	there is an open path
+because it was still in a closed circuit	bulb a is still contained in a closed path with the battery .
+terminal 1 was connected to the positive terminal of the battery	terminal 1 and the positive terminal are separated by the gap
+terminal 1 is conected to terminal 6	terminals 1 and 6 are separated by the gap
+terminal 1 was connected to the positive battery terminal	terminal 1 and the positive terminal are separated by the gap
+the path may not connect a bulb to the switch .	the switch and the bulb have to be in the same path
+you can determine is broken bulb is before a gap or after	measuring voltage indicates the place where the electrical state changes due to a damaged bulb .
+terminal 1 is connected to the negative terminal .	terminal 1 is connected to the negative battery terminal
+a terminal is not connected to the positive battery terminal .	terminals 1 and 6 are not connected
+if the switch is contained in a closed path .	if a bulb and a switch are in the same path the switch affects the bulb
+because there is a gap between terminal 3 and 4	terminal 1 and the positive terminal are separated by the gap
+bulbs a and b are not on the same path as bulb c .	bulb c is in a separate path
+the path passes the energy through the switch	if a bulb and a switch are in the same path the switch affects the bulb
+it was contained in a closed path	bulb a was still contained in the same closed path with the battery .
+the open switch makes the path open	there is an open path
+the positive battery terminal is connected to terminal 6 .	terminal 6 and the positive terminal are connected
+bulbs a b and c are on a closed path	a and c are in the same closed path
+because all the terminals are connected to other terminals , an open switch disrupts that .	the open switch creates a gap
+there was a gap in bulb b	terminal 1 and the positive terminal are separated by the gap
+terminal 1 is connected to terminal 4	terminals 1 and 4 are connected
+the positive terminal is not seperated by a gap from terminal 5	terminal 5 and the positive terminal are not separated by the gap
+the batter is contained in switch y	switch y and bulb a are not in the same closed path
+the difference electrical state will show the burnt bulb	measuring voltage indicates the place where the electrical state changes due to a damaged bulb .
+there is no connection between the bulb terminal and the battery terminal .	the terminals are not connected
+the battery is not in a closed path .	the battery in 4 is not in a closed path
+depends on whether it is before or after the bulb	if a bulb and a switch are in the same path the switch affects the bulb
+there is a gap in the circuit	terminal 1 and the positive terminal are separated by the gap
+the negative battery terminal is connected to terminal 4	terminal 4 and the positive battery terminal are in the same electrical state
+there will be a gap in the path	if bulb a burns out , neither b nor c is in a closed path
+because the terminals are not in a closed path , so you are giving the voltage of the battery itself	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because it is measuring the difference in electrical states between two terminals .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because of the gap at bulb b	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+switch y does not affect the closed circuit of bulb a	switch y and bulb a are not in the same closed path
+electrical states will determine whether there is a gap or connection in the circuit	measuring voltage indicates whether two terminals are separated by a gap .
+because a closed circuit was formed .	bulb a was still contained in the same closed path with the battery .
+if the path is closed , the bulbs will remain on .	if a bulb and a switch are in the same path the switch affects the bulb
+because the voltage is the same .	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+seperate paths connected to the battery	if c burns out , then a and b are still in a closed path with the battery .
+bulb b becomes a gap in the circuit	bulb b creates a gap
+if the switch and the bulb are in the same path .	when the switch and the bulb are contained in the same path
+terminal 5 is connected ot the positive battert terminal	terminal 5 and the positive terminal are connected
+because bulb a was still contained in a closed path	bulb a was still contained in the same closed path with the battery .
+because the outcome of the bulb will not affect each other	a and c are not in the same path with the battery
+the battery is in a short circuit .	there is a short circuit
+you can find where there is a gap	measuring voltage indicates whether two terminals are separated by a gap .
+becuase there are still 2 closed paths for the battery to send volts through .	bulbs b and c are still in closed paths with the battery
+because these terminals all had a reading of 0.0 volts	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+there is a gap in the connection	measuring voltage indicates the place where the electrical state changes due to a gap .
+it is in a closed path with the battery	there is a path containing a , c , z and the battery
+bulbs a and b are contained in a closed path with the battery	if c burns out then a and b are still in a closed path with the battery
+bulb a and bulb c are still on a closed path that contains the battery .	bulbs a and c are still in closed paths with the battery
+the swithch affects the bulb if it is on the same path	when the switch and the bulb are contained in the same path
+circuit 5 only has one terminal to the battery	the battery is contained in a path which does not contain any other components
+" because the battery always has a voltage unless it " " s dead "	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the battery is contained in a closed circuit and there is nothing in its pathway	the battery is contained in a closed path which does not contain any other components
+because it has two electrial states within itself .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulbs b and c were in a closed path with a battery .	bulb b and bulb c were still contained in the same closed path with the battery .
+bulb a and bulb b are still contained in closed paths with the battery	if c burns out then a and b are still in a closed path with the battery
+i guess because it is in the center .	bulb b is in a separate path
+because the two ends of the battery do not connect to one another	the battery is in an open path
+the battery keeps a chemical reaction reaction .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+a switch will effect a bulb if it in the closed path to the battery	when the switch and the bulb are contained in the same path
+there is a gap between the positive battery terminal and the bulb terminal .	there is no gap between the terminals
+circuit 2 is not a closed circuit because the battery and the bulb are connected .	the battery in 2 is not in a closed path
+terminals 4,5 , and 6 are connected to the positive terminal	terminals 4 , 5 and 6 are connected to the positive battery terminal
+the positive battery terminal is not connected	there is no gap between terminal 6 and the positive terminal
+because bulb c was contained in an open path with the battery	there was no longer a closed path containing bulb c and the battery
+a large one , if it is closed it will light up but if it is open it will not	if a bulb and a switch are in the same path the switch affects the bulb
+bulb a is on a closed circut path	bulb a was still contained in the same closed path with the battery .
+the bulb is only connected to that side of the battery terminal .	there is no gap between the terminals
+if the bulb is on the same closed path	the damaged bulb and the other bulb must be contained in the same path
+one side is closed the other side is open .	the battery is in an open path
+there is no closed path	if bulb a burns out , neither b nor c is in a closed path
+bulb a was contained on a closed path with the battery	bulb a was still contained in the same closed path with the battery .
+positive and negative is seperate	terminal 3 and the positive terminal are not connected
+it is a closed path .	there is no closed path containing the battery
+it makes the circuit incomplete .	there is an incomplete circuit
+bulb a and b will be on .	if c burns out , then a and b are still in a closed path with the battery .
+there is a gap , so the terminals are connected to the negative side of the battery .	terminals 1 , 2 and 3 are connected to the negative battery terminal
+the bulb in burned out	there is still a closed path
+terminal 4 is only connected to the positive battery terminal .	terminal 4 and the positive terminal are connected
+the battery and a created a complete circut	bulb a is still contained in a closed path with the battery .
+the path determines if the bulb will turn on or not	if a bulb and a switch are in the same path the switch affects the bulb
+it was connected to both terminals of the battery	bulb a is still contained in a closed path with the battery .
+there is a path from bulb to battery	bulb a is still contained in a closed path with the battery .
+through bulb a , bulb b is still contained in a closed path to the battery .	if c burns out then a and b are still in a closed path with the battery
+the battery is contained in a closed path	the battery is contained in a path in which there is no bulb
+if switch and bulb are contained in the same closed path	when the switch and the bulb are contained in the same path
+bulb c does not affect the path of a and b .	if c is damaged , a and b are still in a closed path
+bulbs b and c werer still contained in a closed path with the battery .	bulb b and bulb c were still contained in the same closed path with the battery .
+because the positive battery terminal is not separated by a gap from terminal 6 .	terminal 6 and the positive terminal are not separated by the gap
+gap between 3 and positive battery	terminal 3 and the positive terminal are separated by the gap
+there is no closed path in circuit 4 .	circuit 4 has no closed paths
+because the voltage doesnt change in the battery	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because bulb a was still on a closed circuit	bulb a is still contained in a closed path with the battery .
+there is a gap at bulb b	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+it is on a closed path	if bulb a burns out , b and c are no longer in a closed path with the battery
+a is on its on path b and c share a path	there is a path containing a and a different path containing b and c
+there is a chemical reaction .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+bulb b and c will no be in a closed path with the battery	if bulb a burns out , b and c are no longer in a closed path with the battery
+still connected to the battery	if bulb a burns out , b and c are no longer in a closed path with the battery
+bulb a and c are contained in a closed path with the battery	bulb a is still in a closed path with the battery
+bulbs have to be contained in closed paths with the battery	the damaged bulb and the other bulb must be contained in the same path
+bulb a is in a closed circuit with the battery without the y switch .	bulb a is still in a closed path with the battery
+bulbs b and c are contained in the same path	b and c are in the same path
+bulbs a and c are contained in different paths with the battery .	a and c are in different paths with the battery
+switch z is in the same path as bulb a	bulb a is still contained in a closed path with the battery and switch z .
+not contained inthe same path	if c burns out , then a and b are still in a closed path .
+bulb b and c are on a closed path to the battery	if bulb a burns out , bulbs b and c are still in a closed path
+there are still complete paths to the battery for b and c	bulbs b and c are still in closed paths with the battery
+because the two terminals are connected	terminals 1 and 4 are connected
+there was a gap in the terminal	switch y and bulb a are not in the same closed path
+bulb a creates a gap	if bulb a burns out , neither b nor c is in a closed path
+there was a gap from terminal 2 to terminal 6	terminals 1 and 2 are in the same electrical state
+there is a light bulb in the circuit	the battery in 2 is not in a closed path
+it was still on a closed path	bulb a was still contained in the same closed path with the battery .
+there is a gap in the circuit .	there is a gap in a circuit
+there is no path through bulb b	there is no closed path
+bulb c is in an indepedent path	bulb c is in a separate path
+the positive battery terminal is separated by a gap from terminal 4 .	terminal 4 and the positive battery terminal are in the same electrical state
+if the switch is in front of the path of a light bulb or not .	the switch and the bulb have to be in the same path
+the bulb must be in a closed pathway containing the battery	if a bulb and a switch are in the same path the switch affects the bulb
+there is a gap between the positive battery connection and the bulb terminal .	there is no gap between the terminals
+a gap causes a lost connection	a non-zero voltage means that the terminals are not connected .
+the bulb is dead pr not connected to the battery terminal	there is no gap between the terminals
+the electrical state is interferred with .	a non-zero voltage means that the terminals are not connected .
+because bulb c was in an open path	bulb c was not in a closed path
+bulb a is on a closed path with the battery	bulb a is still in a closed path with the battery
+because the battery has its own chemical reacion between the positive and negative tterminals it contains	a battery uses a chemical reaction to maintain different electrical states at the terminals
+a terminal is connected to the positive terminal of the battery	terminal 5 and the positive terminal are connected
+bulb a will light when it is in a closed path with the battery .	there is a path containing a , c , z and x
+a switch is contained in the path	the switch and the bulb have to be in the same path
+the positive battery terminal is separated by a gap from terminal 3	terminal 3 and the positive terminal are separated by the gap
+because bulbs a and c have their own closed paths	bulbs a and c are in a closed path
+the bulb creates a gap in the closed path	if bulb a burns out , neither b nor c is in a closed path
+open switch and broken bulb are the same	the damaged bulb and the other bulb must be contained in the same path
+a terminal is connected to another terminal	terminals 4 , 5 and 6 are connected to the positive battery terminal
+bulb a and c are still in a closed path with the battery .	bulbs a and c are still contained in closed paths with the battery
+when the switch is in the same path as the bulb .	when the switch and the bulb are contained in the same path
+because each bulb has its own complete path	each bulb is in its own path
+the battery is not conatined in a closed path	the battery in 4 is not in a closed path
+there is still a closed path that contains the battery , bulb b , and bulb c	bulbs b and c are still in closed paths with the battery
+the battery contains bulb a and b on a closed path	bulbs a and c are still contained in closed paths with the battery
+the positive battery terminal was not seperated by a gap from terminal 4 .	terminal 4 and the positive terminal are not separated by the gap
+terminal 6 is connected to terminal 1	terminals 1 and 6 are separated by the gap
+bulb c creates a gap in the closed path .	if c burns out , then a and b are still in a closed path with the battery .
+bulb a and bulb c are wired in parallel	a and c are in different paths
+that the battery connection does not work	there is a short circuit
+short circuit or bad battery .	there is a short circuit
+if there is a gap in the circuit there the bulb will not light up .	a non-zero voltage means that the terminals are not connected .
+terminal 1 and 2 have the same difference in electrical states	terminals 1 and 2 are connected and in the same electrical state
+there is no gap between terminal 1 and the positive terminal .	terminal 1 and the positive terminal are separated by the gap
+the path must be closed	if a bulb and a switch are in the same path the switch affects the bulb
+it was connected to the positive terminal	terminal 1 and the positive terminal are separated by the gap
+it has its own path connected to the battery	each bulb is in its own path
+if it is in the same path as the bulb	when the switch and the bulb are contained in the same path
+circuit do not effect electrical state between terminals	a battery uses a chemical reaction to maintain different electrical states at the terminals
+the battery is connected to the bulb	the battery in 2 is not in a closed path
+there was a gap from terminal	terminals 1 and 2 are in the same electrical state
+the battery is in a closed path .	the battery is contained in a path in which there is no bulb
+bulb a has a closed pathway	bulb a was still contained in the same closed path with the battery .
+it depends on whether its an open or closed path	if a bulb and a switch are in the same path the switch affects the bulb
+because the bulb is in a closed path	there is no closed path containing the battery
+there is a difference in electrical states between two terminals .	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because terminal 1 is seperated from the positive battery terminal .	terminal 1 and the positive terminal are separated by the gap
+when it is on the same pathway as the batter and the bulb .	when the switch and the bulb are contained in the same path
+because there is a difference in electrial states between the two terminals	a battery uses a chemical reaction to maintain different electrical states at the terminals
+because the gap provides separation to the terminals	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+because their was a connected circuit .	terminal 1 is connected to the negative battery terminal
+the are both connected the negative battery terminal .	terminals 1 and 2 are connected
+there is a difference in electrical states	terminals 1 and 4 are connected and in the same electrical state
+bulbs b and c are contained in the same closed path .	a and c are not in the same path with the battery
+there is still a closed path	there is still a closed path containing switch z , switch x , bulbs a and c and the battery
+the two terminals will both be 0	the terminals are in the same state .
+those terminals are connected to the negative side of the circut	terminals 1 , 2 and 3 are connected to the negative battery terminal
+the damaged bulb b has left a gap in the path so the charge can not reach it	terminals 1 , 2 and 3 are separated from the positive battery terminal by a gap
+because it was in a closed circuit	bulb a is still contained in a closed path with the battery .
+terminal 1 is connected to the negative battery terminal and terminal 6 is connected to the positive battery terminal	terminals 1 and 6 are not connected
+a closed path with a battery enables the bulb to be on .	if a bulb and a switch are in the same path the switch affects the bulb
+the circuit needs to be closed	the circuit has a closed path
+the bulb will be burned out because the terminals	the damaged bulb and the other bulb must be contained in the same path
+the battery is in a closed path that does not contain any other components .	the battery is contained in a path which does not contain any other components
+the bulb terminal and the battery terminal are separated by a gap	there is no gap between the terminals
+not in the same path	bulb c is in a separate path
+the terminals are not connected	terminal 1 and the positive terminal are not connected
+the bulb and battery must be contained in closed paths .	the bulb and the battery are in a closed path
+because bulbs b and c are in a closed path with the battery .	bulb b and bulb c were still contained in the same closed path with the battery .
+because there was a positive and negative connection	terminal 1 is connected to the negative battery terminal
+it was seperated by a gap from terminal 3	terminal 3 and the positive terminal are separated by the gap
+no electricity is being produced .	there is a short circuit
