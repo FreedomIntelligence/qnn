@@ -141,8 +141,7 @@ class DataReader(object):
                 if len(pos_answers)==0 or len(neg_answers)==0:
                     continue
                 
-                for pos in pos_answers:  
-                    
+                for pos in pos_answers:                     
                     seq_pos_a = self.embedding.text_to_sequence(pos)
                     neg_index = np.random.choice(neg_answers.index)
                     neg = neg_answers.loc[neg_index,]
@@ -163,29 +162,18 @@ class DataReader(object):
                         overlap_neg.append(self.overlap_index(seq_q,seq_neg_a))
             
             
-            if self.bert_enabled:
-                q,q_mask = to_array(q,maxlen = self.max_sequence_length, use_mask = True)
-                if self.match_type == 'pairwise':      
-                    pos_a,pos_a_mask = to_array(pos_a,maxlen = self.max_sequence_length, use_mask = True)
-                    neg_a,neg_a_mask = to_array(neg_a,maxlen = self.max_sequence_length, use_mask = True)
-                    x_data = [q,q_mask,pos_a,pos_a_mask,neg_a,neg_a_mask]
-                    y = [l for l in zip(*[q,pos_a,neg_a])]
-                else:
-                    y = to_categorical(np.asarray(y))
-                    a,a_mask = to_array(a,maxlen = self.max_sequence_length, use_mask = True)
-                    x_data = [q,q_mask,a,a_mask]
+            
+            q = to_array(q,maxlen = self.max_sequence_length, use_mask = False)
+            if self.match_type == 'pairwise':
+                pos_a = to_array(pos_a,maxlen = self.max_sequence_length, use_mask = False)
+                neg_a = to_array(neg_a,maxlen = self.max_sequence_length, use_mask = False)
+                x_data = [q,pos_a, neg_a]
+                y = [l for l in zip(*[q,pos_a,neg_a])]
+                
             else:
-                q = to_array(q,maxlen = self.max_sequence_length, use_mask = False)
-                if self.match_type == 'pairwise':
-                    pos_a = to_array(pos_a,maxlen = self.max_sequence_length, use_mask = False)
-                    neg_a = to_array(neg_a,maxlen = self.max_sequence_length, use_mask = False)
-                    x_data = [q,pos_a, neg_a]
-                    y = [l for l in zip(*[q,pos_a,neg_a])]
-                    
-                else:
-                    y = to_categorical(np.asarray(y))
-                    a = to_array(a,maxlen = self.max_sequence_length, use_mask = False)
-                    x_data = [q,a]
+                y = to_categorical(np.asarray(y))
+                a = to_array(a,maxlen = self.max_sequence_length, use_mask = False)
+                x_data = [q,a]
             if overlap_feature:
                 x_data = x_data + [overlap_pos,overlap_neg]
                 

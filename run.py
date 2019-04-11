@@ -56,9 +56,6 @@ def myzip(train_x,train_x_mask):
 #    return x_exp / x_sum
 
 def run(params):
-    if "bert" in params.network_type.lower() :
-        params.max_sequence_length = 512
-        reader.max_sequence_length = 512
     evaluation=[]
 #    params=dataset.classification.process_embedding(reader,params)    
     qdnn = models.setup(params)
@@ -96,7 +93,8 @@ def run(params):
     if params.dataset_type == 'qa':
 #        from models.match import keras as models   
         for i in range(params.epochs):
-            model.fit_generator(reader.batch_gen(reader.get_train(iterable = True)),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
+            model.fit_generator(reader.batch_gen(reader.get_train(iterable = True)),\
+                                epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
             y_pred = model.predict(x = test_data) 
             score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
                 

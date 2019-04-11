@@ -18,16 +18,16 @@ class ComplexMultiply(torch.nn.Module):
                             'on a list of 2 inputs.'
                             'Got ' + str(len(inputs)) + ' inputs.')
 
-        phase = inputs[0]
-        amplitude = inputs[1]
+        phase = inputs[0].float()
+        amplitude = inputs[1].float()
         
         if amplitude.dim() == phase.dim()+1: # Assigning each dimension with same phase
-            cos = torch.unsqueeze(torch.cos(phase), dim=-1)
-            sin = torch.unsqueeze(torch.sin(phase), dim=-1)
+            cos = torch.unsqueeze(torch.cos(phase), dim=-1).float()
+            sin = torch.unsqueeze(torch.sin(phase), dim=-1).float()
             
         elif amplitude.dim() == phase.dim(): #Each dimension has different phases
-            cos = torch.cos(phase)
-            sin = torch.sin(phase)
+            cos = torch.cos(phase).float()
+            sin = torch.sin(phase).float()
         
        
         else:

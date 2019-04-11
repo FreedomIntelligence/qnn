@@ -82,3 +82,16 @@ def to_array(ll,maxlen=0,use_mask=False):
     if use_mask:
         return arr,mask
     return arr
+
+def pad_sequence(sequence, maxlen, dtype='int64', padding='post', truncating='post', value=0.):
+    x = (np.ones(maxlen) * value).astype(dtype)
+    if truncating == 'pre':
+        trunc = sequence[-maxlen:]
+    else:
+        trunc = sequence[:maxlen]
+    trunc = np.asarray(trunc, dtype=dtype)
+    if padding == 'post':
+        x[:len(trunc)] = trunc
+    else:
+        x[-len(trunc):] = trunc
+    return x

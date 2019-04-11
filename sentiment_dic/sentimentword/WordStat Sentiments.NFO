@@ -1,0 +1,32 @@
+[PROTECTION]
+Stemming=0
+Exclusion List=0
+Include Level=0
+Overlap=0
+Category only=0
+Exclude word=0
+Process numeric=0
+Valid char=0
+Case sensitive=0
+Exclusion=0
+Inclusion=0
+[DESCRIPTION]
+Show=1
+Version=2.0
+TEXT=WordStat Sentiment Dictionary 2.0 (Jan 2018)
+[WordStat]
+Level=1
+Stemming=0
+Stemming type=English - Lemmatization
+Exclusion=0
+Exclusion List=E:\Users\Normand\Documents\My Provalis Research Projects\Dictionaries\English.exc
+Last Category=1
+Process Numeric=0
+Exclude Category Names=1
+Characters=
+ECharacters=
+Case sensitive=0
+Overlap=0
+[CATEGORIES]
+\NEGATIVE=
+\POSITIVE=
