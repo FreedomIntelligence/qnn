@@ -38,7 +38,7 @@ def setup(opt):
             from models.classification.tensorflow.QDNNAblation import QDNNAblation
             from models.classification.tensorflow.LocalMixtureNN import LocalMixtureNN
     
-    elif opt.language == 'pytorch':
+    elif opt.language == 'torch':
         if opt.dataset_type == 'qa':
 #            from models.match.pytorch.RealNN import RealNN
 #            from models.match.pytorch.QDNN import QDNN

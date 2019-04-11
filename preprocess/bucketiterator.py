@@ -2,7 +2,7 @@
 import os
 import numpy as np
 import tensorflow as tf
-
+import torch
 from collections import Counter
 import pandas as pd
 
@@ -14,7 +14,7 @@ from tools.timer import log_time_delta
 from nltk.corpus import stopwords
 Overlap = 237
 import random
-from units import to_array 
+from units import to_array, pad_sequence
 from tools import evaluation
 
 class BucketIterator(object):
@@ -50,29 +50,35 @@ class BucketIterator(object):
         else:
             return  self.transformKeras
             
-    
     def transformTorch(self,data):
-        if torch.cuda.is_available():
-            data=data.reset_index()
-            text= Variable(torch.LongTensor(data.text).cuda())
-            label= Variable(torch.LongTensor([int(i) for i in data.label.tolist()]).cuda())                
-        else:
-            data=data.reset_index()
-            text= Variable(torch.LongTensor(data.text))
-            label= Variable(torch.LongTensor(data.label.tolist()))
-        if self.position:
-            position_tensor = self.get_position(data.text)
-            return DottableDict({"text":(text,position_tensor),"label":label})
-        return DottableDict({"text":text,"label":label})
+        
+        padded_sequences = [pad_sequence(s, maxlen = self.max_sequence_length) for s in data[0]]
+        x_data = torch.Tensor(padded_sequences)
+        y_data = torch.Tensor(data[1])
+        return {'X':x_data, 'y':y_data}
+    
+#    def transformTorch(self,data):
+#        if torch.cuda.is_available():
+#            data=data.reset_index()
+#            text= Variable(torch.LongTensor(data.text).cuda())
+#            label= Variable(torch.LongTensor([int(i) for i in data.label.tolist()]).cuda())                
+#        else:
+#            data=data.reset_index()
+#            text= Variable(torch.LongTensor(data.text))
+#            label= Variable(torch.LongTensor(data.label.tolist()))
+#        if self.position:
+#            position_tensor = self.get_position(data.text)
+#            return DottableDict({"text":(text,position_tensor),"label":label})
+#        return DottableDict({"text":text,"label":label})
     
     
     def transformKeras(self,data):
         list_of_data = []
         for i in data:
-            if type(i[0])!=int and type(i)!=np.ndarray:
+            if type(i[0])!=int and type(i)!=np.ndarray and type(i[0][0])==int:
                 list_of_data.append(to_array(i,self.max_sequence_length, use_mask = False))
             else:
-                list_of_data.append(i)
+                list_of_data.append(np.asarray(i))
                     
         return list_of_data
 #        return [to_array(i,self.max_sequence_length, use_mask = False) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
@@ -109,13 +115,6 @@ class BucketIterator(object):
         
         return [index_by_list(feature,balance_index) if type(feature) == list  else feature[balance_index] for feature in data]
         
-        
-        
-            
-                
-        
-        
-        return data
     def __iter__each(self,data):
         if (self.shuffle and not self.test) or self.need_balanced:
             c = list(zip(*data))
@@ -141,14 +140,14 @@ class BucketIterator(object):
     def __iter__(self):
         
         if self.need_balanced:
-            data=self.balance(self.data)
+            self.data=self.balance(self.data)
             
         if not self.always:
-            for sample in self.__iter__each(data):
+            for sample in self.__iter__each(self.data):
     #            yield self.transform([item[index[0]:index[1]] for item in self.data])
                 yield sample
         else:
             while True:
-                for sample in self.__iter__each(data):
+                for sample in self.__iter__each(self.data):
     #            yield self.transform([item[index[0]:index[1]] for item in self.data])
                     yield sample
