@@ -17,6 +17,7 @@ from units import to_array
 class DataReader(object):
     def __init__(self, train, dev, test, opt, nb_classes):
 #        self.data = {'train': train, 'dev': dev, 'test': test}
+#        print(train)
         for key,value in opt.__dict__.items():
             self.__setattr__(key,value)  
         self.preprocessor = preprocess.setup(opt)
@@ -24,12 +25,15 @@ class DataReader(object):
         self.nb_classes = nb_classes
         self.get_max_sentence_length()
         self.dict_path = os.path.join(self.bert_dir,'vocab.txt')
-        
+        self.sentiment_dic = None
         if bool(self.bert_enabled):
-            loaded_dic = Dictionary(dict_path =self.dict_path)
-            self.embedding = Embedding(loaded_dic,self.max_sequence_length)
+            self.dictionary = Dictionary(dict_path =self.dict_path)
+            self.sentiment_dic = self.build_sentiment_lexicon()
+            self.embedding = Embedding(self.dictionary,self.max_sequence_length)
         else:
-            self.embedding = Embedding(self.get_dictionary(self.datas.values()),self.max_sequence_length)
+            self.dictionary = self.get_dictionary(self.datas.values())
+            self.sentiment_dic = self.build_sentiment_lexicon()
+            self.embedding = Embedding(self.dictionary,self.max_sequence_length)
         print('loading word embedding...')
         self.embedding.get_embedding(dataset_name = self.dataset_name, fname=opt.wordvec_path)
         self.opt_callback(opt) 
@@ -39,7 +43,18 @@ class DataReader(object):
         opt.embedding_size = self.embedding.lookup_table.shape[1]        
         opt.max_sequence_length= self.max_sequence_length
         
-        opt.lookup_table = self.embedding.lookup_table      
+        opt.lookup_table = self.embedding.lookup_table     
+        opt.sentiment_dic = self.sentiment_dic
+        
+    def build_sentiment_lexicon(self):
+        sentiment_lexicon = np.zeros((len(self.dictionary),1))
+        with open(self.sentiment_dic_file, 'r', encoding='utf-8', newline='\n', errors='ignore') as fin:
+            for line in fin:
+                tokens = line.rstrip().split()
+                if tokens[0] in self.dictionary:
+                    index = self.dictionary[tokens[0]]
+                    sentiment_lexicon[index] = np.asarray(tokens[1:], dtype='float32')
+        return sentiment_lexicon
     
     def get_dictionary(self, corpuses= None,dataset="",fresh=True):
         pkl_name="temp/"+self.dataset_name+".alphabet.pkl"
@@ -81,7 +96,10 @@ class DataReader(object):
         if max_sequence_length == 0:
             max_sequence_length = self.max_sequence_length
         if iterable:
-            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
+#            iterator = BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length)
+#            for batch in iterator:
+#                yield batch[0],batch[1]
+            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length,backend = self.language)
         else: 
             if self.bert_enabled:
                 x,x_mask = to_array(x,maxlen = self.max_sequence_length, use_mask = True)
@@ -99,7 +117,10 @@ class DataReader(object):
         if max_sequence_length == 0:
             max_sequence_length = self.max_sequence_length
         if iterable:
-            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
+#            iterator = BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length)
+#            for batch in iterator:
+#                yield batch[0],batch[1]
+            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length,backend = self.language)
         else: 
             if self.bert_enabled:
                 x,x_mask = to_array(x,maxlen = self.max_sequence_length, use_mask = True)
@@ -117,7 +138,10 @@ class DataReader(object):
         if max_sequence_length == 0:
             max_sequence_length = self.max_sequence_length
         if iterable:
-            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
+#            iterator = BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length)
+#            for batch in iterator:
+#                yield batch[0],batch[1]
+            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length,backend = self.language)
         else: 
             if self.bert_enabled:
                 x,x_mask = to_array(x,maxlen = self.max_sequence_length, use_mask = True)
@@ -249,7 +273,6 @@ class TRECDataReader(DataReader):
 class SSTDataReader(DataReader):
     def __init__(self, task_dir_path, opt, nclasses = 2, seed = 1111):
         self.seed = seed
-
         # binary of fine-grained
         assert nclasses in [2, 5]
         self.nclasses = nclasses
@@ -258,8 +281,10 @@ class SSTDataReader(DataReader):
         train = self.loadFile(os.path.join(task_dir_path, self.task_name,'sentiment-train'))
         dev = self.loadFile(os.path.join(task_dir_path, self.task_name, 'sentiment-dev'))
         test = self.loadFile(os.path.join(task_dir_path, self.task_name, 'sentiment-test'))
+
 #        super().__init__(train, dev, test, nclasses)
-        super(SSTDataReader,self).__init__(train, dev, test, nclasses, opt)
+
+        super().__init__(train, dev, test, opt, nclasses)
         self.nb_classes = nclasses
 
     def loadFile(self, fpath):

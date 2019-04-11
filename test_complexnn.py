@@ -36,8 +36,6 @@ from tools.logger import Logger
 logger = Logger()     
 import os
 
-
-
 def myzip(train_x,train_x_mask):
     assert train_x.shape == train_x_mask.shape
     results=[]

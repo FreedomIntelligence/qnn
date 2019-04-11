@@ -37,8 +37,6 @@ logger = Logger()
 import os
 
 
-
-
 def run(params):
     evaluation=[]
 #    params=dataset.classification.process_embedding(reader,params)    
