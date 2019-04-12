@@ -179,6 +179,7 @@ if __name__ == '__main__':
             file_writer.write(params.to_string()+'\n')
             file_writer.write(str(df.max())+'\n')
             file_writer.write('_________________________\n\n\n')
+            file_writer.flush()
         #        print("_____________")
             K.clear_session()
         
@@ -206,6 +207,7 @@ if __name__ == '__main__':
             file_writer.write(params.to_string()+'\n')
             file_writer.write(str(df.max())+'\n')
             file_writer.write('_________________________\n\n\n')
+            file_writer.flush()
         #        print("_____________")
             K.clear_session()
             
