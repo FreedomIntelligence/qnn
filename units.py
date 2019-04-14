@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import keras
+import numpy as np
 #keras.optimizers.SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)
 #keras.optimizers.RMSprop(lr=0.001, rho=0.9, epsilon=None, decay=0.0)
 #keras.optimizers.Adagrad(lr=0.01, epsilon=None, decay=0.0)
@@ -57,7 +58,6 @@ def getLogger():
     
     return log_path,logger
 
-import numpy as np
 def to_array(ll,maxlen=0):
     lens = [len(l) for l in ll]
     if maxlen ==0:
@@ -75,3 +75,8 @@ def to_array(ll,maxlen=0):
 #    print(mask.shape)
     arr[mask] = np.concatenate(ll)
     return arr
+
+def batch_softmax_with_first_item(x):
+    x_exp = np.exp(x)
+    x_sum = np.repeat(np.expand_dims(np.sum(x_exp, axis=1),1), x.shape[1], axis=1)
+    return x_exp / x_sum

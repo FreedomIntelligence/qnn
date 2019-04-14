@@ -20,7 +20,8 @@ def rank_hinge_loss(kwargs=None):
         return  K.mean(K.maximum(basic_loss, 0.0),keepdims = True)
 
     return _margin_loss
-def percision(sb,inputs):
+
+def precision(sb,inputs):
 
     positive = inputs[0]
     negative = inputs[1]

@@ -121,14 +121,15 @@ stopwords_set = set(stopwords.words('english'))
 from nltk.stem import SnowballStemmer
 import re, string
 stemmer=SnowballStemmer('english')
-def clean(sentence,remove_punctuation=False,stem=False,remove_stowords=False):
+
+def clean(sentence,remove_punctuation=False,stem=False,remove_stopwords=False):
     
     if remove_punctuation:
         sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
     sentence = [w for w  in word_tokenize(sentence.lower())]
     if stem:
         sentence = [stemmer.stem(w) for w  in sentence]
-    if remove_stowords:
+    if remove_stopwords:
         sentence = [w for w in sentence if w not in stopwords_set]
     return " ".join( sentence)
     
@@ -140,7 +141,6 @@ class dataHelper():
         for key,value in opt.__dict__.items():
             self.__setattr__(key,value)        
       
-            
         self.dir_path = os.path.join(os.path.join(opt.datasets_dir, "QA"),opt.dataset_name.lower())
         self.datas = self.load(filter =opt.clean)
         self.alphabet = self.get_alphabet(self.datas.values())
@@ -184,7 +184,7 @@ class dataHelper():
                 data=self.removeUnanswerdQuestion(data)
 #            data.to_csv(data_name+"_cleaned.csv",index=False,encoding="utf-8",sep="\t")
             if self.clean_sentence:
-                data["question"] = data["question"].apply(lambda x : clean(x,remove_punctuation=self.remove_punctuation,stem=self.stem,remove_stowords=self.remove_stowords))
+                data["question"] = data["question"].apply(lambda x : clean(x,remove_punctuation=self.remove_punctuation,stem=self.stem,remove_stopwords=self.remove_stopwords))
                 data["answer"] = data["answer"].apply(lambda x : clean(x))
             datas[data_name] = data
         return datas
@@ -198,7 +198,7 @@ class dataHelper():
 #        counter=df.groupby("question").apply(lambda group: len(group["flag"]))
 #        questions_multi=counter[counter>1].index
     
-        return df[df["question"].isin(questions_have_correct) ].reset_index()  #&  df["question"].isin(questions_have_correct) & df["question"].isin(questions_have_uncorrect)
+        return df[df["question"].isin(questions_have_correct)].reset_index()  #&  df["question"].isin(questions_have_correct) & df["question"].isin(questions_have_uncorrect)
 
                 
     def get_alphabet(self,corpuses=None,dataset="",fresh=True):
