@@ -2,7 +2,6 @@
 from params import Params
 from dataset import qa
 import keras.backend as K
-#import units
 import pandas as pd
 from loss import *
 from tools.metrics import precision_batch
@@ -14,13 +13,11 @@ from tensorflow import set_random_seed
 import tensorflow as tf
 import os
 import random
-
-
-
+from models import match as models  
 
 
 if __name__ == '__main__':
-#def test_match():
+
     
     grid_parameters ={
 #        "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
@@ -73,14 +70,8 @@ if __name__ == '__main__':
     
     file_writer = open(params.output_file,'w')
     for parameter in parameters:
-#        old_dataset = params.dataset_name
-#        old_dataset = params.dataset_name
-        params.setup(zip(grid_parameters.keys(),parameter))
-#        if old_dataset != params.dataset_name:   # batch_size
-#            print("switch %s to %s"%(old_dataset,params.dataset_name))
-#            reader=dataset.setup(params)
-#            params.reader = reader
-        from models import match as models      
+
+        params.setup(zip(grid_parameters.keys(),parameter))       
         reader = qa.setup(params)
         test_data = reader.getTest(iterable = False)
         dev_data = reader.getTest(iterable = False, mode = 'dev')
@@ -97,6 +88,7 @@ if __name__ == '__main__':
                     optimizer = getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=[metric_type])
             
+            print('Training the network:')
             for i in range(params.epochs):
                 if "unbalance" in  params.__dict__ and params.unbalance:
                     model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot,unbalance=params.unbalance),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
@@ -110,10 +102,11 @@ if __name__ == '__main__':
                 metric = reader.evaluate(score, mode = "dev")
                 evaluations.append(metric)
                 print(metric)
-                
+            print('Done.')
+            
             print('Test Performance:')
             y_pred = model.predict(x = test_data) 
-            score =batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
+            score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
                 
             metric = reader.evaluate(score, mode = "test")
             print(metric)
@@ -135,17 +128,18 @@ if __name__ == '__main__':
                     optimizer = getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=[precision_batch],
                     loss_weights=[0.0, 1.0,0.0])
-            
+            print('Training the network:')
             for i in range(params.epochs):
                 model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=int(len(reader.datas["train"]["question"].unique())/reader.batch_size),verbose = True)
                 
                 print('Validation Performance:')
                 y_pred = model.predict(x = dev_data)
                 score = y_pred[0]
-#                score = batch_softmax_with_first_item(y_pred[0])[:,1]  if params.onehot else y_pred[0][:,1]
                 metric = reader.evaluate(score, mode = "dev")
                 evaluations.append(metric)
                 print(metric)
+            
+            print('Done.')
                 
             print('Test Performance:')
             y_pred = model.predict(x = test_data) 

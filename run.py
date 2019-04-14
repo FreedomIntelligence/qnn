@@ -84,14 +84,14 @@ if __name__=="__main__":
         old_dataset = params.dataset_name
         params.setup(zip(grid_parameters.keys(),parameter))
         if old_dataset != params.dataset_name:
-            print("switch %s to %s"%(old_dataset,params.dataset_name))
+            print("switch {} to {}".format(old_dataset,params.dataset_name))
             reader=dataset.setup(params)
             params.reader = reader
 #        params.print()
 #        dir_path,logger = units.getLogger()
 #        params.save(dir_path)
         history,evaluation=run(params,reader)
-        global_logger.info("%s : %.4f "%( params.to_string() ,max(history.history["val_acc"])))
+        global_logger.info("{} : {:.4f} ".format( params.to_string() ,max(history.history["val_acc"])))
         K.clear_session()
 
 
