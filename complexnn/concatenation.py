@@ -47,8 +47,8 @@ class Concatenation(Layer):
 
         if self.axis<0:
             self.axis = self.axis + len(input_shape[0])
-        new_dim = sum( [single_shape[self.axis]  for single_shape in input_shape])
-        output_shape =input_shape[0].copy()
+        new_dim = sum([single_shape[self.axis]  for single_shape in input_shape])
+        output_shape = list(input_shape[0])
         output_shape[self.axis] = new_dim
 
 #        print('Input shape concatenation layer:{}'.format(input_shape))
@@ -58,9 +58,6 @@ class Concatenation(Layer):
 
 def main():
     from keras.layers import Input, Dense
-
-
-
     encoding_dim = 50
     input_dim = 300
     a=np.random.random([5,300])

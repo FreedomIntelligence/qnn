@@ -47,7 +47,7 @@ class BucketIterator(object):
         self.batch_size=batch_size
         self.test=test 
         self.backend=backend
-        self.transform=self.setTransform()
+#        self.transform=self.setTransform
         self.always=always
         self.max_sequence_length = max_sequence_length
         
@@ -59,8 +59,8 @@ class BucketIterator(object):
         self.batch_size=opt.batch_size
         self.shuffle=opt.__dict__.get("shuffle",self.shuffle)
         self.transform=self.setTransform()
-        
-    def setTransform(self,data):
+    
+    def transform(self,data):
 
         return  [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
     
@@ -301,23 +301,16 @@ class DataReader(object):
         aset = set(answer)
         a_len = len(answer)
     
-        # q_index = np.arange(1,q_len)
         a_index = np.arange(1,a_len + 1)
     
         overlap = qset.intersection(aset)
-        # for i,q in enumerate(cut(question)[:q_len]):
-        #     value = 1
-        #     if q in overlap:
-        #         value = 2
-        #     q_index[i] = value
+
         for i,a in enumerate(answer):
             if a in overlap:
                 a_index[i] = Overlap
         return a_index
 
     
-
-            
     def getTest(self,mode ="test",overlap_feature =False, iterable = True):
         
         if overlap_feature:
@@ -358,19 +351,6 @@ class DataReader(object):
                         data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
                             [1]*len(q) +[0]*len(q)]
                     yield data
-#        c = list(zip(*data))
-#        random.shuffle(c)
-#        
-##            print(type(item))
-#        result = [to_array(item,self.max_sequence_length) if i<2 else np.array(item)  for i,item in enumerate(zip(*c))]
-#        if iterable:            
-#            x,y,z = result
-#            formated = ([i for i in zip(x,y)],z)
-#            return BucketIterator(formated,batch_size=self.batch_size,shuffle=False,max_sequence_length = self.max_sequence_length)
-#        else:
-#            return result
-
-
 
     
     def getPairWiseSamples4Keras(self, iterable = False):
@@ -379,14 +359,6 @@ class DataReader(object):
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
                 yield batch, batch
         
-        
-#        data = [q,a,neg]
-#        c = list(zip(*data))
-#        random.shuffle(c)
-#        
-##            print(type(item))
-#        result = [to_array(item,self.max_sequence_length) for i,item in enumerate(zip(*c))]
-#        return result
         
             
     def prepare_data(self,seqs):
@@ -399,7 +371,6 @@ class DataReader(object):
         for idx, seq in enumerate(seqs):
             x[idx, :lengths[idx]] = seq
             x_mask[idx, :lengths[idx]] = 1.0
-         # print( x, x_mask)
         return x, x_mask
     
     def evaluate(self,predicted,mode= "test",acc=False):
@@ -408,22 +379,7 @@ class DataReader(object):
 
 if __name__ == "__main__":
     
-    
-#    from dataset import qa
-#    from params import Params
-#    
-#    params = Params()
-#    config_file = 'config/qa.ini'    # define dataset in the config
-#    params.parse_config(config_file)
-#    
-#    reader = qa.setup(params)
-##    data1 = next(iter(reader.getTest()))
-##    data = next(iter(reader.getTrain(overlap_feature=True)))
-##    for data in reader.getTest(overlap_feature=True,shuffle=False):
-##        print(len(data))
-##    data = next(iter(reader.getTrain(overlap_feature=True,shuffle=False)))
-##    data = next(iter(reader.getTest(overlap_feature=True)))
-#    data = reader.getTrain(iterable=False)
+
     # -*- coding: utf-8 -*-
     import keras
     from keras.layers import Input, Dense, Activation, Lambda
