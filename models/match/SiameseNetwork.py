@@ -10,7 +10,7 @@ import numpy as np
 from keras import regularizers
 import keras.backend as K
 from distutils.util import strtobool
-from complexnn import Attention
+from layers import Attention
 from models import representation as representation_model_factory
 
 class SiameseNetwork(BasicModel):

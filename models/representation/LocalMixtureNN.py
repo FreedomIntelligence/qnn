@@ -3,7 +3,8 @@ from keras.layers import Embedding, GlobalMaxPooling1D,GlobalAveragePooling1D, D
 
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
-from complexnn import *
+from layers import *
+
 import math
 import numpy as np
 

@@ -3,7 +3,7 @@ from keras.layers import Embedding, GlobalAveragePooling1D, Dense, Masking, Flat
 from models.BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
-from complexnn import *
+from layers import *
 import math
 import numpy as np
 
