@@ -45,9 +45,7 @@ def get_sentiment_dic_training_data(reader, opt):
     return pretrain_x, pretrain_y
 
 def process_embedding(reader,opt):
-    opt.max_sequence_length = reader.get_max_sentence_length()
-
-    
+    opt.max_sequence_length = reader.get_max_sentence_length()    
     if  opt.wordvec_path == 'random':
         opt.random_init = True
     else:
