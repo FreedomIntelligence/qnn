@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from params import Params
 from models import representation as models
-import dataset
-import units
+from dataset import classification as dataset
+from tools import units
 from tools.save import save_experiment
 import itertools
 import argparse
@@ -16,9 +16,7 @@ def run(params,reader):
     qdnn = models.setup(params)
     model = qdnn.getModel()
     
-    model.compile(loss = params.loss,
-              optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr),
-              metrics=['accuracy'])
+    model.compile(loss = params.loss,optimizer = units.getOptimizer(name=params.optimizer,lr=params.lr), metrics=['accuracy'])
     
     model.summary()    
     (train_x, train_y),(test_x, test_y),(val_x, val_y) = reader.get_processed_data()

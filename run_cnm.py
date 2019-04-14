@@ -5,8 +5,8 @@ import keras.backend as K
 #import units
 import pandas as pd
 from loss import *
-from metrics import precision_batch
-from units import to_array, getOptimizer, batch_softmax_with_first_item
+from tools.metrics import precision_batch
+from tools.units import to_array, getOptimizer, batch_softmax_with_first_item
 import argparse
 import itertools
 

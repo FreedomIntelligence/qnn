@@ -14,7 +14,7 @@ from tools.timer import log_time_delta
 from nltk.corpus import stopwords
 Overlap = 237
 import random
-from units import to_array 
+from tools.units import to_array 
 from tools import evaluation
 class Alphabet(dict):
     def __init__(self, start_feature_id = 1):
@@ -250,7 +250,7 @@ class DataReader(object):
         embedding = np.zeros((len(vocab),dim))
         count = 1
         import codecs
-        with codecs.open("oov.txt","w",encoding="utf-8") as f:
+        with codecs.open("temp/oov.txt","w",encoding="utf-8") as f:
             for word in vocab:
                 if word in vectors:
                     count += 1
