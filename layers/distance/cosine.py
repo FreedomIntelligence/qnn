@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys; sys.path.append('.')
+
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer,Dense,Dropout
@@ -10,7 +10,7 @@ import os
 import keras.backend as K
 import math
 
-class Cosinse(Layer):
+class Cosine(Layer):
 
     def __init__(self, dropout_keep_prob = 1, axis = -1, keep_dims = True, **kwargs):
         # self.output_dim = output_dim
@@ -18,11 +18,11 @@ class Cosinse(Layer):
         self.keep_dims = keep_dims
         self.dropout_keep_prob=dropout_keep_prob
         self.dropout_probs = Dropout(dropout_keep_prob)
-        super(Cosinse, self).__init__(**kwargs)
+        super(Cosine, self).__init__(**kwargs)
 
     def get_config(self):
         config = {'axis': self.axis, 'keep_dims': self.keep_dims}
-        base_config = super(Cosinse, self).get_config()
+        base_config = super(Cosine, self).get_config()
         return dict(list(base_config.items())+list(config.items()))
 
     def build(self, input_shape):
@@ -35,7 +35,7 @@ class Cosinse(Layer):
         #                               shape=(input_shape[1], self.output_dim),
         #                               initializer='uniform',
         #                               trainable=True)
-        super(Cosinse, self).build(input_shape)  # Be sure to call this somewhere!
+        super(Cosine, self).build(input_shape)  # Be sure to call this somewhere!
 
     def call(self, inputs):
 
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     x =  Input(shape=(2,))
     y =  Input(shape=(2,))
 
-    output = Cosinse()([x,y])
+    output = Cosine()([x,y])
 
     encoder = Model([x,y], output)
     encoder.compile(loss = 'mean_squared_error',

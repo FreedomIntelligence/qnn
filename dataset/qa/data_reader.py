@@ -2,20 +2,25 @@
 
 import os
 import numpy as np
-import tensorflow as tf
+#import tensorflow as tf
 
-from collections import Counter
+#from collections import Counter
 import pandas as pd
 
-import random
 import pickle
-from tools.timer import log_time_delta
+#from tools.timer import log_time_delta
 
 from nltk.corpus import stopwords
 Overlap = 237
-import random
 from tools.units import to_array 
 from tools import evaluation
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+stopwords_set = set(stopwords.words('english'))
+from nltk.stem import SnowballStemmer
+import re, string
+stemmer=SnowballStemmer('english')
+
 class Alphabet(dict):
     def __init__(self, start_feature_id = 1):
         self.fid = start_feature_id
@@ -42,7 +47,7 @@ class BucketIterator(object):
         self.batch_size=batch_size
         self.test=test 
         self.backend=backend
-        self.transform=self.setTransform()
+#        self.transform=self.setTransform
         self.always=always
         self.max_sequence_length = max_sequence_length
         
@@ -53,57 +58,17 @@ class BucketIterator(object):
         
         self.batch_size=opt.batch_size
         self.shuffle=opt.__dict__.get("shuffle",self.shuffle)
-#        self.position=opt.__dict__.get("position",False)
         self.transform=self.setTransform()
-        
-    def setTransform(self):
-        if self.backend == "tensorflow":
-            return self.transformTF
-        elif self.backend == "torch":
-            return  self.transformTorch
-        else:
-            return  self.transformKeras
-            
     
-    def transformTorch(self,data):
-        if torch.cuda.is_available():
-            data=data.reset_index()
-            text= Variable(torch.LongTensor(data.text).cuda())
-            label= Variable(torch.LongTensor([int(i) for i in data.label.tolist()]).cuda())                
-        else:
-            data=data.reset_index()
-            text= Variable(torch.LongTensor(data.text))
-            label= Variable(torch.LongTensor(data.label.tolist()))
-        if self.position:
-            position_tensor = self.get_position(data.text)
-            return DottableDict({"text":(text,position_tensor),"label":label})
-        return DottableDict({"text":text,"label":label})
-    
-    def transformKeras(self,data):
-        return [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
-    def transformTF(self,data):
-        return [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
-    
-#    def get_position(self,inst_data):
-#        inst_position = np.array([[pos_i+1 if w_i != self.padding_token else 0 for pos_i, w_i in enumerate(inst)] for inst in inst_data])
-#        inst_position_tensor = Variable( torch.LongTensor(inst_position), volatile=self.test) 
-#        if torch.cuda.is_available():
-#            inst_position_tensor=inst_position_tensor.cuda()
-#        return inst_position_tensor
+    def transform(self,data):
 
+        return  [to_array(i,self.max_sequence_length) if type(i[0])!=int and type(i)!=np.ndarray  else i for i in data]
+    
     def __iter__(self):
         if self.shuffle and not self.test:
-#            random.shuffle(self.data)
             c = list(zip(*self.data))
-            random.shuffle(c)
+            np.random.shuffle(c)
             self.data = [i for i in zip(*c)]
-#            self.data = self.data.sample(frac=1).reset_index(drop=True)          
-            
-#        if sort_by_len:
-#            sorted_index = sorted(range(len(q)), key=lambda x: len(q[x]), reverse=True)
-#            q = [ q[i] for i in sorted_index]
-#            a = [a[i] for i in sorted_index]
-#            neg_a = [ neg_a[i] for i in sorted_index]
             
         batch_nums = int(len(self.data[0])/self.batch_size)
 
@@ -112,28 +77,20 @@ class BucketIterator(object):
         indexes = [(i*self.batch_size,(i+1)*self.batch_size) for  i in range(batch_nums)]
 
         for index in indexes:
-
             yield self.transform([item[index[0]:index[1]] for item in self.data])
 
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-stopwords_set = set(stopwords.words('english'))
-from nltk.stem import SnowballStemmer
-import re, string
-stemmer=SnowballStemmer('english')
 
 def clean(sentence,remove_punctuation=False,stem=False,remove_stopwords=False):
     
     if remove_punctuation:
         sentence = re.sub('[%s]' % re.escape(string.punctuation), ' ', sentence)
-    sentence = [w for w  in word_tokenize(sentence.lower())]
+    sentence = [w for w in word_tokenize(sentence.lower())]
     if stem:
-        sentence = [stemmer.stem(w) for w  in sentence]
+        sentence = [stemmer.stem(w) for w in sentence]
     if remove_stopwords:
         sentence = [w for w in sentence if w not in stopwords_set]
-    return " ".join( sentence)
+    return " ".join(sentence)
     
-
 
 
 class DataReader(object):
@@ -175,7 +132,7 @@ class DataReader(object):
         print('Loading data:')
         datas = dict()
         
-        for data_name in ["train","test"]: #'dev'            
+        for data_name in ["train","test","dev"]: #'dev'            
             data_file = os.path.join(self.dir_path,data_name+".txt")
             data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')            
             clean_set = ["test","dev"] if self.train_verbose else ["train","test","dev"]
@@ -267,8 +224,7 @@ class DataReader(object):
         tokens = sentence.lower().split()[:self.max_sequence_length]   # tokens = [w for w in tokens if w not in stopwords.words('english')]
         seq = [self.alphabet[w] if w in self.alphabet else self.alphabet['[UNK]'] for w in tokens]
 #        seq_pos = np.array([[pos_i+1 if w_i != self.padding_token else 0 for pos_i, w_i in enumerate(inst)] for inst in inst_data])
-        
-        
+         
         return seq
     
 #    @log_time_delta
@@ -337,6 +293,7 @@ class DataReader(object):
             return BucketIterator( data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
         else: 
             return data
+        
     # calculate the overlap_index
     def overlap_index(self,question,answer,stopwords = []):
 
@@ -344,23 +301,16 @@ class DataReader(object):
         aset = set(answer)
         a_len = len(answer)
     
-        # q_index = np.arange(1,q_len)
         a_index = np.arange(1,a_len + 1)
     
         overlap = qset.intersection(aset)
-        # for i,q in enumerate(cut(question)[:q_len]):
-        #     value = 1
-        #     if q in overlap:
-        #         value = 2
-        #     q_index[i] = value
+
         for i,a in enumerate(answer):
             if a in overlap:
                 a_index[i] = Overlap
         return a_index
 
     
-
-            
     def getTest(self,mode ="test",overlap_feature =False, iterable = True):
         
         if overlap_feature:
@@ -371,7 +321,7 @@ class DataReader(object):
             process = lambda row: [self.encode_to_split(row["question"]),
                                self.encode_to_split(row["answer"])]
         
-        samples = self.datas[mode].apply( process,axis=1)
+        samples = self.datas[mode].apply(process,axis=1)
         if iterable:
             return BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=False)
         else: 
@@ -401,19 +351,6 @@ class DataReader(object):
                         data = [[np.concatenate([q,q],0).astype(int),np.concatenate([a,neg],0).astype(int)],
                             [1]*len(q) +[0]*len(q)]
                     yield data
-#        c = list(zip(*data))
-#        random.shuffle(c)
-#        
-##            print(type(item))
-#        result = [to_array(item,self.max_sequence_length) if i<2 else np.array(item)  for i,item in enumerate(zip(*c))]
-#        if iterable:            
-#            x,y,z = result
-#            formated = ([i for i in zip(x,y)],z)
-#            return BucketIterator(formated,batch_size=self.batch_size,shuffle=False,max_sequence_length = self.max_sequence_length)
-#        else:
-#            return result
-
-
 
     
     def getPairWiseSamples4Keras(self, iterable = False):
@@ -422,14 +359,6 @@ class DataReader(object):
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
                 yield batch, batch
         
-        
-#        data = [q,a,neg]
-#        c = list(zip(*data))
-#        random.shuffle(c)
-#        
-##            print(type(item))
-#        result = [to_array(item,self.max_sequence_length) for i,item in enumerate(zip(*c))]
-#        return result
         
             
     def prepare_data(self,seqs):
@@ -442,7 +371,6 @@ class DataReader(object):
         for idx, seq in enumerate(seqs):
             x[idx, :lengths[idx]] = seq
             x_mask[idx, :lengths[idx]] = 1.0
-         # print( x, x_mask)
         return x, x_mask
     
     def evaluate(self,predicted,mode= "test",acc=False):
@@ -451,22 +379,7 @@ class DataReader(object):
 
 if __name__ == "__main__":
     
-    
-#    from dataset import qa
-#    from params import Params
-#    
-#    params = Params()
-#    config_file = 'config/qa.ini'    # define dataset in the config
-#    params.parse_config(config_file)
-#    
-#    reader = qa.setup(params)
-##    data1 = next(iter(reader.getTest()))
-##    data = next(iter(reader.getTrain(overlap_feature=True)))
-##    for data in reader.getTest(overlap_feature=True,shuffle=False):
-##        print(len(data))
-##    data = next(iter(reader.getTrain(overlap_feature=True,shuffle=False)))
-##    data = next(iter(reader.getTest(overlap_feature=True)))
-#    data = reader.getTrain(iterable=False)
+
     # -*- coding: utf-8 -*-
     import keras
     from keras.layers import Input, Dense, Activation, Lambda

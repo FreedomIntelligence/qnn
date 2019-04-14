@@ -4,11 +4,18 @@ from dataset import qa
 import keras.backend as K
 #import units
 import pandas as pd
-from loss import *
-from tools.metrics import precision_batch
+from layers.loss import *
+from layers.loss.metrics import precision_batch
 from tools.units import to_array, getOptimizer, batch_softmax_with_first_item
 import argparse
 import itertools
+from numpy.random import seed
+from tensorflow import set_random_seed
+import tensorflow as tf
+import os
+import random
+
+
 
 
 
@@ -54,6 +61,16 @@ if __name__ == '__main__':
     args = parser.parse_args()
     parameters= [arg for index,arg in enumerate(itertools.product(*grid_parameters.values())) if index%args.gpu_num==args.gpu]
     params.parse_config(args.config)
+    
+#   Reproducibility Setting
+    seed(params.seed)
+    set_random_seed(params.seed)
+    random.seed(params.seed)
+    
+    session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+    sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
+    K.set_session(sess)
+    
     file_writer = open(params.output_file,'w')
     for parameter in parameters:
 #        old_dataset = params.dataset_name
@@ -66,6 +83,7 @@ if __name__ == '__main__':
         from models import match as models      
         reader = qa.setup(params)
         test_data = reader.getTest(iterable = False)
+        dev_data = reader.getTest(iterable = False, mode = 'dev')
         qdnn = models.setup(params)
         model = qdnn.getModel()
     
@@ -78,17 +96,28 @@ if __name__ == '__main__':
             model.compile(loss =loss_type, #""
                     optimizer = getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=[metric_type])
+            
             for i in range(params.epochs):
                 if "unbalance" in  params.__dict__ and params.unbalance:
                     model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot,unbalance=params.unbalance),epochs = 1,steps_per_epoch=int(len(reader.datas["train"])/reader.batch_size),verbose = True)        
                 else:
                     model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique())/reader.batch_size,verbose = True)        
-                y_pred = model.predict(x = test_data) 
+                
+                print('Validation Performance:')
+                y_pred = model.predict(x = dev_data) 
                 score =batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
                 
-                metric = reader.evaluate(score, mode = "test")
+                metric = reader.evaluate(score, mode = "dev")
                 evaluations.append(metric)
                 print(metric)
+                
+            print('Test Performance:')
+            y_pred = model.predict(x = test_data) 
+            score =batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
+                
+            metric = reader.evaluate(score, mode = "test")
+            print(metric)
+            
             df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
             file_writer.write(params.to_string()+'\n')
             file_writer.write(str(df.max())+'\n')
