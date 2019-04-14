@@ -16,7 +16,7 @@ from complexnn.l2_normalization import L2Normalization
 from complexnn.utils import *
 from complexnn.reshape import reshape
 from complexnn.lambda_functions import *
-from complexnn.cosine import Cosinse
+from complexnn.cosine import Cosine
 from complexnn.marginLoss import MarginLoss
 from complexnn.AESD import AESD
 #def get

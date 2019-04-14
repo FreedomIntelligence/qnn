@@ -13,7 +13,7 @@ from numpy.random import seed
 from tensorflow import set_random_seed
 import tensorflow as tf
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+import random
 
 
 
@@ -64,6 +64,8 @@ if __name__ == '__main__':
 #   Reproducibility Setting
     seed(params.seed)
     set_random_seed(params.seed)
+    random.seed(params.seed)
+    
     session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
     sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
     K.set_session(sess)
