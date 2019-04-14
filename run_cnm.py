@@ -114,7 +114,6 @@ if __name__ == '__main__':
             K.clear_session()
         
     else:
-   
         reader = qa.setup(params)
         history, performance = run(params, reader)
         df=pd.DataFrame([list(performance)],columns=["map","mrr","p1"])
