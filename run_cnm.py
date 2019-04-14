@@ -5,8 +5,8 @@ import keras.backend as K
 #import units
 import pandas as pd
 from loss import *
-from metrics import precision_batch
-from units import to_array, getOptimizer, batch_softmax_with_first_item
+from tools.metrics import precision_batch
+from tools.units import to_array, getOptimizer, batch_softmax_with_first_item
 import argparse
 import itertools
 from numpy.random import seed
@@ -18,23 +18,24 @@ import random
 
 
 
+
 if __name__ == '__main__':
 #def test_match():
     
     grid_parameters ={
 #        "dataset_name":["MR","TREC","SST_2","SST_5","MPQA","SUBJ","CR"],
-        "wordvec_path":["glove/glove.6B.50d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
+        "wordvec_path":["glove/glove.6B.50d.txt","glove/glove.6B.100d.txt","glove/glove.6B.200d.txt","glove/glove.6B.300d.txt"],#"glove/glove.6B.300d.txt"],"glove/normalized_vectors.txt","glove/glove.6B.50d.txt","glove/glove.6B.100d.txt",
 #        "loss": ["categorical_crossentropy"],#"mean_squared_error"],,"categorical_hinge"
-        "optimizer":["rmsprop"],#,"adadelta","adam" ,"adamax","nadam"
-        "batch_size":[16],#,32
+        "optimizer":["rmsprop", "adagrad"],#,"adadelta","adam" ,"adamax","nadam"
+        "batch_size":[16,32],#,32
 #        "activation":["sigmoid"],
 #        "amplitude_l2":[0.0000005],
 #        "phase_l2":[0.00000005],
 #        "dense_l2":[0],#0.0001,0.00001,0],
-        "measurement_size" :[300],#,50100],
+        "measurement_size" :[300,500],#,50100],
 #        "ngram_value":["1,2,3","2,3,4","1,3,4"],
 #        "margin":[0.1,0.2],
-        "lr" : [0.5],#,1,0.01
+        "lr" : [0.5,0.1,0.025],#,1,0.01
 #        "dropout_rate_embedding" : [0.9],#0.5,0.75,0.8,0.9,1],
 #        "dropout_rate_probs" : [0.8,0.9]#,0.5,0.75,0.8,1]   
 #            "ngram_value" : [3]
@@ -43,7 +44,7 @@ if __name__ == '__main__':
 #        "dataset_name": ["wiki","trec"],
 #        "pooling_type": ["max","average","none"],
         "distance_type":[6],
-        "train_verbose":[0],
+        "train_verbose":[0,1],
         "remove_punctuation": [0],
         "stem" : [0],
         "remove_stopwords" : [1],        
@@ -70,7 +71,6 @@ if __name__ == '__main__':
     sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
     K.set_session(sess)
     
-
     file_writer = open(params.output_file,'w')
     for parameter in parameters:
 #        old_dataset = params.dataset_name
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 #            print("switch %s to %s"%(old_dataset,params.dataset_name))
 #            reader=dataset.setup(params)
 #            params.reader = reader
-        from models.match import keras as models      
+        from models import match as models      
         reader = qa.setup(params)
         test_data = reader.getTest(iterable = False)
         qdnn = models.setup(params)
@@ -101,7 +101,7 @@ if __name__ == '__main__':
                 else:
                     model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique())/reader.batch_size,verbose = True)        
                 y_pred = model.predict(x = test_data) 
-                score = batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
+                score =batch_softmax_with_first_item(y_pred)[:,1]  if params.onehot else y_pred
                 
                 metric = reader.evaluate(score, mode = "test")
                 evaluations.append(metric)

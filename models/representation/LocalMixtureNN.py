@@ -10,7 +10,7 @@ import numpy as np
 from keras import regularizers
 import keras.backend as K
 
-from models.representation.BasicModel import BasicModel
+from models.BasicModel import BasicModel
 class LocalMixtureNN(BasicModel):
 
     def initialize(self):

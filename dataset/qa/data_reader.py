@@ -12,7 +12,7 @@ import pickle
 
 from nltk.corpus import stopwords
 Overlap = 237
-from units import to_array 
+from tools.units import to_array 
 from tools import evaluation
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -89,7 +89,7 @@ def clean(sentence,remove_punctuation=False,stem=False,remove_stopwords=False):
         sentence = [stemmer.stem(w) for w in sentence]
     if remove_stopwords:
         sentence = [w for w in sentence if w not in stopwords_set]
-    return " ".join( sentence)
+    return " ".join(sentence)
     
 
 
@@ -132,7 +132,7 @@ class DataReader(object):
         print('Loading data:')
         datas = dict()
         
-        for data_name in ["train","test"]: #'dev'            
+        for data_name in ["train","test","dev"]: #'dev'            
             data_file = os.path.join(self.dir_path,data_name+".txt")
             data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')            
             clean_set = ["test","dev"] if self.train_verbose else ["train","test","dev"]
@@ -207,7 +207,7 @@ class DataReader(object):
         embedding = np.zeros((len(vocab),dim))
         count = 1
         import codecs
-        with codecs.open("oov.txt","w",encoding="utf-8") as f:
+        with codecs.open("temp/oov.txt","w",encoding="utf-8") as f:
             for word in vocab:
                 if word in vectors:
                     count += 1
