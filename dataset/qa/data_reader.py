@@ -381,10 +381,10 @@ class DataReader(object):
         if unbalance:
             process = lambda row: [self.encode_to_split(row["question"]),
                        self.encode_to_split(row["answer"]), 
-                       row['flag'] ]
+                       row['flag']]
             samples = self.datas["train"].apply(process,axis=1)
             while True:
-                for batch in BucketIterator( [i for i in zip(*samples)],batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length):
+                for batch in BucketIterator([i for i in zip(*samples)],batch_size=self.batch_size,shuffle=True,max_sequence_length=self.max_sequence_length):
                     if onehot:
                         yield   batch[:2],np.array([[0,1] if i else [1,0] for i in batch[2]])
                     else:

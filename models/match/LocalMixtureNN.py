@@ -36,7 +36,7 @@ class LocalMixtureNN(BasicModel):
                     getScore("AESD.AESD",mean="arithmetic",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
                     getScore("AESD.AESD",mean="arithmetic",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
                     getScore("AESD.AESD",mean="arithmetic",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    getScore("cosine.Cosinse",dropout_keep_prob =self.opt.dropout_rate_probs)
+                    getScore("cosine.Cosine",dropout_keep_prob =self.opt.dropout_rate_probs)
                     ]
                     
         self.distance= distances[self.opt.distance_type]
