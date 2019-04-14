@@ -5,7 +5,7 @@ from models.representation.QDNNAblation import QDNNAblation
 from models.representation.LocalMixtureNN import LocalMixtureNN
 
 def setup(opt):
-    print("network type: " + opt.network_type)
+    print("representation network type: " + opt.network_type)
     if opt.network_type == "real":
         model = RealNN(opt)
     elif opt.network_type == "qdnn":

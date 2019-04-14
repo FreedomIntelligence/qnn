@@ -63,7 +63,7 @@ if __name__ == '__main__':
 #            print("switch %s to %s"%(old_dataset,params.dataset_name))
 #            reader=dataset.setup(params)
 #            params.reader = reader
-        from models.match import keras as models      
+        from models import match as models      
         reader = qa.setup(params)
         test_data = reader.getTest(iterable = False)
         qdnn = models.setup(params)
