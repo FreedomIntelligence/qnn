@@ -4,7 +4,7 @@ from models.BasicModel import BasicModel
 from keras.models import Model, Input, model_from_json, load_model
 from keras.constraints import unit_norm
 import sys
-from complexnn import *
+from layers import *
 
 from keras.initializers import Constant
 import math

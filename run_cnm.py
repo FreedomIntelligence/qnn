@@ -3,8 +3,8 @@ from params import Params
 from dataset import qa
 import keras.backend as K
 import pandas as pd
-from loss import *
-from tools.metrics import precision_batch
+from layers.loss import *
+from layers.loss.metrics import precision_batch
 from tools.units import to_array, getOptimizer, batch_softmax_with_first_item
 import argparse
 import itertools

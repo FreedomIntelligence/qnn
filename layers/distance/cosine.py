@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys; sys.path.append('.')
+
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer,Dense,Dropout

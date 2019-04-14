@@ -3,15 +3,16 @@ from models.BasicModel import BasicModel
 from keras.layers import Embedding, GlobalMaxPooling1D,Dense, Masking, Flatten,Dropout, Activation,concatenate,Reshape, Permute,Lambda, Subtract
 from keras.models import Model, Input, model_from_json, load_model, Sequential
 from keras.constraints import unit_norm
-from complexnn import *
+from layers import *
 import math
 import numpy as np
 
 from keras import regularizers
 import keras.backend as K
 from distutils.util import strtobool
-from complexnn import Attention
+from layers import Attention
 from models import representation as representation_model_factory
+from layers import distance
 
 class SiameseNetwork(BasicModel):
 
@@ -20,13 +21,13 @@ class SiameseNetwork(BasicModel):
         self.answer = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
         self.neg_answer = Input(shape=(self.opt.max_sequence_length,), dtype='float32')
       
-        distances= [getScore("AESD.AESD",mean="geometric",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    getScore("AESD.AESD",mean="geometric",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    getScore("AESD.AESD",mean="geometric",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    getScore("AESD.AESD",mean="arithmetic",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    getScore("AESD.AESD",mean="arithmetic",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    getScore("AESD.AESD",mean="arithmetic",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    getScore("cosine.Cosine",dropout_keep_prob =self.opt.dropout_rate_probs)
+        distances= [distance.get_distance("AESD.AESD",mean="geometric",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    distance.get_distance("AESD.AESD",mean="geometric",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    distance.get_distance("AESD.AESD",mean="geometric",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    distance.get_distance("AESD.AESD",mean="arithmetic",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    distance.get_distance("AESD.AESD",mean="arithmetic",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    distance.get_distance("AESD.AESD",mean="arithmetic",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
+                    distance.get_distance("cosine.Cosine",dropout_keep_prob =self.opt.dropout_rate_probs)
                     ]
                     
         self.distance = distances[self.opt.distance_type]
