@@ -95,7 +95,7 @@ class ComplexMeasurement(Layer):
         
 #        print('Input shape of measurment layer:{}'.format(input_shape))
 #        print(output_shape)
-        return([output_shape])
+        return(tuple(output_shape))
 
 def main():
 
