@@ -129,6 +129,8 @@ if __name__ == '__main__':
         elif params.match_type == 'pairwise':
             test_data.append(test_data[0])
             test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
+            dev_data.append(dev_data[0])
+            dev_data = [to_array(i,reader.max_sequence_length) for i in dev_data]
             model.compile(loss = identity_loss,
                     optimizer = getOptimizer(name=params.optimizer,lr=params.lr),
                     metrics=[precision_batch],
@@ -136,13 +138,21 @@ if __name__ == '__main__':
             
             for i in range(params.epochs):
                 model.fit_generator(reader.getPairWiseSamples4Keras(),epochs = 1,steps_per_epoch=int(len(reader.datas["train"]["question"].unique())/reader.batch_size),verbose = True)
-
-                y_pred = model.predict(x = test_data)
+                
+                print('Validation Performance:')
+                y_pred = model.predict(x = dev_data)
                 score = y_pred[0]
 #                score = batch_softmax_with_first_item(y_pred[0])[:,1]  if params.onehot else y_pred[0][:,1]
-                metric = reader.evaluate(score, mode = "test")
+                metric = reader.evaluate(score, mode = "dev")
                 evaluations.append(metric)
                 print(metric)
+                
+            print('Test Performance:')
+            y_pred = model.predict(x = test_data) 
+            score = y_pred[0]
+            metric = reader.evaluate(score, mode = "test")
+            print(metric)
+            
             df=pd.DataFrame(evaluations,columns=["map","mrr","p1"])
             file_writer.write(params.to_string()+'\n')
             file_writer.write(str(df.max())+'\n')
