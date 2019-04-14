@@ -3,11 +3,11 @@
 
 import os
 import numpy as np
-from .QAHelper import dataHelper
+from .data_reader import DataReader
 
 def setup(opt):
     
-    reader = dataHelper(opt)  
+    reader = DataReader(opt)  
     return reader
 
 

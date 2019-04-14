@@ -10,8 +10,8 @@ import os
 #sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import keras.backend as K
 import math
-from dataset.data import get_lookup_table,data_gen
-from dataset.data_reader import SSTDataReader
+from dataset.classification.data import get_lookup_table,data_gen
+from dataset.classification.data_reader import SSTDataReader
 from keras.layers import Embedding
 from keras import regularizers
 

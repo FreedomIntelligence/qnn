@@ -136,7 +136,7 @@ def clean(sentence,remove_punctuation=False,stem=False,remove_stopwords=False):
 
 
 
-class dataHelper():
+class DataReader(object):
     def __init__(self,opt):
         for key,value in opt.__dict__.items():
             self.__setattr__(key,value)        
@@ -154,54 +154,52 @@ class dataHelper():
 #        self.a_max_sent_length = a_max_sent_length
 
         
-        print('get embedding')
+        print('Getting word embedding:')
         if opt.dataset_name=="NLPCC":     # can be updated
             self.embeddings = self.get_embedding(language="cn",fname=opt.wordvec_path)
         else:
             self.embeddings = self.get_embedding(fname=opt.wordvec_path)
         opt.embeddings = self.embeddings
+        print('Done.')
         opt.nb_classes = 2               # for nli, this could be 3
         opt.alphabet=self.alphabet
         opt.embedding_size = self.embeddings.shape[1]
         if self.max_sequence_length >self.max_len:
             self.max_sequence_length = self.max_len
             
-        opt.max_sequence_length= self.max_sequence_length
-        
+        opt.max_sequence_length= self.max_sequence_length   
         opt.lookup_table = self.embeddings      
         
             
     def load(self,  filter = True):
+        print('Loading data:')
         datas = dict()
         
-        for data_name in ["train",'test']: #'dev'            
+        for data_name in ["train","test"]: #'dev'            
             data_file = os.path.join(self.dir_path,data_name+".txt")
-            data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')
-    #        data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"],quoting =3).fillna('0')
-            
+            data = pd.read_csv(data_file,header = None,sep="\t",names=["question","answer","flag"]).fillna('0')            
             clean_set = ["test","dev"] if self.train_verbose else ["train","test","dev"]
+            
             if filter == True and data_name in clean_set:
-                data=self.removeUnanswerdQuestion(data)
+                data=self.removeUnansweredQuestion(data)
 #            data.to_csv(data_name+"_cleaned.csv",index=False,encoding="utf-8",sep="\t")
             if self.clean_sentence:
                 data["question"] = data["question"].apply(lambda x : clean(x,remove_punctuation=self.remove_punctuation,stem=self.stem,remove_stopwords=self.remove_stopwords))
                 data["answer"] = data["answer"].apply(lambda x : clean(x))
             datas[data_name] = data
+        print('Done.')
         return datas
     
-    @log_time_delta
-    def removeUnanswerdQuestion(self,df):
+#    @log_time_delta
+    def removeUnansweredQuestion(self,df):
         counter= df.groupby("question").apply(lambda group: sum(group["flag"]))
         questions_have_correct=counter[counter>0].index
-#        counter= df.groupby("question").apply(lambda group: sum(group["flag"]==0))
-#        questions_have_uncorrect=counter[counter>0].index
-#        counter=df.groupby("question").apply(lambda group: len(group["flag"]))
-#        questions_multi=counter[counter>1].index
     
         return df[df["question"].isin(questions_have_correct)].reset_index()  #&  df["question"].isin(questions_have_correct) & df["question"].isin(questions_have_uncorrect)
 
                 
     def get_alphabet(self,corpuses=None,dataset="",fresh=True):
+        print('Getting dictionary:')
         pkl_name="temp/"+self.dataset_name+".alphabet.pkl"
         if  os.path.exists(pkl_name) and not fresh:
             return pickle.load(open(pkl_name,"rb"))
@@ -214,14 +212,15 @@ class dataHelper():
                     tokens = sentence.lower().split()
                     for token in set(tokens):
                         alphabet.add(token)
-        print("alphabet size %d" % len(alphabet.keys()) )
+        print('Done.')
+        print("Dictionary size = {}".format(len(alphabet.keys())))
         if not os.path.exists("temp"):
             os.mkdir("temp")
         pickle.dump( alphabet,open(pkl_name,"wb"))
         return alphabet   
     
 
-    @log_time_delta
+#    @log_time_delta
     def get_embedding(self,fname=None,language ="en", fresh = True):
         pkl_name="temp/"+self.dataset_name+".subembedding.pkl"
         if  os.path.exists(pkl_name) and not fresh:
@@ -231,15 +230,18 @@ class dataHelper():
 #        else:
 #            fname= "embedding/embedding.200.header_txt"
         if fname.endswith("bin"):
+            print('Loading word embedding from binary file.')
             from gensim.models.keyedvectors import KeyedVectors
             embeddings_raw = KeyedVectors.load_word2vec_format(fname, binary=True)
             embeddings={x:y for x,y in zip(embeddings_raw.vocab,embeddings_raw.vectors)}
             embedding_size=embeddings_raw.vectors.shape[1]
+            print('The dimensionality of embedding is {}.'.format(embedding_size))
         else:
+            print('Loading word embedding from text file.')
             embeddings,embedding_size = self.load_text_vec(fname)
         sub_embeddings = self.getSubVectorsFromDict(embeddings,embedding_size)
         self.embedding_size=embedding_size
-        pickle.dump( sub_embeddings,open(pkl_name,"wb"))
+        pickle.dump(sub_embeddings,open(pkl_name,"wb"))
         return sub_embeddings
     
 
@@ -256,8 +258,8 @@ class dataHelper():
                 else:
                     f.write(word+"\n")
                     embedding[vocab[word]]= np.random.uniform(-0.5,+0.5,dim)#vectors['[UNKNOW]'] #.tolist()
-        print( 'word in embedding',count)
-        print( 'word not in embedding',len(vocab)-count)
+        print('{} words are in embedding'.format(count))
+        print( '{} words are not in embedding'.format(len(vocab)-count))
         return embedding
     
     def encode_to_split(self,sentence):    
@@ -269,7 +271,7 @@ class dataHelper():
         
         return seq
     
-    @log_time_delta
+#    @log_time_delta
     def load_text_vec(self,filename=""):
         vectors = {}
         with open(filename,encoding='utf-8') as f:
@@ -277,7 +279,7 @@ class dataHelper():
             for line in f:
                 i += 1
                 if i % 100000 == 0:
-                    print( 'epch %d' % i)
+                    print('{} words have been loaded.'.format(i))
                 items = line.strip().split(' ')
                 if len(items) == 2:
                     vocab_size, embedding_size= items[0],items[1]
@@ -287,9 +289,8 @@ class dataHelper():
                     if word in self.alphabet:
                         vectors[word] = items[1:]
         embedding_size = len(items[1:])
-        print( 'embedding_size',embedding_size)
-        print( 'done')
-        print( 'words found in wor2vec embedding ',len(vectors.keys()))
+        print('The dimensionality of embedding is {}'.format(embedding_size))
+        print('{} words in the dataset are found in embedding'.format(len(vectors.keys())))
         return vectors,embedding_size
     
 #    @log_time_delta

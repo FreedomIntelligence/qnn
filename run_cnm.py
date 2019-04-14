@@ -7,6 +7,8 @@ import pandas as pd
 from loss import *
 from metrics import precision_batch
 from units import to_array, getOptimizer, batch_softmax_with_first_item
+import argparse
+import itertools
 
 
 
@@ -42,8 +44,7 @@ if __name__ == '__main__':
         "max_len":[100],
         "one_hot": [0],
     }
-    import argparse
-    import itertools
+
 
     params = Params()
     parser = argparse.ArgumentParser(description='Running the Complex-valued Network for Matching')

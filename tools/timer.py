@@ -9,6 +9,6 @@ def log_time_delta(func):
         ret = func(*args, **kwargs)
         end = time.time()
         delta = end - start
-        print( "%s runed %.2f seconds"% (func.__name__,delta))
+        print( "Running the function {} takes {:.2f} seconds".format(func.__name__,delta))
         return ret
     return _deco
