@@ -195,6 +195,7 @@ class DataReader(object):
             print('The dimensionality of embedding is {}.'.format(embedding_size))
         else:
             print('Loading word embedding from text file.')
+            print(fname)
             embeddings,embedding_size = self.load_text_vec(fname)
         sub_embeddings = self.getSubVectorsFromDict(embeddings,embedding_size)
         self.embedding_size=embedding_size
@@ -290,7 +291,7 @@ class DataReader(object):
             data = (q,a,neg_a)
 #        print("samples size : " +str(len(q)))
         if iterable:
-            return BucketIterator( data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
+            return BucketIterator(data,batch_size=self.batch_size,shuffle=True,max_sequence_length=max_sequence_length) 
         else: 
             return data
         
@@ -327,7 +328,7 @@ class DataReader(object):
         else: 
             return [i for i in zip(*samples)]
         
-    def getPointWiseSamples4Keras(self, iterable = False ,onehot=False,unbalance=False):
+    def get_pointwise_samples(self, iterable = False ,onehot=False,unbalance=False):
         if unbalance:
             process = lambda row: [self.encode_to_split(row["question"]),
                        self.encode_to_split(row["answer"]), 
@@ -353,7 +354,7 @@ class DataReader(object):
                     yield data
 
     
-    def getPairWiseSamples4Keras(self, iterable = False):
+    def get_pairwise_samples(self, iterable = False):
         
         while True:
             for batch in self.getTrain(iterable=True,max_sequence_length=self.max_sequence_length):
