@@ -27,7 +27,8 @@ class SiameseNetwork(BasicModel):
                     distance.get_distance("AESD.AESD",mean="arithmetic",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
                     distance.get_distance("AESD.AESD",mean="arithmetic",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
                     distance.get_distance("AESD.AESD",mean="arithmetic",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    distance.get_distance("cosine.Cosine",dropout_keep_prob = self.opt.dropout_rate_probs)
+                    distance.get_distance("cosine.Cosine",dropout_keep_prob = self.opt.dropout_rate_probs),
+                    distance.get_distance("tensor_comb.TensorComb")
                     ]
                     
         self.distance = distances[self.opt.distance_type]

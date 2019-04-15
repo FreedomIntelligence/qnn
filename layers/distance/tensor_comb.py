@@ -29,7 +29,7 @@ class TensorComb(Layer):
 
 
         self.kernel = self.add_weight(name='kernel',
-                                      shape=(input_shape[1], input_shape[1]),
+                                      shape=(int(input_shape[0][1]), int(input_shape[0][1])),
                                       initializer='uniform',
                                       trainable=True)
         super(TensorComb, self).build(input_shape)  # Be sure to call this somewhere!
@@ -37,32 +37,24 @@ class TensorComb(Layer):
     def call(self, inputs):
 
         x,y = inputs
-    
-
+        
+        #x*W*y'
+        res = K.dot(x, self.kernel)
+        output = K.batch_dot(K.expand_dims(res,2), K.expand_dims(res,1), axes = (1,2))
+        
 #        norm1 = K.sqrt(0.00001+ K.sum(x**2, axis = self.axis, keepdims = False))
 #        norm2 = K.sqrt(0.00001+ K.sum(y**2, axis = self.axis, keepdims = False))
 #        output= K.sum(self.dropout_probs(x*y),1) / norm1 /norm2
-        l2norm = K.sqrt(K.sum(self.dropout_probs((x-y)**2),keepdims = False,axis=-1)+0.00001)
-        if self.mean=="geometric":            
-            output =  1 /(1+ l2norm) *   1 /( 1+ K.exp(-1*self.delta*(self.c+K.sum(self.dropout_probs(x*y),-1)))) 
-        else:
-            output =  0.5 /(1+ l2norm) +   0.5 /( 1+ K.exp(-1*self.delta*(self.c+K.sum(self.dropout_probs(x*y),-1)))) 
-        
+    
          
 
-        return K.expand_dims(output)
+        return K.squeeze(output, axis = 2)
 
     def compute_output_shape(self, input_shape):
 #        print(input_shape)
         # print(type(input_shape[1]))
-        output_shape = []
-        if self.axis<0:
-            self.axis = len(input_shape[0])+self.axis 
-        for i in range(len(input_shape[0])):            
-            if not i == self.axis:
-                output_shape.append(input_shape[0][i])
-        if self.keep_dims:
-            output_shape.append(1)
+        output_shape = [input_shape[0],1]
+
 #        print('Input shape of L2Norm layer:{}'.format(input_shape))
 #        print(output_shape)
         return([tuple(output_shape)])
@@ -92,25 +84,20 @@ if __name__ == '__main__':
 #    encoder.fit(x=a, y=b, epochs = 10)
     
 
-    x =  Input(shape=(2,10))
-    y =  Input(shape=(2,10))
+    x =  Input(shape=(10,))
+    y =  Input(shape=(10,))
 
-    output = Cosine()([x,y])
+    output = TensorComb()([x,y])
 
     encoder = Model([x,y], output)
     encoder.compile(loss = 'mean_squared_error',
             optimizer = 'rmsprop',
             metrics=['accuracy'])
 #    
-    a = np.random.random((5,300))
-    b = np.random.random((5,300))
-    c = np.random.random((5,1))
-    a = np.ones((5,300))
-#    b = np.ones((5,300))
-#    encoder.fit(x=[a,b], y=c, epochs = 10)
-    
-    a= np.array([[1,1],[3,4]])
-    b= np.array([[1,0],[4,3]])
+    a = np.random.random((20,10))
+    b = np.random.random((20,10))
+    c = np.random.random((20,1))
+
     print(encoder.predict(x = [a,b]))
     
 #    b = np.random.random((5,2,2))
