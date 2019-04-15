@@ -27,7 +27,7 @@ class SiameseNetwork(BasicModel):
                     distance.get_distance("AESD.AESD",mean="arithmetic",delta =0.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
                     distance.get_distance("AESD.AESD",mean="arithmetic",delta =1,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
                     distance.get_distance("AESD.AESD",mean="arithmetic",delta =1.5,c=1,dropout_keep_prob =self.opt.dropout_rate_probs),
-                    distance.get_distance("cosine.Cosine",dropout_keep_prob =self.opt.dropout_rate_probs)
+                    distance.get_distance("cosine.Cosine",dropout_keep_prob = self.opt.dropout_rate_probs)
                     ]
                     
         self.distance = distances[self.opt.distance_type]
@@ -61,7 +61,7 @@ class SiameseNetwork(BasicModel):
 
             score1 = self.distance([q_rep, self.representation_model.get_representation(self.answer)])
             score2 = self.distance([q_rep, self.representation_model.get_representation(self.neg_answer)])
-            basic_loss = MarginLoss(self.opt.margin)( [score1,score2])
+            basic_loss = MarginLoss(self.opt.margin)([score1,score2])
             
             output=[score1,basic_loss,basic_loss]
             model = Model([self.question, self.answer, self.neg_answer], output)       

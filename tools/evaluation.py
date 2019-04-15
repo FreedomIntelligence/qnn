@@ -5,7 +5,18 @@ import platform,os
 import sklearn
 import numpy as np
 qa_path="data/nlpcc-iccpol-2016.dbqa.testing-data"
+from tools.units import batch_softmax_with_first_item
 
+
+def matching_score(y_pred, onehot = False, match_type = 'pairwise'):
+    if match_type == 'pointwise':
+        score = batch_softmax_with_first_item(y_pred)[:,1]  if onehot else y_pred
+    elif match_type == 'pairwise':
+        score = y_pred[0]
+    else:
+        print('wrong matching type -- the default pointwise is used.')
+        score = batch_softmax_with_first_item(y_pred)[:,1]  if onehot else y_pred
+    return score
 
 def percisionAT1_metric(group):
 	group = sklearn.utils.shuffle(group,random_state =132)
