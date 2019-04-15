@@ -28,7 +28,7 @@ class TensorComb(Layer):
 
         self.kernel = self.add_weight(name='kernel',
                                       shape=(int(input_shape[0][1]), int(input_shape[0][1])),
-                                      initializer='uniform',
+                                      initializer='identity',
                                       trainable=True)
         super(TensorComb, self).build(input_shape)  # Be sure to call this somewhere!
 
@@ -38,7 +38,7 @@ class TensorComb(Layer):
         
         #x*W*y'
         res = K.dot(x, self.kernel)
-        output = K.batch_dot(K.expand_dims(res,2), K.expand_dims(res,1), axes = (1,2))
+        output = K.batch_dot(K.expand_dims(res,2), K.expand_dims(y,1), axes = (1,2))
         
 #        norm1 = K.sqrt(0.00001+ K.sum(x**2, axis = self.axis, keepdims = False))
 #        norm2 = K.sqrt(0.00001+ K.sum(y**2, axis = self.axis, keepdims = False))
@@ -51,7 +51,7 @@ class TensorComb(Layer):
     def compute_output_shape(self, input_shape):
 #        print(input_shape)
         # print(type(input_shape[1]))
-        output_shape = [input_shape[0],1]
+        output_shape = [input_shape[0][1],1]
 
 #        print('Input shape of L2Norm layer:{}'.format(input_shape))
 #        print(output_shape)
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     a = np.random.random((20,10))
     b = np.random.random((20,10))
     c = np.random.random((20,1))
-
+    encoder.fit(x = [a,b], y = c)
     print(encoder.predict(x = [a,b]))
     
 #    b = np.random.random((5,2,2))

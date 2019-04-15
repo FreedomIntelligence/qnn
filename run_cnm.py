@@ -26,6 +26,7 @@ def run(params,reader):
     data_generator = None
     if 'onehot' not in params.__dict__:
         params.onehot = 0
+        
     if params.match_type == 'pointwise':
         test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
         dev_data = [to_array(i,reader.max_sequence_length) for i in dev_data]
@@ -76,8 +77,6 @@ def run(params,reader):
     print('Done.')
     return performance
             
-
-
 
 def write_in_file(file_writer,performance):
     df=pd.DataFrame(list(performance),columns=["map_dev","mrr_dev","p1_dev","map_test","mrr_test","p1_test"])
