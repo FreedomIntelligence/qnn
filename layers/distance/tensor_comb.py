@@ -26,8 +26,6 @@ class TensorComb(Layer):
 
         # Create a trainable weight variable for this layer.
 
-
-
         self.kernel = self.add_weight(name='kernel',
                                       shape=(int(input_shape[0][1]), int(input_shape[0][1])),
                                       initializer='uniform',
