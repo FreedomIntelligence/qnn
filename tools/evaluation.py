@@ -7,6 +7,13 @@ import numpy as np
 qa_path="data/nlpcc-iccpol-2016.dbqa.testing-data"
 from tools.units import batch_softmax_with_first_item
 
+def write_to_file(file_writer,params_str,performance):
+    df=pd.DataFrame(list(performance),columns=["map_dev","mrr_dev","p1_dev","map_test","mrr_test","p1_test"])
+#    file_writer.write(params.to_string()+'\n')
+    file_writer.write(params_str+'\n')
+    file_writer.write(str(df[df.map_dev==df.map_dev.max()])+'\n')
+    file_writer.write('_________________________\n\n\n')
+    file_writer.flush()
 
 def matching_score(y_pred, onehot = False, match_type = 'pairwise'):
     if match_type == 'pointwise':
