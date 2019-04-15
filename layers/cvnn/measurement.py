@@ -4,11 +4,7 @@ from keras.layers import Layer
 from keras.models import Model, Input
 from keras.constraints import unit_norm
 from keras.initializers import Orthogonal
-import tensorflow as tf
-import sys
-import os
-import keras.backend as K
-import math
+
 
 class ComplexMeasurement(Layer):
 
@@ -16,9 +12,11 @@ class ComplexMeasurement(Layer):
         self.units = units
         self.trainable = trainable
         super(ComplexMeasurement, self).__init__(**kwargs)
+        self.measurement_constrain = unit_norm(axis = (1,2))
+        self.measurement_initalizer = Orthogonal(gain=1.0, seed=None)
 
     def get_config(self):
-        config = {'units': self.units, 'kernel': self.kernel, 'dim': self.dim}
+        config = {'units': self.units, 'trainable': self.trainable, 'dim': self.dim}
         base_config = super(ComplexMeasurement, self).get_config()
         return dict(list(base_config.items())+list(config.items()))
 
@@ -34,9 +32,10 @@ class ComplexMeasurement(Layer):
         self.dim = input_shape[0][-1]
         self.kernel = self.add_weight(name='kernel',
                                       shape=(self.units, self.dim,2),
-                                      constraint = unit_norm(axis = (1,2)),
-                                      initializer=Orthogonal(gain=1.0, seed=None),
+                                      constraint = self.measurement_constrain,
+                                      initializer= self.measurement_initalizer,
                                       trainable=self.trainable)
+
 
         super(ComplexMeasurement, self).build(input_shape)  # Be sure to call this somewhere!
 
@@ -58,14 +57,9 @@ class ComplexMeasurement(Layer):
         input_imag = inputs[1]
         # print(input_real.shape)
         # print(input_imag.shape)
-
-
         kernel_r = K.batch_dot(K.expand_dims(kernel_real,1), K.expand_dims(kernel_real,2), axes = (1,2)) - K.batch_dot(K.expand_dims(kernel_imag,1), K.expand_dims(kernel_imag,2), axes = (1,2))
 
         kernel_i = K.batch_dot(K.expand_dims(kernel_imag,1), K.expand_dims(kernel_real,2), axes = (1,2)) + K.batch_dot(K.expand_dims(kernel_real,1), K.expand_dims(kernel_imag,2), axes = (1,2))
-
-
-       
 
         kernel_r = K.reshape(kernel_r, shape = (self.units, self.dim * self.dim))
         kernel_i = K.reshape(kernel_i, shape = (self.units, self.dim * self.dim))

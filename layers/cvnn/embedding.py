@@ -4,11 +4,7 @@ from keras.layers import Layer
 from keras.models import Model, Input
 from keras.initializers import RandomUniform
 from keras.constraints import unit_norm
-import tensorflow as tf
-import sys
-import os
-#sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import keras.backend as K
+
 import math
 from dataset.classification.data import get_lookup_table,data_gen
 from dataset.classification.data_reader import SSTDataReader
@@ -48,7 +44,7 @@ def amplitude_embedding_layer(embedding_matrix, input_shape, trainable = False, 
 
 
 def main():
-    path_to_vec = 'glove/glove.6B.100d.txt'
+    path_to_vec = 'glove/glove.6B.50d.txt'
     dir_name = 'data\\SST'
     reader = SSTDataReader(dir_name,nclasses = 2)
     embedding_params = reader.get_word_embedding(path_to_vec,orthonormalized=False)

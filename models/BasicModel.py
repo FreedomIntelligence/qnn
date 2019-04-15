@@ -5,6 +5,7 @@ class BasicModel(object):
         self.opt=opt
         self.initialize()
         self.model = self.build()
+
     
     def initialize(self):
         pass

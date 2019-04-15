@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
-import sys; sys.path.append('.')
+
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer
 from keras.models import Model, Input
-import tensorflow as tf
 import sys
-import os
-import keras.backend as K
-import math
+
 from copy import copy
 
 class Concatenation(Layer):

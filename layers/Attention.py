@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 
-# -*- coding: utf-8 -*-
-import sys; sys.path.append('.')
 import numpy as np
 from keras import backend as K
 from keras.layers import Layer,Dense,Dropout
 from keras.models import Model, Input
-import tensorflow as tf
-import sys
-import os
-import keras.backend as K
-import math
+
+
+
 
 class Attention(Layer):
 
