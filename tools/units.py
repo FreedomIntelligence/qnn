@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import keras
 import numpy as np
+import re
+import configparser
+import argparse
 #keras.optimizers.SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)
 #keras.optimizers.RMSprop(lr=0.001, rho=0.9, epsilon=None, decay=0.0)
 #keras.optimizers.Adagrad(lr=0.01, epsilon=None, decay=0.0)
@@ -9,6 +12,28 @@ import numpy as np
 #keras.optimizers.Adamax(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0)
 #keras.optimizers.Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
 
+def parse_grid_parameters(file_path):
+    config = configparser.ConfigParser()
+    config.read(file_path)
+    config_common = config['COMMON']
+    dictionary = {}
+    for key,value in config_common.items():
+        array = value.split(';')
+        is_numberic = re.compile(r'^[-+]?[0-9.]+$')
+        new_array = []
+    
+        for value in array:
+            value = value.strip()
+            result = is_numberic.match(value)
+            if result:
+                if type(eval(value)) == int:
+                    value= int(value)
+                else :
+                    value= float(value)
+            new_array.append(value)
+        dictionary[key] = new_array
+    return dictionary
+    
 def getOptimizer(name="sgd",lr=0.0001):
     name=name.strip().lower()
     if name=="sgd":
