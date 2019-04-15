@@ -80,7 +80,7 @@ def run(params,reader):
 
 
 def write_in_file(file_writer,performance):
-    df=pd.DataFrame([list(performance)],columns=["map_dev","mrr_dev","p1_dev","map_test","mrr_test","p1_test"])
+    df=pd.DataFrame(list(performance),columns=["map_dev","mrr_dev","p1_dev","map_test","mrr_test","p1_test"])
     file_writer.write(params.to_string()+'\n')
     file_writer.write(str(df[df.map_dev==df.map_dev.max()])+'\n')
     file_writer.write('_________________________\n\n\n')
