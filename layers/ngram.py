@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys; sys.path.append('.')
+
 from keras.layers import Input,Layer
 from keras.models import Model
 import numpy as np
@@ -13,7 +13,7 @@ class NGram(Layer):
         super(NGram, self).__init__(**kwargs)
 
     def get_config(self):
-        config = {'index': self.index}
+        config = {'index': self.n_value}
         base_config = super(NGram, self).get_config()
         return dict(list(base_config.items())+list(config.items()))
 

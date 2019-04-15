@@ -77,6 +77,15 @@ def run(params,reader):
     return performance
             
 
+
+
+def write_in_file(file_writer,performance):
+    df=pd.DataFrame([list(performance)],columns=["map_dev","mrr_dev","p1_dev","map_test","mrr_test","p1_test"])
+    file_writer.write(params.to_string()+'\n')
+    file_writer.write(str(df[df.map_dev==df.map_dev.max()])+'\n')
+    file_writer.write('_________________________\n\n\n')
+    file_writer.flush()
+    
     
 if __name__ == '__main__':
 
@@ -110,20 +119,13 @@ if __name__ == '__main__':
             params.setup(zip(grid_parameters.keys(),parameter))      
             reader = qa.setup(params)
             performance = run(params, reader)
-            df=pd.DataFrame([list(performance)],columns=["map_dev","mrr_dev","p1_dev","map_test","mrr_test","p1_test"])
-            file_writer.write(params.to_string()+'\n')
-            file_writer.write(df+'\n')
-            file_writer.write('_________________________\n\n\n')
-            file_writer.flush()
+            write_in_file(file_writer,performance)
             K.clear_session()
+            
     else:
         reader = qa.setup(params)
         performance = run(params, reader)
-        df=pd.DataFrame([list(performance)],columns=["map_dev","mrr_dev","p1_dev","map_test","mrr_test","p1_test"])
-        file_writer.write(params.to_string()+'\n')
-        file_writer.write(df+'\n')
-        file_writer.write('_________________________\n\n\n')
-        file_writer.flush()
+        write_in_file(file_writer,performance)
         K.clear_session()
 
    
