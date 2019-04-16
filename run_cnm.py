@@ -15,6 +15,7 @@ import os
 import random
 from models import match as models   
 from tools.evaluation import matching_score, write_to_file
+best_metric = 0
 
 def run(params,reader):
     test_data = reader.getTest(iterable = False, mode = 'test')
@@ -45,7 +46,7 @@ def run(params,reader):
 #                model.fit_generator(reader.getPointWiseSamples4Keras(onehot = params.onehot),epochs = 1,steps_per_epoch=len(reader.datas["train"]["question"].unique())/reader.batch_size,verbose = True)        
     
     elif params.match_type == 'pairwise':
-        test_data.append(test_data[0])
+        test_data.append(test_data[0])   # fill a placeholder for the first parameter
         test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
         dev_data.append(dev_data[0])
         dev_data = [to_array(i,reader.max_sequence_length) for i in dev_data]
@@ -65,6 +66,8 @@ def run(params,reader):
         score = matching_score(y_pred, params.onehot, params.match_type)
         dev_metric = reader.evaluate(score, mode = "dev")
         print(dev_metric)
+        if dev_metric[0] > best_metric:
+            model.save("temp/best.h5")
         
          
         print('Test Performance:')
@@ -121,8 +124,9 @@ if __name__ == '__main__':
         performance = run(params, reader)
         write_to_file(file_writer,params.to_string(),performance)
         K.clear_session()
+        
+#model.save("temp/best.h5")
 
-   
             
                 
     

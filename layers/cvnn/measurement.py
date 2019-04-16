@@ -16,7 +16,7 @@ class ComplexMeasurement(Layer):
         self.measurement_initalizer = Orthogonal(gain=1.0, seed=None)
 
     def get_config(self):
-        config = {'units': self.units, 'trainable': self.trainable, 'dim': self.dim}
+        config = {'units': self.units, 'trainable': self.trainable}
         base_config = super(ComplexMeasurement, self).get_config()
         return dict(list(base_config.items())+list(config.items()))
 
