@@ -7,7 +7,7 @@ from layers import *
 from layers.loss import *
 from layers.loss.metrics import precision_batch
 from tools.units import to_array
-
+from tools.evaluation import matching_score
 params = Params()
 params.parse_config("config/qalocal_pair_trec.ini")
 reader = qa.setup(params)
@@ -20,3 +20,4 @@ test_data = [to_array(i,reader.max_sequence_length) for i in test_data]
 y_pred = model.predict(x = test_data) 
 score = matching_score(y_pred, params.onehot, params.match_type)    
 test_metric = reader.evaluate(score, mode = "test")
+print(test_metric)
