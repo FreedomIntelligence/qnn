@@ -12,7 +12,7 @@ params = Params()
 params.parse_config("config/qalocal_pair_trec.ini")
 reader = qa.setup(params)
 
-model = load_model('temp/best.h5',custom_objects={'NGram': NGram,"L2Normalization":L2Normalization,"L2Norm":L2Norm,"ComplexMeasurement":ComplexMeasurement,"ComplexMultiply":ComplexMultiply,"ComplexMixture":ComplexMixture,"Concatenation":Concatenation,"Cosine":Cosine,"MarginLoss":MarginLoss,"identity_loss":identity_loss,"precision_batch":precision_batch})
+model = load_model('temp/best.h5',custom_objects={'NGram': NGram,"L2Normalization":L2Normalization,"L2Norm":L2Norm,"ComplexMeasurement":ComplexMeasurement,"ComplexMultiply":ComplexMultiply,"ComplexMixture":ComplexMixture,"Concatenation":Concatenation,"Cosine":Cosine,"TensorComb":TensorComb,"MarginLoss":MarginLoss,"identity_loss":identity_loss,"precision_batch":precision_batch})
 
 test_data = reader.getTest(iterable = False, mode = 'test')
 test_data.append(test_data[0])

@@ -18,7 +18,7 @@ class TensorComb(Layer):
         super(TensorComb, self).__init__(**kwargs)
 
     def get_config(self):
-        config = {'kernel': self.kernel}
+        config = {'trainable': True}
         base_config = super(TensorComb, self).get_config()
         return dict(list(base_config.items())+list(config.items()))
 
