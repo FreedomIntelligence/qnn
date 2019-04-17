@@ -45,7 +45,7 @@ class Params(object):
     def get_parameter_list(self):
         info=[]
         for k, v in self.__dict__.items():
-            if k in ['dataset_name','batch_size','epochs','network_type',
+            if k in ['seed','dataset_name','batch_size','epochs','network_type',
                      'dropout_rate_embedding','dropout_rate_probs','measurement_size',
                      'lr','ngram_value','clean',
                      'match_type','margin','pooling_type','steps_per_epoch',

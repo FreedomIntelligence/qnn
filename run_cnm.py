@@ -15,9 +15,9 @@ import os
 import random
 from models import match as models   
 from tools.evaluation import matching_score, write_to_file
-best_metric = 0
 
 def run(params,reader):
+    best_metric = 0
     test_data = reader.getTest(iterable = False, mode = 'test')
     dev_data = reader.getTest(iterable = False, mode = 'dev')
     qdnn = models.setup(params)
@@ -86,7 +86,6 @@ def run(params,reader):
     
 if __name__ == '__main__':
 
-    
     params = Params()
     parser = argparse.ArgumentParser(description='Running the Complex-valued Network for Matching.')
     parser.add_argument('-gpu_num', action = 'store', dest = 'gpu_num', help = 'please enter the gpu num.',default=1)

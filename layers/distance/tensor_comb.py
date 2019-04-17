@@ -26,19 +26,41 @@ class TensorComb(Layer):
 
         # Create a trainable weight variable for this layer.
 
-        self.kernel = self.add_weight(name='kernel',
+        self.kernel_2 = self.add_weight(name='kernel_2',
                                       shape=(int(input_shape[0][1]), int(input_shape[0][1])),
                                       initializer='identity',
                                       trainable=True)
+        
+        self.kernel_1 = self.add_weight(name='kernel_1',
+                                      shape=(2*int(input_shape[0][1]),1),
+                                      initializer='uniform',
+                                      trainable=True)
+        
+        self.bias = self.add_weight(name='bias',
+                                      shape=(1,),
+                                      initializer='random_uniform',
+                                      trainable=True)
+        
+#        self.1st_order_kernel = self.add_weight(name='1st_order_kernel',
+#                                      shape=(2*int(input_shape[0][1]),1),
+#                                      initializer='identity',
+#                                      trainable=True)
+#        
+#        self.1st_order_kernel = self.add_weight(name='0th_order_kernel',
+#                                      shape=(2*int(input_shape[0][1]),1),
+#                                      initializer='identity',
+#                                      trainable=True)
         super(TensorComb, self).build(input_shape)  # Be sure to call this somewhere!
 
     def call(self, inputs):
 
         x,y = inputs
-        
         #x*W*y'
-        res = K.dot(x, self.kernel)
-        output = K.batch_dot(K.expand_dims(res,2), K.expand_dims(y,1), axes = (1,2))
+        res = K.dot(x, self.kernel_2)
+        corr_2nd_order = K.batch_dot(K.expand_dims(res,2), K.expand_dims(y,1), axes = (1,2))
+        corr_1st_order = K.dot(K.concatenate([x,y],axis = 1), self.kernel_1)
+        output = K.squeeze(corr_2nd_order,axis = -1) + corr_1st_order + self.bias
+        
         
 #        norm1 = K.sqrt(0.00001+ K.sum(x**2, axis = self.axis, keepdims = False))
 #        norm2 = K.sqrt(0.00001+ K.sum(y**2, axis = self.axis, keepdims = False))
@@ -46,7 +68,7 @@ class TensorComb(Layer):
     
          
 
-        return K.squeeze(output, axis = 2)
+        return K.sigmoid(output)
 
     def compute_output_shape(self, input_shape):
 #        print(input_shape)
